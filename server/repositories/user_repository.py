@@ -1,33 +1,34 @@
 from typing import Any
 
+from server.core.db import AsyncSession
 from server.models.user_model import User
 
 
-async def get(session: Any, pk: int) -> User:
+async def get(session: AsyncSession, pk: int) -> User:
     return User()
 
 
-async def get_all(session: Any, limit: int = 250, **values: Any) -> list[User]:
+async def get_all(session: AsyncSession, limit: int = 250, **values: Any) -> list[User]:
     return [User()]
 
 
-async def create(session: Any, user: User) -> User:
+async def create(session: AsyncSession, user: User) -> User:
     return user
 
 
-async def update(session: Any, pk: int, **values: Any):
+async def update(session: AsyncSession, pk: int, **values: Any):
     pass
 
 
-async def delete(session: Any, pk: int):
+async def delete(session: AsyncSession, pk: int):
     pass
 
 
-async def count(session: Any, user: User) -> int:
+async def count(session: AsyncSession, user: User) -> int:
     return 1
 
 
-async def get_or_create(session: Any, user: User) -> User:
+async def get_or_create(session: AsyncSession, user: User) -> User:
     if res := await get_all(
         session=session, name=user.name, surname=user.surname, limit=1
     ):
@@ -35,7 +36,7 @@ async def get_or_create(session: Any, user: User) -> User:
     return await create(session=session, user=user)
 
 
-async def update_and_get(session: Any, pk: int, **values: Any) -> User:
+async def update_and_get(session: AsyncSession, pk: int, **values: Any) -> User:
     await update(session=session, pk=pk, **values)
     return await get(session=session, pk=pk)
 
