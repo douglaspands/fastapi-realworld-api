@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "fastapi-realworld-api"
+version = "0.1.0"
+description = "Exemplo de projeto utilizado no mundo real"
+authors = ["Douglas"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
