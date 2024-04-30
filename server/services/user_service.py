@@ -4,4 +4,5 @@ from server.repositories import user_repository
 
 
 async def get_users(session: AsyncSession) -> list[User]:
-    return await user_repository.get_all(session=session)
+    users = await user_repository.get_all(session=session)
+    return users
