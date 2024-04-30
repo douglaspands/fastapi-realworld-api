@@ -1,7 +1,8 @@
 import os
-from rich.console import Console
 from pathlib import Path
 from shlex import quote
+
+from rich.console import Console
 
 console = Console()
 
@@ -16,7 +17,7 @@ def _shell(cmd: str) -> int:
     return os.system(cmd)
 
 
-def run_server():
+def server():
     cmd = (
         "gunicorn "
         f"--workers {API_WORKERS} "
@@ -27,7 +28,7 @@ def run_server():
     _shell(cmd)
 
 
-def run_server_debug():
+def server_debug():
     cmd = (
         "uvicorn "
         "--reload "

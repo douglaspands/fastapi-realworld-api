@@ -15,7 +15,6 @@ pydantic-settings = "^2.2.1"
 asyncio = "^3.4.3"
 gunicorn = "^22.0.0"
 
-
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.2"
 pytest = "^8.2.0"
@@ -34,5 +33,5 @@ build-backend = "poetry.core.masonry.api"
 profile = "black"
 
 [tool.poetry.scripts]
-server = 'scripts.poetry:run_server'
-server_debug = 'scripts.poetry:run_server_debug'
+server = 'scripts.poetry:server'
+server_debug = 'scripts.poetry:server_debug'
