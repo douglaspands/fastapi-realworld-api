@@ -24,10 +24,6 @@ async def get_all(
     return result.all()
 
 
-# async def create(session: AsyncSession, user: User) -> User:
-#     return user
-
-
 # async def update(session: AsyncSession, pk: int, **values: Any):
 #     pass
 
@@ -54,9 +50,9 @@ async def get_all(
 
 
 __all__ = (
-    # "get",
+    "get",
     "get_all",
-    # "create",
+    "create",
     # "update",
     # "delete",
     # "count",
