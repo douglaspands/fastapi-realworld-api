@@ -1,19 +1,27 @@
-from typing import Any
+from typing import Any, Sequence
 
 from sqlmodel import select
+
 from server.core.db import AsyncSession
-from server.models.user_model import User
+from server.models.people_model import People
 
 
-async def get_all(session: AsyncSession, limit: int = 250, **values: Any) -> list[User]:
-    statement = select(User).where(**values).limit(limit)
-    result = await session.execute(statement)
-    users = result.scalars().all()
-    return users
+async def create(session: AsyncSession, people: People):
+    session.add(people)
 
 
-# async def get(session: AsyncSession, pk: int) -> User:
-#     return User()
+async def get(session: AsyncSession, pk: int) -> People:
+    statement = select(People).where(People.id == pk)
+    result = await session.exec(statement)
+    return result.one()
+
+
+async def get_all(
+    session: AsyncSession, limit: int = 250, **values: Any
+) -> Sequence[People]:
+    statement = select(People).where(**values).limit(limit)
+    result = await session.exec(statement)
+    return result.all()
 
 
 # async def create(session: AsyncSession, user: User) -> User:

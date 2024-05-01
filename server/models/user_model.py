@@ -1,16 +1,18 @@
-from typing import Optional, Self
+# from typing import TYPE_CHECKING, Optional
 
-from sqlmodel import Field, SQLModel
+# from sqlmodel import Field, Relationship, SQLModel
 
-
-class User(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    name: str
-    surname: str
-
-    @property
-    def fullname(self: Self) -> str:
-        return f"{self.name} {self.surname}"
+# if TYPE_CHECKING:
+#     from .people_model import People
 
 
-__all__ = ("User",)
+# class User(SQLModel, table=True):
+#     id: Optional[int] = Field(default=None, primary_key=True)
+#     username: str
+#     password: str
+
+#     people_id: int | None = Field(default=None, foreign_key="people.id")
+#     people: People | None = Relationship()
+
+
+# __all__ = ("User",)

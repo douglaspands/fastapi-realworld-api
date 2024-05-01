@@ -2,9 +2,10 @@
     "recommendations": [
         "tamasfe.even-better-toml",
         "charliermarsh.ruff",
-        "ms-python.black-formatter",
-        "ms-python.isort",
         "ms-python.mypy-type-checker",
-        "ms-python.python"
+        "aaron-bond.better-comments",
+        "njpwerner.autodocstring",
+        "diogonolasco.pyinit",
+        "kevinrose.vsc-python-indent"
     ]
 }
