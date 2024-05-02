@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from typing import Sequence
 
 from fastapi import APIRouter, Depends
@@ -25,7 +26,9 @@ async def all_people(session: SessionIO = Depends(get_sessionio)):
     return ResponseOK(data=data)
 
 
-@router.post("/v1/people", response_model=ResponseOK[People], status_code=201)
+@router.post(
+    "/v1/people", response_model=ResponseOK[People], status_code=HTTPStatus.CREATED
+)
 async def create_people(
     create_people: CreatePeople, session: SessionIO = Depends(get_sessionio)
 ):
