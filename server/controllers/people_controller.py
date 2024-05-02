@@ -2,7 +2,7 @@ from typing import Sequence
 
 from fastapi import APIRouter, Depends
 
-from server.core.db import AsyncSession, get_async_session
+from server.core.db import SessionIO, get_sessionio
 from server.core.schemas import ResponseOK
 from server.resources.people_resources import CreatePeople, People
 from server.services import people_service
@@ -14,20 +14,20 @@ router = APIRouter(
 
 
 @router.get("/v1/people/{pk}", response_model=ResponseOK[People])
-async def get_people(pk: int, session: AsyncSession = Depends(get_async_session)):
+async def get_people(pk: int, session: SessionIO = Depends(get_sessionio)):
     data = await people_service.get_people(session=session, pk=pk)
     return ResponseOK(data=data)
 
 
 @router.get("/v1/people", response_model=ResponseOK[Sequence[People]])
-async def all_people(session: AsyncSession = Depends(get_async_session)):
+async def all_people(session: SessionIO = Depends(get_sessionio)):
     data = await people_service.all_people(session=session)
     return ResponseOK(data=data)
 
 
 @router.post("/v1/people", response_model=ResponseOK[People], status_code=201)
 async def create_people(
-    create_people: CreatePeople, session: AsyncSession = Depends(get_async_session)
+    create_people: CreatePeople, session: SessionIO = Depends(get_sessionio)
 ):
     data = await people_service.create_people(
         session=session, create_people=create_people

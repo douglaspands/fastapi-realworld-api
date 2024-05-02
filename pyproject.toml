@@ -40,7 +40,7 @@ asyncio_mode = "auto"
 
 [tool.poetry.scripts]
 server = 'scripts.poetry:server'
-server_debug = 'scripts.poetry:server_debug'
 lint = 'scripts.poetry:lint'
 test = 'scripts.poetry:test'
 build = 'scripts.poetry:build'
+server_production = 'scripts.poetry:server_production'

@@ -5,11 +5,11 @@ import pytest
 from faker import Faker
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
-from server.core.db import AsyncSession
+from server.core.db import SessionIO
 from server.models.people_model import People
 from server.resources.people_resources import CreatePeople
 from server.services import people_service
-from tests.mocks.async_session_mock import AsyncSessionMock
+from tests.mocks.async_session_mock import SessionIOMock
 
 fake = Faker("pt_BR")
 Faker.seed(0)
@@ -25,7 +25,7 @@ async def test_get_people_ok(people_repository_mock: AsyncMock):
     people_mock = People(
         id=people_id, first_name=fake.first_name(), last_name=fake.last_name()
     )
-    session_mock = cast(AsyncSession, AsyncSessionMock())
+    session_mock = cast(SessionIO, SessionIOMock())
     people_repository_mock.get.return_value = people_mock
 
     # WHEN
@@ -45,7 +45,7 @@ async def test_get_people_not_found(people_repository_mock: AsyncMock):
 
     # MOCK
     error_message = "No row was found when one was required"
-    session_mock = cast(AsyncSession, AsyncSessionMock())
+    session_mock = cast(SessionIO, SessionIOMock())
     people_repository_mock.get.side_effect = NoResultFound(error_message)
 
     # WHEN
@@ -64,7 +64,7 @@ async def test_all_people_ok(people_repository_mock: AsyncMock):
         People(id=idx + 1, first_name=fake.first_name(), last_name=fake.last_name())
         for idx in range(10)
     ]
-    session_mock = cast(AsyncSession, AsyncSessionMock())
+    session_mock = cast(SessionIO, SessionIOMock())
     people_repository_mock.get_all.return_value = people_mock
 
     # WHEN
@@ -87,9 +87,9 @@ async def test_create_people_ok(people_repository_mock: AsyncMock):
     )
 
     # MOCK
-    session_mock = cast(AsyncSession, AsyncSessionMock())
+    session_mock = cast(SessionIO, SessionIOMock())
 
-    async def create_mock(session: AsyncSession, people: People):
+    async def create_mock(session: SessionIO, people: People):
         people.id = 1
 
     people_repository_mock.create = create_mock
@@ -115,7 +115,7 @@ async def test_create_people_error(people_repository_mock: AsyncMock):
 
     # MOCK
     error_message = 'insert or update on table "people" violates foreign key constraint "people_some_column_fkey"'
-    session_mock = cast(AsyncSession, AsyncSessionMock())
+    session_mock = cast(SessionIO, SessionIOMock())
     people_repository_mock.create.side_effect = IntegrityError(
         orig=Exception(error_message), params={}, statement=""
     )

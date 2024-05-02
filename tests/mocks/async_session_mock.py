@@ -6,7 +6,7 @@ from typing import Any, Self, Sequence, TypeVar
 T = TypeVar("T")
 
 
-class AsyncSessionMock:
+class SessionIOMock:
     def __init__(
         self: Self, return_value: Any = None, side_effect: BaseException | None = None
     ):

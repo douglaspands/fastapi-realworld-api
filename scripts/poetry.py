@@ -58,7 +58,7 @@ def build():
     _print("BUILD SUCCESSFUL", is_error=True)
 
 
-def server():
+def server_production():
     cmd = (
         "gunicorn "
         f"--workers {API_WORKERS} "
@@ -69,7 +69,7 @@ def server():
     _shell(cmd)
 
 
-def server_debug():
+def server():
     cmd = (
         "uvicorn "
         "--reload "
