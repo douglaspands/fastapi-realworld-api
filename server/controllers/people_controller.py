@@ -14,13 +14,17 @@ router = APIRouter(
 )
 
 
-@router.get("/v1/people/{pk}", response_model=ResponseOK[People])
+@router.get(
+    "/v1/people/{pk}", response_model=ResponseOK[People], status_code=HTTPStatus.OK
+)
 async def get_people(pk: int, session: SessionIO = Depends(get_sessionio)):
     data = await people_service.get_people(session=session, pk=pk)
     return ResponseOK(data=data)
 
 
-@router.get("/v1/people", response_model=ResponseOK[Sequence[People]])
+@router.get(
+    "/v1/people", response_model=ResponseOK[Sequence[People]], status_code=HTTPStatus.OK
+)
 async def all_people(session: SessionIO = Depends(get_sessionio)):
     data = await people_service.all_people(session=session)
     return ResponseOK(data=data)
