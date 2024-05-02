@@ -13,25 +13,25 @@ router = APIRouter(
 )
 
 
-@router.post("/v1/people/", response_model=ResponseOK[People], status_code=201)
-async def create_user(
+@router.get("/v1/people/{pk}", response_model=ResponseOK[People])
+async def get_people(pk: int, session: AsyncSession = Depends(get_async_session)):
+    data = await people_service.get_people(session=session, pk=pk)
+    return ResponseOK(data=data)
+
+
+@router.get("/v1/people", response_model=ResponseOK[Sequence[People]])
+async def all_people(session: AsyncSession = Depends(get_async_session)):
+    data = await people_service.all_people(session=session)
+    return ResponseOK(data=data)
+
+
+@router.post("/v1/people", response_model=ResponseOK[People], status_code=201)
+async def create_people(
     create_people: CreatePeople, session: AsyncSession = Depends(get_async_session)
 ):
     data = await people_service.create_people(
         session=session, create_people=create_people
     )
-    return ResponseOK(data=data)
-
-
-@router.get("/v1/people/{pk}", response_model=ResponseOK[People])
-async def get_user(pk: int, session: AsyncSession = Depends(get_async_session)):
-    data = await people_service.get_people(session=session, pk=pk)
-    return ResponseOK(data=data)
-
-
-@router.get("/v1/people/", response_model=ResponseOK[Sequence[People]])
-async def all_people(session: AsyncSession = Depends(get_async_session)):
-    data = await people_service.all_people(session=session)
     return ResponseOK(data=data)
 
 

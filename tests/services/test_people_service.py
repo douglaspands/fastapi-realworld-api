@@ -15,7 +15,7 @@ fake = Faker("pt_BR")
 Faker.seed(0)
 
 
-@pytest.mark.anyio
+@pytest.mark.asyncio
 @patch("server.services.people_service.people_repository", new_callable=AsyncMock)
 async def test_get_people_ok(people_repository_mock: AsyncMock):
     # GIVEN
@@ -37,7 +37,7 @@ async def test_get_people_ok(people_repository_mock: AsyncMock):
     assert res.last_name and isinstance(res.last_name, str)
 
 
-@pytest.mark.anyio
+@pytest.mark.asyncio
 @patch("server.services.people_service.people_repository", new_callable=AsyncMock)
 async def test_get_people_not_found(people_repository_mock: AsyncMock):
     # GIVEN
@@ -56,7 +56,7 @@ async def test_get_people_not_found(people_repository_mock: AsyncMock):
     assert error_message in str(exc_info.value)
 
 
-@pytest.mark.anyio
+@pytest.mark.asyncio
 @patch("server.services.people_service.people_repository", new_callable=AsyncMock)
 async def test_all_people_ok(people_repository_mock: AsyncMock):
     # MOCK
@@ -78,7 +78,7 @@ async def test_all_people_ok(people_repository_mock: AsyncMock):
         assert res[idx].last_name == people_mock[idx].last_name
 
 
-@pytest.mark.anyio
+@pytest.mark.asyncio
 @patch("server.services.people_service.people_repository", new_callable=AsyncMock)
 async def test_create_people_ok(people_repository_mock: AsyncMock):
     # GIVEN
@@ -105,7 +105,7 @@ async def test_create_people_ok(people_repository_mock: AsyncMock):
     assert people.last_name == create_people.last_name
 
 
-@pytest.mark.anyio
+@pytest.mark.asyncio
 @patch("server.services.people_service.people_repository", new_callable=AsyncMock)
 async def test_create_people_error(people_repository_mock: AsyncMock):
     # GIVEN

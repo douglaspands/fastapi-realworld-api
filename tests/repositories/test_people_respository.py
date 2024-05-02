@@ -13,7 +13,7 @@ fake = Faker("pt_BR")
 Faker.seed(0)
 
 
-@pytest.mark.anyio
+@pytest.mark.asyncio
 async def test_people_get_by_pk_ok():
     # GIVEN
     people_id = 1
@@ -33,7 +33,7 @@ async def test_people_get_by_pk_ok():
     assert res.last_name and isinstance(res.last_name, str)
 
 
-@pytest.mark.anyio
+@pytest.mark.asyncio
 async def test_people_get_by_pk_not_found():
     # GIVEN
     people_id = 9999
@@ -52,7 +52,7 @@ async def test_people_get_by_pk_not_found():
     assert error_message in str(exc_info.value)
 
 
-@pytest.mark.anyio
+@pytest.mark.asyncio
 async def test_people_get_all_ok():
     # MOCK
     people_mock = [
@@ -72,7 +72,7 @@ async def test_people_get_all_ok():
         assert res[idx].last_name == people_mock[idx].last_name
 
 
-@pytest.mark.anyio
+@pytest.mark.asyncio
 async def test_people_save_ok():
     # GIVEN
     create_people = People(first_name=fake.first_name(), last_name=fake.last_name())
@@ -88,7 +88,7 @@ async def test_people_save_ok():
     assert create_people.id > 0
 
 
-@pytest.mark.anyio
+@pytest.mark.asyncio
 async def test_people_save_error():
     # GIVEN
     create_people = People(first_name=fake.first_name(), last_name=fake.last_name())

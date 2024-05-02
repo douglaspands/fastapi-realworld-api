@@ -11,7 +11,8 @@ from server.core.settings import get_settings
 def get_async_engine() -> AsyncEngine:
     config = get_settings()
     engine = create_async_engine(
-        url=str(config.db_url), echo=config.db_debug, future=True
+        url=str(config.db_url),
+        echo=config.db_debug,
     )
     return engine
 
