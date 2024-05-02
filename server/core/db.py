@@ -18,11 +18,14 @@ class EngineIO(AsyncEngine):
 @cache
 def get_engineio() -> EngineIO:
     config = get_settings()
-    engine = create_async_engine(
-        url=str(config.db_url),
-        echo=config.db_debug,
+    engine = cast(
+        EngineIO,
+        create_async_engine(
+            url=str(config.db_url),
+            echo=config.db_debug,
+        ),
     )
-    return cast(EngineIO, engine)
+    return engine
 
 
 async def get_sessionio() -> AsyncGenerator[SessionIO, Any]:

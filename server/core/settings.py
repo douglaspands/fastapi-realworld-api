@@ -1,6 +1,5 @@
 from functools import cache
 
-from pydantic import PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -11,7 +10,7 @@ class Settings(BaseSettings):
 
     app_name: str = "fastapi-realworld-api"
     app_version: str = "v0.0.0"
-    db_url: PostgresDsn | str = ""
+    db_url: str = ""
     db_debug: bool = False
 
 
