@@ -1,7 +1,7 @@
 from functools import cache
-from typing import Any, AsyncGenerator, cast
+from typing import Any, AsyncGenerator
 
-from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from server.core.settings import get_settings
@@ -11,31 +11,24 @@ class SessionIO(AsyncSession):
     pass
 
 
-class EngineIO(AsyncEngine):
-    pass
-
-
 @cache
-def get_engineio() -> EngineIO:
+def _make_session() -> async_sessionmaker[SessionIO]:
     config = get_settings()
-    engine = cast(
-        EngineIO,
-        create_async_engine(
+    async_session = async_sessionmaker(
+        bind=create_async_engine(
             url=str(config.db_url),
             echo=config.db_debug,
         ),
-    )
-    return engine
-
-
-async def get_sessionio() -> AsyncGenerator[SessionIO, Any]:
-    async_session = async_sessionmaker(
-        bind=get_engineio(),
         class_=SessionIO,
         expire_on_commit=False,
     )
+    return async_session
+
+
+async def get_sessionio() -> AsyncGenerator[SessionIO, Any]:
+    async_session = _make_session()
     async with async_session() as session:
         yield session
 
 
-__all__ = ("get_sessionio", "get_engineio", "SessionIO", "EngineIO")
+__all__ = ("get_sessionio", "SessionIO")

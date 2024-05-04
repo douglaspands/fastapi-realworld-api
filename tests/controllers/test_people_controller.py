@@ -1,5 +1,4 @@
 from http import HTTPStatus
-from typing import cast
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -7,7 +6,6 @@ from faker import Faker
 from sqlalchemy.exc import NoResultFound
 
 from server.controllers.people_controller import get_sessionio
-from server.core.db import SessionIO
 from server.models.people_model import People
 from server.resources.people_resources import CreatePeople
 from tests.mocks.async_session_mock import SessionIOMock
@@ -27,7 +25,7 @@ async def test_get_people_ok(
     people_id = 1
 
     # MOCK
-    session_mock = cast(SessionIO, SessionIOMock())
+    session_mock = SessionIOMock.cast()
     httpclient.app.dependency_overrides[get_sessionio] = lambda: session_mock
     people_mock = People(
         id=people_id, first_name=fake.first_name(), last_name=fake.last_name()
@@ -53,7 +51,7 @@ async def test_get_people_not_found(
     people_id = 99999
 
     # MOCK
-    session_mock = cast(SessionIO, SessionIOMock())
+    session_mock = SessionIOMock.cast()
     httpclient.app.dependency_overrides[get_sessionio] = lambda: session_mock
     people_service_mock.get_people.return_value = NoResultFound(
         "No row was found when one was required"
@@ -74,7 +72,7 @@ async def test_all_people_ok(
     httpclient: HttpClientIO,
 ):
     # MOCK
-    session_mock = cast(SessionIO, SessionIOMock())
+    session_mock = SessionIOMock.cast()
     httpclient.app.dependency_overrides[get_sessionio] = lambda: session_mock
     people_mock = [
         People(id=idx + 1, first_name=fake.first_name(), last_name=fake.last_name())
@@ -98,7 +96,7 @@ async def test_all_people_nocontent(
     httpclient: HttpClientIO,
 ):
     # MOCK
-    session_mock = cast(SessionIO, SessionIOMock())
+    session_mock = SessionIOMock.cast()
     httpclient.app.dependency_overrides[get_sessionio] = lambda: session_mock
     people_service_mock.all_people.return_value = []
 
@@ -117,7 +115,7 @@ async def test_create_people_ok(
     httpclient: HttpClientIO,
 ):
     # MOCK
-    session_mock = cast(SessionIO, SessionIOMock())
+    session_mock = SessionIOMock.cast()
     httpclient.app.dependency_overrides[get_sessionio] = lambda: session_mock
     people_mock = People(
         id=fake.pyint(), first_name=fake.first_name(), last_name=fake.last_name()
@@ -145,7 +143,7 @@ async def test_create_people_validation_error(
     httpclient: HttpClientIO,
 ):
     # MOCK
-    session_mock = cast(SessionIO, SessionIOMock())
+    session_mock = SessionIOMock.cast()
     httpclient.app.dependency_overrides[get_sessionio] = lambda: session_mock
     people_mock = People(
         id=fake.pyint(), first_name=fake.first_name(), last_name=fake.last_name()

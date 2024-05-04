@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from random import randint
-from typing import Any, Self, Sequence, TypeVar
+from typing import Any, Self, Sequence, Type, TypeVar, cast
+
+from server.core.db import SessionIO
 
 T = TypeVar("T")
 
@@ -12,6 +14,14 @@ class SessionIOMock:
     ):
         self._return_value = return_value
         self._side_effect = side_effect
+
+    @classmethod
+    def cast(
+        cls: Type[SessionIOMock],
+        return_value: Any = None,
+        side_effect: BaseException | None = None,
+    ) -> SessionIO:
+        return cast(SessionIO, cls(return_value=return_value, side_effect=side_effect))
 
     def __enter__(self: Self, *args: Any, **kwargs: Any) -> Self:
         self._enter_count = getattr(self, "_enter_count", 0) + 1

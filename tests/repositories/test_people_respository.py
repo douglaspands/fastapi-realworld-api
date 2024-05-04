@@ -1,10 +1,7 @@
-from typing import cast
-
 import pytest
 from faker import Faker
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
-from server.core.db import SessionIO
 from server.models.people_model import People
 from server.repositories import people_repository
 from tests.mocks.async_session_mock import SessionIOMock
@@ -22,7 +19,7 @@ async def test_people_get_by_pk_ok():
     people_mock = People(
         id=people_id, first_name=fake.first_name(), last_name=fake.last_name()
     )
-    session_mock = cast(SessionIO, SessionIOMock(return_value=people_mock))
+    session_mock = SessionIOMock.cast(return_value=people_mock)
 
     # WHEN
     res = await people_repository.get(session=session_mock, pk=people_id)
@@ -40,9 +37,7 @@ async def test_people_get_by_pk_not_found():
 
     # MOCK
     error_message = "No row was found when one was required"
-    session_mock = cast(
-        SessionIO, SessionIOMock(side_effect=NoResultFound(error_message))
-    )
+    session_mock = SessionIOMock.cast(side_effect=NoResultFound(error_message))
 
     # WHEN
     with pytest.raises(NoResultFound) as exc_info:
@@ -59,7 +54,7 @@ async def test_people_get_all_ok():
         People(id=idx + 1, first_name=fake.first_name(), last_name=fake.last_name())
         for idx in range(10)
     ]
-    session_mock = cast(SessionIO, SessionIOMock(return_value=people_mock))
+    session_mock = SessionIOMock.cast(return_value=people_mock)
 
     # WHEN
     res = await people_repository.get_all(session=session_mock)
@@ -78,7 +73,7 @@ async def test_people_save_ok():
     create_people = People(first_name=fake.first_name(), last_name=fake.last_name())
 
     # MOCK
-    session_mock = cast(SessionIO, SessionIOMock())
+    session_mock = SessionIOMock.cast()
 
     # WHEN
     await people_repository.create(session=session_mock, people=create_people)
@@ -95,13 +90,10 @@ async def test_people_save_error():
 
     # MOCK
     error_message = 'insert or update on table "people" violates foreign key constraint "people_some_column_fkey"'
-    session_mock = cast(
-        SessionIO,
-        SessionIOMock(
-            side_effect=IntegrityError(
-                orig=Exception(error_message), params={}, statement=""
-            )
-        ),
+    session_mock = SessionIOMock.cast(
+        side_effect=IntegrityError(
+            orig=Exception(error_message), params={}, statement=""
+        )
     )
 
     # WHEN
