@@ -1,7 +1,7 @@
-from server.resources.base_resource import Base
+from server.resources.base_resource import BaseResource
 
 
-class CreatePeople(Base):
+class CreatePeople(BaseResource):
     first_name: str
     last_name: str
 

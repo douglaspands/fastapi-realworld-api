@@ -2,7 +2,6 @@ from http import HTTPStatus
 from typing import Any
 from unittest.mock import AsyncMock, patch
 
-import pytest
 from faker import Faker
 from pydash import camel_case
 from sqlalchemy.exc import IntegrityError, NoResultFound
@@ -11,7 +10,7 @@ from server.controllers.people_controller import get_sessionio
 from server.models.people_model import People
 from server.resources.people_resources import CreatePeople
 from tests.mocks.async_session_mock import SessionIOMock
-from tests.utils.http_client import HttpClientIO
+from tests.utils.http_client import HttpClient
 
 fake = Faker("pt_BR")
 Faker.seed(0)
@@ -30,18 +29,17 @@ def snake_to_camel(d: dict[str, Any]) -> dict[str, Any]:
     return r
 
 
-@pytest.mark.asyncio
 @patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
-async def test_get_people_ok(
+def test_get_people_ok(
     people_service_mock: AsyncMock,
-    httpclient: HttpClientIO,
+    httpclient: HttpClient,
 ):
     # GIVEN
     people_id = 1
 
     # MOCK
     session_mock = SessionIOMock.cast()
-    httpclient.app.dependency_overrides[get_sessionio] = lambda: session_mock
+    httpclient.current_app.dependency_overrides[get_sessionio] = lambda: session_mock
     people_mock = People(
         id=people_id, first_name=fake.first_name(), last_name=fake.last_name()
     )
@@ -49,74 +47,71 @@ async def test_get_people_ok(
 
     # WHEN
     url = f"/people/v1/people/{people_id}"
-    response = await httpclient.get(url)
+    response = httpclient.get(url)
 
     # THEN
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {"data": snake_to_camel(people_mock.model_dump())}
 
 
-@pytest.mark.asyncio
 @patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
-async def test_get_people_not_found(
+def test_get_people_not_found(
     people_service_mock: AsyncMock,
-    httpclient: HttpClientIO,
+    httpclient: HttpClient,
 ):
     # GIVEN
     people_id = 99999
 
     # MOCK
     session_mock = SessionIOMock.cast()
-    httpclient.app.dependency_overrides[get_sessionio] = lambda: session_mock
+    httpclient.current_app.dependency_overrides[get_sessionio] = lambda: session_mock
     people_service_mock.get_people.side_effect = NoResultFound(
         "No row was found when one was required"
     )
 
     # WHEN
     url = f"/people/v1/people/{people_id}"
-    response = await httpclient.get(url)
+    response = httpclient.get(url)
 
     # THEN
     assert response.status_code == HTTPStatus.NOT_FOUND
 
 
-@pytest.mark.asyncio
 @patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
-async def test_get_people_internal_server_error(
+def test_get_people_internal_server_error(
     people_service_mock: AsyncMock,
-    httpclient: HttpClientIO,
+    httpclient: HttpClient,
 ):
     # GIVEN
     people_id = 500
 
     # MOCK
     session_mock = SessionIOMock.cast()
-    httpclient.app.dependency_overrides[get_sessionio] = lambda: session_mock
+    httpclient.current_app.dependency_overrides[get_sessionio] = lambda: session_mock
+    message_error = 'insert or update on table "people" violates foreign key constraint "people_some_column_fkey"'
     people_service_mock.get_people.side_effect = IntegrityError(
-        orig=Exception(
-            'insert or update on table "people" violates foreign key constraint "people_some_column_fkey"'
-        ),
+        orig=Exception(message_error),
         params={},
         statement="",
     )
 
     # WHEN
     url = f"/people/v1/people/{people_id}"
-    response = await httpclient.get(url)
+    response = httpclient.get(url)
 
     # THEN
     assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
+    assert message_error in response.text
 
 
-@pytest.mark.asyncio
 @patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
-async def test_all_people_ok(
+def test_all_people_ok(
     people_service_mock: AsyncMock,
-    httpclient: HttpClientIO,
+    httpclient: HttpClient,
 ):
     # MOCK
     session_mock = SessionIOMock.cast()
-    httpclient.app.dependency_overrides[get_sessionio] = lambda: session_mock
+    httpclient.current_app.dependency_overrides[get_sessionio] = lambda: session_mock
     people_mock = [
         People(id=idx + 1, first_name=fake.first_name(), last_name=fake.last_name())
         for idx in range(10)
@@ -125,7 +120,7 @@ async def test_all_people_ok(
 
     # WHEN
     url = "/people/v1/people"
-    response = await httpclient.get(url)
+    response = httpclient.get(url)
 
     # THEN
     assert response.status_code == HTTPStatus.OK
@@ -134,34 +129,32 @@ async def test_all_people_ok(
     }
 
 
-@pytest.mark.asyncio
 @patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
-async def test_all_people_nocontent(
+def test_all_people_nocontent(
     people_service_mock: AsyncMock,
-    httpclient: HttpClientIO,
+    httpclient: HttpClient,
 ):
     # MOCK
     session_mock = SessionIOMock.cast()
-    httpclient.app.dependency_overrides[get_sessionio] = lambda: session_mock
+    httpclient.current_app.dependency_overrides[get_sessionio] = lambda: session_mock
     people_service_mock.all_people.return_value = []
 
     # WHEN
     url = "/people/v1/people"
-    response = await httpclient.get(url)
+    response = httpclient.get(url)
 
     # THEN
     assert response.status_code == HTTPStatus.NO_CONTENT
 
 
-@pytest.mark.asyncio
 @patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
-async def test_create_people_ok(
+def test_create_people_ok(
     people_service_mock: AsyncMock,
-    httpclient: HttpClientIO,
+    httpclient: HttpClient,
 ):
     # MOCK
     session_mock = SessionIOMock.cast()
-    httpclient.app.dependency_overrides[get_sessionio] = lambda: session_mock
+    httpclient.current_app.dependency_overrides[get_sessionio] = lambda: session_mock
     people_mock = People(
         id=fake.pyint(), first_name=fake.first_name(), last_name=fake.last_name()
     )
@@ -174,22 +167,21 @@ async def test_create_people_ok(
 
     # WHEN
     url = "/people/v1/people"
-    response = await httpclient.post(url, json=create_people.model_dump())
+    response = httpclient.post(url, json=create_people.model_dump())
 
     # THEN
     assert response.status_code == HTTPStatus.CREATED
     assert response.json() == {"data": snake_to_camel(people_mock.model_dump())}
 
 
-@pytest.mark.asyncio
 @patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
-async def test_create_people_validation_error(
+def test_create_people_validation_error(
     people_service_mock: AsyncMock,
-    httpclient: HttpClientIO,
+    httpclient: HttpClient,
 ):
     # MOCK
     session_mock = SessionIOMock.cast()
-    httpclient.app.dependency_overrides[get_sessionio] = lambda: session_mock
+    httpclient.current_app.dependency_overrides[get_sessionio] = lambda: session_mock
     people_mock = People(
         id=fake.pyint(), first_name=fake.first_name(), last_name=fake.last_name()
     )
@@ -203,7 +195,7 @@ async def test_create_people_validation_error(
 
     # WHEN
     url = "/people/v1/people"
-    response = await httpclient.post(url, json=create_people)
+    response = httpclient.post(url, json=create_people)
 
     # THEN
     assert response.status_code == HTTPStatus.BAD_REQUEST

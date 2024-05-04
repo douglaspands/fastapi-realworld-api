@@ -1,12 +1,19 @@
-from typing import Any, Self, cast
+from typing import Any, Self
 
 from fastapi import FastAPI
-from httpx import ASGITransport, AsyncClient
-from httpx._transports.asgi import _ASGIApp
+from fastapi.testclient import TestClient
 
 
-class HttpClientIO(AsyncClient):
+class HttpClient(TestClient):
+    current_app: FastAPI
+
     def __init__(self: Self, *args: Any, **kwargs: Any):
-        self.app: FastAPI = kwargs.pop("app", None)
-        kwargs["transport"] = ASGITransport(app=cast(_ASGIApp, self.app))
+        for arg in args:
+            if isinstance(arg, FastAPI):
+                self.current_app: FastAPI = arg
+        if not self.current_app:
+            self.current_app = kwargs["app"]
         super().__init__(*args, **kwargs)
+
+
+__all__ = ("HttpClient",)

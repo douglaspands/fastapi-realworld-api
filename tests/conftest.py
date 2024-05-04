@@ -1,16 +1,15 @@
-from typing import Any, AsyncGenerator, Generator
+from typing import Any, Generator
 
 import pytest
 
-from server.api import app as api_app
+from server.api import app
 from server.core.settings import Settings, get_settings
-from tests.utils.http_client import HttpClientIO
+from tests.utils.http_client import HttpClient
 
 
 @pytest.fixture
-async def httpclient() -> AsyncGenerator[HttpClientIO, Any]:
-    async with HttpClientIO(app=api_app, base_url="http://test") as ac:
-        yield ac
+def httpclient() -> HttpClient:
+    return HttpClient(app)
 
 
 @pytest.fixture
