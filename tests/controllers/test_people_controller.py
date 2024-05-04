@@ -3,7 +3,7 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 from faker import Faker
-from sqlalchemy.exc import NoResultFound
+from sqlalchemy.exc import IntegrityError, NoResultFound
 
 from server.controllers.people_controller import get_sessionio
 from server.models.people_model import People
@@ -38,7 +38,7 @@ async def test_get_people_ok(
 
     # THEN
     assert response.status_code == HTTPStatus.OK
-    assert response.json() == {"data": people_mock.model_dump()}
+    assert response.json() == {"data": people_mock.model_dump(mode="json")}
 
 
 @pytest.mark.asyncio
@@ -53,7 +53,7 @@ async def test_get_people_not_found(
     # MOCK
     session_mock = SessionIOMock.cast()
     httpclient.app.dependency_overrides[get_sessionio] = lambda: session_mock
-    people_service_mock.get_people.return_value = NoResultFound(
+    people_service_mock.get_people.side_effect = NoResultFound(
         "No row was found when one was required"
     )
 
@@ -63,6 +63,34 @@ async def test_get_people_not_found(
 
     # THEN
     assert response.status_code == HTTPStatus.NOT_FOUND
+
+
+@pytest.mark.asyncio
+@patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
+async def test_get_people_internal_server_error(
+    people_service_mock: AsyncMock,
+    httpclient: HttpClientIO,
+):
+    # GIVEN
+    people_id = 500
+
+    # MOCK
+    session_mock = SessionIOMock.cast()
+    httpclient.app.dependency_overrides[get_sessionio] = lambda: session_mock
+    people_service_mock.get_people.side_effect = IntegrityError(
+        orig=Exception(
+            'insert or update on table "people" violates foreign key constraint "people_some_column_fkey"'
+        ),
+        params={},
+        statement="",
+    )
+
+    # WHEN
+    url = f"/people/v1/people/{people_id}"
+    response = await httpclient.get(url)
+
+    # THEN
+    assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
 
 
 @pytest.mark.asyncio
@@ -152,8 +180,8 @@ async def test_create_people_validation_error(
 
     # GIVEN
     create_people = {
-        "first_name": people_mock.first_name,
-        "last_name": None,
+        "firstName": people_mock.first_name,
+        "lastName": None,
     }
 
     # WHEN

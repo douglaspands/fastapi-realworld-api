@@ -1,10 +1,9 @@
-from http import HTTPStatus
 from typing import Sequence
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 
 from server.core.db import SessionIO, get_sessionio
-from server.core.schemas import ResponseOK
+from server.core.schema import ResponseOK
 from server.resources.people_resources import CreatePeople, People
 from server.services import people_service
 
@@ -15,7 +14,7 @@ router = APIRouter(
 
 
 @router.get(
-    "/v1/people/{pk}", response_model=ResponseOK[People], status_code=HTTPStatus.OK
+    "/v1/people/{pk}", response_model=ResponseOK[People], status_code=status.HTTP_200_OK
 )
 async def get_people(pk: int, session: SessionIO = Depends(get_sessionio)):
     data = await people_service.get_people(session=session, pk=pk)
@@ -23,7 +22,9 @@ async def get_people(pk: int, session: SessionIO = Depends(get_sessionio)):
 
 
 @router.get(
-    "/v1/people", response_model=ResponseOK[Sequence[People]], status_code=HTTPStatus.OK
+    "/v1/people",
+    response_model=ResponseOK[Sequence[People]],
+    status_code=status.HTTP_200_OK,
 )
 async def all_people(session: SessionIO = Depends(get_sessionio)):
     data = await people_service.all_people(session=session)
@@ -31,7 +32,7 @@ async def all_people(session: SessionIO = Depends(get_sessionio)):
 
 
 @router.post(
-    "/v1/people", response_model=ResponseOK[People], status_code=HTTPStatus.CREATED
+    "/v1/people", response_model=ResponseOK[People], status_code=status.HTTP_201_CREATED
 )
 async def create_people(
     create_people: CreatePeople, session: SessionIO = Depends(get_sessionio)

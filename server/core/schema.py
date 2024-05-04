@@ -1,13 +1,13 @@
-from typing import Generic, Sequence, TypeVar
+from typing import Generic, TypeVar
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 T = TypeVar("T")
 # E = TypeVar("E")
 
 
 class ResponseOK(BaseModel, Generic[T]):
-    data: T | Sequence[T] = Field(..., title="Envelope", description="Data envelope")
+    data: T
 
 
 # class ResponseError(BaseModel, Generic[E]):

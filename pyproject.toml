@@ -14,6 +14,7 @@ uvicorn = {extras = ["standard"], version = "^0.29.0"}
 pydantic-settings = "^2.2.1"
 gunicorn = "^22.0.0"
 aiosqlite = "^0.20.0"
+pydash = "^8.0.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.2"

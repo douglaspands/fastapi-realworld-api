@@ -1,7 +1,7 @@
-from pydantic import BaseModel
+from server.resources.base_resource import Base
 
 
-class CreatePeople(BaseModel):
+class CreatePeople(Base):
     first_name: str
     last_name: str
 

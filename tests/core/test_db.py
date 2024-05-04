@@ -1,6 +1,5 @@
-from sqlite3 import OperationalError
-
 import pytest
+from sqlalchemy.exc import OperationalError
 
 from server.core.db import get_sessionio
 from server.core.settings import DatabaseDsn, Settings
@@ -20,4 +19,4 @@ async def test_get_sessionio_error(settings: Settings):
     with pytest.raises(OperationalError) as exc_info:
         async for session in get_sessionio():
             await people_repository.get(pk=99999, session=session)
-    assert "(sqlite3.OperationalError) no such table: people" in str(exc_info)
+    assert "no such table: people" in str(exc_info.value)
