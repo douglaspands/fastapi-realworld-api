@@ -2,8 +2,7 @@ from fastapi import FastAPI, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import NoResultFound
-
-# from starlette.exceptions import HTTPException as StarletteHTTPException
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 
 def init_app(app: FastAPI):
@@ -30,9 +29,14 @@ def init_app(app: FastAPI):
             content={"errors": [{"message": str(exc)}]},
         )
 
-    # @app.exception_handler(StarletteHTTPException)
-    # async def http_exception_handler(request: Request, exc: StarletteHTTPException):
-    #     return JSONResponse(
-    #         status_code=exc.status_code,
-    #         content={"errors": [{"message": str(exc.detail)}]},
-    #     )
+    @app.exception_handler(StarletteHTTPException)
+    async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+        return JSONResponse(
+            status_code=exc.status_code,
+            content=(
+                None
+                if exc.status_code
+                in (status.HTTP_204_NO_CONTENT, status.HTTP_404_NOT_FOUND)
+                else {"errors": [{"message": str(exc.detail)}]}
+            ),
+        )

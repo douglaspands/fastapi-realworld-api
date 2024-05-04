@@ -1,6 +1,6 @@
 from typing import Sequence
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, HTTPException, status
 
 from server.core.db import SessionIO, get_sessionio
 from server.core.schema import ResponseOK
@@ -28,6 +28,8 @@ async def get_people(pk: int, session: SessionIO = Depends(get_sessionio)):
 )
 async def all_people(session: SessionIO = Depends(get_sessionio)):
     data = await people_service.all_people(session=session)
+    if not data:
+        raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)
     return ResponseOK(data=data)
 
 
