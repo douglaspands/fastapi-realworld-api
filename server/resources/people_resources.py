@@ -7,7 +7,7 @@ class CreatePeople(Base):
 
 
 class People(CreatePeople):
-    id: int | None = None
+    id: int
 
 
 __all__ = ("CreatePeople", "People")
