@@ -22,13 +22,6 @@ def init_app(app: FastAPI):
             content={"errors": [{"message": str(exc)}]},
         )
 
-    @app.exception_handler(Exception)
-    async def exception_handler(request: Request, exc: Exception):
-        return JSONResponse(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            content={"errors": [{"message": str(exc)}]},
-        )
-
     @app.exception_handler(StarletteHTTPException)
     async def http_exception_handler(request: Request, exc: StarletteHTTPException):
         return JSONResponse(

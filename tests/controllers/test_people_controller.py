@@ -3,7 +3,7 @@ from typing import Any
 from unittest.mock import AsyncMock, patch
 
 from faker import Faker
-from pydash import camel_case
+from pydash import camel_case, get
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
 from server.controllers.people_controller import get_sessionio
@@ -101,7 +101,7 @@ def test_get_people_internal_server_error(
 
     # THEN
     assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
-    assert message_error in response.text
+    assert message_error in get(response.json(), "errors[0].message", "")
 
 
 @patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
