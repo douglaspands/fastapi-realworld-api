@@ -1,8 +1,10 @@
 from http import HTTPStatus
+from typing import Any
 from unittest.mock import AsyncMock, patch
 
 import pytest
 from faker import Faker
+from pydash import camel_case
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
 from server.controllers.people_controller import get_sessionio
@@ -13,6 +15,19 @@ from tests.utils.http_client import HttpClientIO
 
 fake = Faker("pt_BR")
 Faker.seed(0)
+
+
+def snake_to_camel(d: dict[str, Any]) -> dict[str, Any]:
+    r: dict[str, Any] = {}
+    for k, v in d.items():
+        if isinstance(v, (list, set, tuple)):
+            il = []
+            for i in v:
+                il.append(snake_to_camel(i) if isinstance(i, dict) else i)
+            r[camel_case(k)] = il
+        else:
+            r[camel_case(k)] = snake_to_camel(v) if isinstance(v, dict) else v
+    return r
 
 
 @pytest.mark.asyncio
@@ -38,7 +53,7 @@ async def test_get_people_ok(
 
     # THEN
     assert response.status_code == HTTPStatus.OK
-    assert response.json() == {"data": people_mock.model_dump(mode="json")}
+    assert response.json() == {"data": snake_to_camel(people_mock.model_dump())}
 
 
 @pytest.mark.asyncio
@@ -114,7 +129,9 @@ async def test_all_people_ok(
 
     # THEN
     assert response.status_code == HTTPStatus.OK
-    assert response.json() == {"data": [p.model_dump() for p in people_mock]}
+    assert response.json() == {
+        "data": [snake_to_camel(p.model_dump()) for p in people_mock]
+    }
 
 
 @pytest.mark.asyncio
@@ -161,7 +178,7 @@ async def test_create_people_ok(
 
     # THEN
     assert response.status_code == HTTPStatus.CREATED
-    assert response.json() == {"data": people_mock.model_dump()}
+    assert response.json() == {"data": snake_to_camel(people_mock.model_dump())}
 
 
 @pytest.mark.asyncio
