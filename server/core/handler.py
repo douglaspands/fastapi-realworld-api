@@ -7,7 +7,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 def init_app(app: FastAPI):
     @app.exception_handler(RequestValidationError)
-    async def validation_exception_handler(
+    async def request_validation_error_handler(
         request: Request, exc: RequestValidationError
     ):
         return JSONResponse(
@@ -37,6 +37,6 @@ def init_app(app: FastAPI):
                 None
                 if exc.status_code
                 in (status.HTTP_204_NO_CONTENT, status.HTTP_404_NOT_FOUND)
-                else {"errors": [{"message": str(exc.detail)}]}
+                else {"errors": [{"message": exc.detail}]}
             ),
         )
