@@ -1,9 +1,7 @@
 from typing import Awaitable, Callable
 
-from fastapi import FastAPI, status
+from fastapi import FastAPI, Request, Response, status
 from fastapi.responses import JSONResponse
-from starlette.requests import Request
-from starlette.responses import Response
 
 
 def init_app(app: FastAPI):

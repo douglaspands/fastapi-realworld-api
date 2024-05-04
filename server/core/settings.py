@@ -19,7 +19,6 @@ DatabaseDsn = Annotated[
 class Settings(BaseSettings):
     # app
     app_name: str = "fastapi-realworld-api"
-    app_version: str = "v0.1.0"
 
     # database
     db_debug: bool = False

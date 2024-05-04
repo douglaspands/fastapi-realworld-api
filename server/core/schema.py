@@ -1,17 +1,31 @@
-from typing import Generic, TypeVar
+from typing import Any, Dict, Generic, Sequence, TypeVar
 
 from pydantic import BaseModel
 
 T = TypeVar("T")
-# E = TypeVar("E")
+
+
+class ValidationError(BaseModel):
+    type: str
+    loc: Sequence[str]
+    msg: str
+    input: Dict[str, Any]
+
+
+class MessageError(BaseModel):
+    message: str
 
 
 class ResponseOK(BaseModel, Generic[T]):
     data: T
 
 
-# class ResponseError(BaseModel, Generic[E]):
-#     errors: list[E] = Field(..., title="Envelope", description="Errors envelope")
+class ResponseBadRequest(BaseModel):
+    errors: Sequence[ValidationError]
 
 
-__all__ = ("ResponseOK",)
+class ResponseErrors(BaseModel):
+    errors: Sequence[MessageError]
+
+
+__all__ = ("ResponseOK", "ResponseBadRequest", "ResponseErrors")
