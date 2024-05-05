@@ -6,7 +6,10 @@ from pydash import camel_case as PydashCamelCase
 
 class BaseResource(PydanticBaseModel):
     model_config = PydanticConfigDict(
-        alias_generator=PydanticAliasGenerator(serialization_alias=PydashCamelCase)
+        alias_generator=PydanticAliasGenerator(
+            validation_alias=PydashCamelCase, serialization_alias=PydashCamelCase
+        ),
+        populate_by_name=True,
     )
 
 

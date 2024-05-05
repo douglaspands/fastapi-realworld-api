@@ -4,10 +4,13 @@ from server.core import handler, middleware, openapi, router
 
 
 def create_app() -> FastAPI:
-    app = FastAPI(**openapi.get_config())
+    app = FastAPI(
+        with_google_fonts=True,
+    )
     middleware.init_app(app)
     handler.init_app(app)
     router.init_app(app)
+    openapi.init_app(app)
     return app
 
 

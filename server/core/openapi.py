@@ -1,18 +1,22 @@
 from http import HTTPStatus
-from typing import Any, Dict, Union
+from typing import Any
+
+from fastapi import FastAPI
+from fastapi.openapi.utils import get_openapi
+from pydash import unset
 
 from server.core.schema import ResponseBadRequest, ResponseErrors
 
+HTTP_422 = {
+    "description": "Unprocessable Entity",
+    "content": {
+        "application/json": {"schema": {"$ref": "#/components/schemas/ResponseErrors"}}
+    },
+}
 
-def get_config() -> dict[str, Any]:
-    return {
-        "responses": response_generator(500),
-        "with_google_fonts": True,
-    }
 
-
-def response_generator(*args: int) -> Dict[Union[int, str], Dict[str, Any]]:
-    responses: Dict[Union[int, str], Dict[str, Any]] = {}
+def response_generator(*args: int) -> dict[int | str, dict[str, Any]]:
+    responses: dict[int | str, dict[str, Any]] = {}
     for status in set(args):
         if status in HTTPStatus:
             if status in (204, 404):
@@ -24,4 +28,29 @@ def response_generator(*args: int) -> Dict[Union[int, str], Dict[str, Any]]:
     return responses
 
 
-__all__ = ("get_config", "response_generator")
+def init_app(app: FastAPI):
+    app.router.responses = response_generator(500)
+    openapi_schema = get_openapi(
+        title=app.title,
+        version=app.version,
+        openapi_version=app.openapi_version,
+        summary=app.summary,
+        description=app.description,
+        terms_of_service=app.terms_of_service,
+        contact=app.contact,
+        license_info=app.license_info,
+        routes=app.routes,
+        webhooks=app.webhooks.routes,
+        tags=app.openapi_tags,
+        servers=app.servers,
+        separate_input_output_schemas=app.separate_input_output_schemas,
+    )
+    unset(openapi_schema, "components.schemas.HTTPValidationError")
+    for path in dict(openapi_schema["paths"]).values():
+        for method in dict(path).values():
+            if dict(method["responses"]).get("422"):
+                method["responses"]["422"] = HTTP_422
+    app.openapi_schema = openapi_schema
+
+
+__all__ = ("init_app", "response_generator")
