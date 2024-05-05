@@ -1,27 +1,27 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+Todas as notas de alteração deste projeto serão documentados neste arquivo.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+O formato é baseado no [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
+e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/spec/v2.0.0.html).
 
-## [Unreleased]
+## [Não Lançado]
 
-### Added
+### Adicionado
 
-- Include people controller;
-- Include people service;
-- Include people respository;
-- Include people model;
-- Include people resource;
-- Include core api;
-- Include core handler;
-- Include core settings;
-- Include core router;
-- Include core db;
-- Include core exceptions;
-- Include core openapi;
-- Include core schema;
-- Include core midleware;
-- Test coverage 100% of the source code;
-- Include and configuration alembic for autogenerate migrations;
+- Incluido people controller;
+- Incluido people service;
+- Incluido people respository;
+- Incluido people model;
+- Incluido people resource;
+- Incluido core api;
+- Incluido core handler;
+- Incluido core settings;
+- Incluido core router;
+- Incluido core db;
+- Incluido core exceptions;
+- Incluido core openapi;
+- Incluido core schema;
+- Incluido core midleware;
+- Cobertura de teste de 100% do codigo;
+- Alembic: incluido e configurado para a autogeração dos scripts de migração;
