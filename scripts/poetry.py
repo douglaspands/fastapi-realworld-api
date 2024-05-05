@@ -58,6 +58,11 @@ def build():
     _print("BUILD SUCCESSFUL")
 
 
+def migrate():
+    cmd = "alembic upgrade head"
+    _shell(cmd)
+
+
 def server():
     cmd = (
         "uvicorn "

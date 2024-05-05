@@ -6,18 +6,26 @@ Exemplo de projeto com `FastAPI` e `SQLModel` usando `async/await` utilizado no 
 - Poetry ~1.8.0
 
 ## Como usar
+Seguem os passos para iniciar a aplicação (os passos 1, 2 e 3 precisam ser executados somente na primeira vez).
+
+### 1. Instalar dependencias
 Na primeira vez é necessario instalar todas as dependencias executando o seguinte comando:
 ```sh
 poetry install
 ```
-Para iniciar o servidor tem 2 modos, um equivalente ao de produção e o segundo para uso em desenvolvimento.
 
-### Produção
+### 2. Criar arquivo .env
+```sh
+db_url=sqlite+aiosqlite:///database.db
+db_debug=1
+``` 
+
+### 3. Executar migrações
+```sh
+poetry run migrate
+``` 
+
+### 4. Iniciar aplicação
 ```sh
 poetry run server
-```
-
-### Em desenvolvimento
-```sh
-poetry run server_debug
 ```
