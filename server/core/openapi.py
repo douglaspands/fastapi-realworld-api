@@ -46,10 +46,10 @@ def init_app(app: FastAPI):
         separate_input_output_schemas=app.separate_input_output_schemas,
     )
     unset(openapi_schema, "components.schemas.HTTPValidationError")
-    for path in dict(openapi_schema["paths"]).values():
-        for method in dict(path).values():
-            if dict(method["responses"]).get("422"):
-                method["responses"]["422"] = HTTP_422
+    for path_value in dict(openapi_schema["paths"]).values():
+        for method_value in dict(path_value).values():
+            if dict(method_value["responses"]).get("422"):
+                method_value["responses"]["422"] = HTTP_422
     app.openapi_schema = openapi_schema
 
 
