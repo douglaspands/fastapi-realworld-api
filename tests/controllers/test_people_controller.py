@@ -7,6 +7,7 @@ from pydash import camel_case, get
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
 from server.controllers.people_controller import get_sessionio
+from server.core.exceptions import BusinessError, NotFoundError
 from server.models.people_model import People
 from server.resources.people_resources import CreatePeople
 from tests.mocks.async_session_mock import SessionIOMock
@@ -78,6 +79,29 @@ def test_get_people_not_found(
 
 
 @patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
+def test_get_people_not_found_2(
+    people_service_mock: AsyncMock,
+    httpclient: HttpClient,
+):
+    # GIVEN
+    people_id = 99999
+
+    # MOCK
+    session_mock = SessionIOMock.cast()
+    httpclient.current_app.dependency_overrides[get_sessionio] = lambda: session_mock
+    people_service_mock.get_people.side_effect = NotFoundError(
+        "No row was found when one was required"
+    )
+
+    # WHEN
+    url = f"/people/v1/people/{people_id}"
+    response = httpclient.get(url)
+
+    # THEN
+    assert response.status_code == HTTPStatus.NOT_FOUND
+
+
+@patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
 def test_get_people_internal_server_error(
     people_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -101,7 +125,7 @@ def test_get_people_internal_server_error(
 
     # THEN
     assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
-    assert message_error in get(response.json(), "errors[0].message", "")
+    assert message_error in get(response.json(), "errors[0].message")
 
 
 @patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
@@ -199,3 +223,31 @@ def test_create_people_validation_error(
 
     # THEN
     assert response.status_code == HTTPStatus.BAD_REQUEST
+
+
+@patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
+def test_create_people_business_error(
+    people_service_mock: AsyncMock,
+    httpclient: HttpClient,
+):
+    # MOCK
+    session_mock = SessionIOMock.cast()
+    httpclient.current_app.dependency_overrides[get_sessionio] = lambda: session_mock
+    people_mock = People(
+        id=fake.pyint(), first_name=fake.first_name(), last_name=fake.last_name()
+    )
+    message_error = "Business error mock"
+    people_service_mock.create_people.side_effect = BusinessError(message_error)
+
+    # GIVEN
+    create_people = CreatePeople(
+        first_name=people_mock.first_name, last_name=people_mock.last_name
+    )
+
+    # WHEN
+    url = "/people/v1/people"
+    response = httpclient.post(url, json=create_people.model_dump())
+
+    # THEN
+    assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
+    assert message_error == get(response.json(), "errors[0].message")

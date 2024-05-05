@@ -55,7 +55,7 @@ def build():
     if not all(sc == 0 for sc in results):
         _print("BUILD ERROR", is_error=True)
         sys.exit(1)
-    _print("BUILD SUCCESSFUL", is_error=True)
+    _print("BUILD SUCCESSFUL")
 
 
 def server():
