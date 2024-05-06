@@ -24,38 +24,22 @@ async def get_all(
     return result.all()
 
 
-# async def update(session: SessionIO, pk: int, **values: Any):
-#     pass
+async def update(session: SessionIO, pk: int, **values: Any) -> People:
+    people = await get(session=session, pk=pk)
+    people.sqlmodel_update(values)
+    session.add(people)
+    return people
 
 
-# async def delete(session: SessionIO, pk: int):
-#     pass
-
-
-# async def count(session: SessionIO, user: User) -> int:
-#     return 1
-
-
-# async def get_or_create(session: SessionIO, user: User) -> User:
-#     if res := await get_all(
-#         session=session, name=user.name, surname=user.surname, limit=1
-#     ):
-#         return res[0]
-#     return await create(session=session, user=user)
-
-
-# async def update_and_get(session: SessionIO, pk: int, **values: Any) -> User:
-#     await update(session=session, pk=pk, **values)
-#     return await get(session=session, pk=pk)
+async def delete(session: SessionIO, pk: int):
+    people = await get(session=session, pk=pk)
+    await session.delete(people)
 
 
 __all__ = (
     "get",
     "get_all",
     "create",
-    # "update",
-    # "delete",
-    # "count",
-    # "get_or_create",
-    # "update_and_get",
+    "update",
+    "delete",
 )

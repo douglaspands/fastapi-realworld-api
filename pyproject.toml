@@ -44,6 +44,7 @@ asyncio_mode = "auto"
 [tool.poetry.scripts]
 server = 'scripts.poetry:server'
 lint = 'scripts.poetry:lint'
+format = 'scripts.poetry:format'
 test = 'scripts.poetry:test'
 build = 'scripts.poetry:build'
 migrate = 'scripts.poetry:migrate'

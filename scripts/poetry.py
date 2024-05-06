@@ -44,6 +44,13 @@ def lint():
     _print("LINT SUCCESSFUL")
 
 
+def format():
+    cmd = "ruff format {folder}"
+    folders = (str(SERVER_FOLDER), str(TEST_FOLDER))
+    for folder in folders:
+        _shell(cmd.format(folder=folder))
+
+
 def build():
     results = []
     cmd_tools = ("mypy {folder}", "ruff check {folder}")

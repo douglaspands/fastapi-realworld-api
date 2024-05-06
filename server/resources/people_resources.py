@@ -1,4 +1,4 @@
-from server.resources.base_resource import BaseResource
+from server.resources.base_resource import AllOptionalMetaclass, BaseResource
 
 
 class CreatePeople(BaseResource):
@@ -6,8 +6,12 @@ class CreatePeople(BaseResource):
     last_name: str
 
 
+class UpdatePeople(CreatePeople, metaclass=AllOptionalMetaclass):
+    pass
+
+
 class People(CreatePeople):
     id: int
 
 
-__all__ = ("CreatePeople", "People")
+__all__ = ("CreatePeople", "People", "UpdatePeople")
