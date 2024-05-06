@@ -6,7 +6,12 @@ from server.core.db import SessionIO, get_sessionio
 from server.core.exceptions import NoContentError
 from server.core.openapi import response_generator
 from server.core.schema import ResponseOK
-from server.resources.people_resources import CreatePeople, People, UpdatePeople
+from server.resources.people_resources import (
+    CreatePeople,
+    People,
+    UpdatePeople,
+    UpdatePeopleOptional,
+)
 from server.services import people_service
 
 router = APIRouter(
@@ -54,6 +59,21 @@ async def create_people(
     return ResponseOK(data=data)
 
 
+@router.put(
+    "/v1/people/{pk}",
+    response_model=ResponseOK[People],
+    status_code=status.HTTP_200_OK,
+    responses=response_generator(400, 422, 500),
+)
+async def update_people_all(
+    pk: int, update_people: UpdatePeople, session: SessionIO = Depends(get_sessionio)
+):
+    data = await people_service.update_people_all(
+        session=session, pk=pk, update_people=update_people
+    )
+    return ResponseOK(data=data)
+
+
 @router.patch(
     "/v1/people/{pk}",
     response_model=ResponseOK[People],
@@ -61,7 +81,9 @@ async def create_people(
     responses=response_generator(400, 422, 500),
 )
 async def update_people(
-    pk: int, update_people: UpdatePeople, session: SessionIO = Depends(get_sessionio)
+    pk: int,
+    update_people: UpdatePeopleOptional,
+    session: SessionIO = Depends(get_sessionio),
 ):
     data = await people_service.update_people(
         session=session, pk=pk, update_people=update_people

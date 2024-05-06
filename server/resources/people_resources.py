@@ -6,7 +6,11 @@ class CreatePeople(BaseResource):
     last_name: str
 
 
-class UpdatePeople(CreatePeople, metaclass=AllOptionalMetaclass):
+class UpdatePeople(CreatePeople):
+    pass
+
+
+class UpdatePeopleOptional(CreatePeople, metaclass=AllOptionalMetaclass):
     pass
 
 
@@ -14,4 +18,4 @@ class People(CreatePeople):
     id: int
 
 
-__all__ = ("CreatePeople", "People", "UpdatePeople")
+__all__ = ("CreatePeople", "People", "UpdatePeople", "UpdatePeopleOptional")

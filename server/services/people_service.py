@@ -3,7 +3,11 @@ from typing import Sequence
 from server.core.db import SessionIO
 from server.models.people_model import People
 from server.repositories import people_repository
-from server.resources.people_resources import CreatePeople, UpdatePeople
+from server.resources.people_resources import (
+    CreatePeople,
+    UpdatePeople,
+    UpdatePeopleOptional,
+)
 
 
 async def all_people(session: SessionIO) -> Sequence[People]:
@@ -26,10 +30,19 @@ async def create_people(session: SessionIO, create_people: CreatePeople) -> Peop
 
 
 async def update_people(
-    session: SessionIO, pk: int, update_people: UpdatePeople
+    session: SessionIO, pk: int, update_people: UpdatePeopleOptional
 ) -> People:
     async with session.begin():
         values = update_people.model_dump(exclude_none=True)
+        people = await people_repository.update(session=session, pk=pk, **values)
+    return people
+
+
+async def update_people_all(
+    session: SessionIO, pk: int, update_people: UpdatePeople
+) -> People:
+    async with session.begin():
+        values = update_people.model_dump()
         people = await people_repository.update(session=session, pk=pk, **values)
     return people
 
