@@ -65,10 +65,10 @@ async def create_people(
     status_code=status.HTTP_200_OK,
     responses=response_generator(400, 422, 500),
 )
-async def update_people_all(
+async def update_people(
     pk: int, update_people: UpdatePeople, session: SessionIO = Depends(get_sessionio)
 ):
-    data = await people_service.update_people_all(
+    data = await people_service.update_people(
         session=session, pk=pk, update_people=update_people
     )
     return ResponseOK(data=data)
@@ -80,12 +80,12 @@ async def update_people_all(
     status_code=status.HTTP_200_OK,
     responses=response_generator(400, 422, 500),
 )
-async def update_people(
+async def update_people_optional(
     pk: int,
     update_people: UpdatePeopleOptional,
     session: SessionIO = Depends(get_sessionio),
 ):
-    data = await people_service.update_people(
+    data = await people_service.update_people_optional(
         session=session, pk=pk, update_people=update_people
     )
     return ResponseOK(data=data)

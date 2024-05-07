@@ -29,7 +29,7 @@ async def create_people(session: SessionIO, create_people: CreatePeople) -> Peop
     return people
 
 
-async def update_people(
+async def update_people_optional(
     session: SessionIO, pk: int, update_people: UpdatePeopleOptional
 ) -> People:
     async with session.begin():
@@ -38,7 +38,7 @@ async def update_people(
     return people
 
 
-async def update_people_all(
+async def update_people(
     session: SessionIO, pk: int, update_people: UpdatePeople
 ) -> People:
     async with session.begin():

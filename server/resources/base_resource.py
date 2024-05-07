@@ -32,8 +32,9 @@ class AllOptionalMetaclass(PydanticModelMetaclass):
         for base in bases:
             annotations.update(base.__annotations__)
         for field in annotations:
-            if not field.startswith("__") and not field.startswith("model_"):
+            if not field.startswith("__"):
                 annotations[field] = Optional[annotations[field]]
+                namespaces[field] = None
         namespaces["__annotations__"] = annotations
         return super().__new__(cls, name, bases, namespaces, **kwargs)
 
