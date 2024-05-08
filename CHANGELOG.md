@@ -18,7 +18,8 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 - Incluido core handler;
 - Incluido core settings;
 - Incluido core router;
-- Incluido core db;
+- Incluido core database;
+- Incluido core context;
 - Incluido core exceptions;
 - Incluido core openapi;
 - Incluido core schema;

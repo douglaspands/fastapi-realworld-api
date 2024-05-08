@@ -2,7 +2,7 @@ from typing import Any, Sequence
 
 from sqlmodel import select
 
-from server.core.db import SessionIO
+from server.core.database import SessionIO
 from server.models.people_model import People
 
 

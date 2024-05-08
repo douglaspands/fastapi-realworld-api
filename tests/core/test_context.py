@@ -1,7 +1,7 @@
 import pytest
 
 from server.core.context import get_context
-from server.core.db import SessionIO
+from server.core.database import SessionIO
 from server.core.settings import DatabaseDsn, Settings
 
 

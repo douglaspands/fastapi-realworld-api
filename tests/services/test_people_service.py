@@ -4,7 +4,7 @@ import pytest
 from faker import Faker
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
-from server.core.db import SessionIO
+from server.core.database import SessionIO
 from server.models.people_model import People
 from server.resources.people_resources import CreatePeople
 from server.services import people_service

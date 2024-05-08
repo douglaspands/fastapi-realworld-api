@@ -1,7 +1,7 @@
 import pytest
 from sqlalchemy.exc import OperationalError
 
-from server.core.db import get_sessionio
+from server.core.database import get_sessionio
 from server.core.settings import DatabaseDsn, Settings
 from server.repositories import people_repository
 

@@ -4,7 +4,7 @@ from typing import Any, AsyncGenerator
 
 from pydantic import BaseModel, ConfigDict
 
-from server.core.db import SessionIO, get_sessionio
+from server.core.database import SessionIO, get_sessionio
 
 
 class Context(BaseModel):

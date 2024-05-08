@@ -3,7 +3,7 @@ from __future__ import annotations
 from random import randint
 from typing import Any, Self, Sequence, Type, TypeVar, cast
 
-from server.core.db import SessionIO
+from server.core.database import SessionIO
 
 T = TypeVar("T")
 
