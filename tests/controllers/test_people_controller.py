@@ -6,11 +6,11 @@ from faker import Faker
 from pydash import camel_case, get
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
-from server.controllers.people_controller import get_sessionio
+from server.controllers.people_controller import get_context
 from server.core.exceptions import BusinessError, NotFoundError
 from server.models.people_model import People
 from server.resources.people_resources import CreatePeople
-from tests.mocks.async_session_mock import SessionIOMock
+from tests.mocks.context_mock import ContextMock
 from tests.utils.http_client import HttpClient
 
 fake = Faker("pt_BR")
@@ -39,8 +39,8 @@ def test_get_people_ok(
     people_id = 1
 
     # MOCK
-    session_mock = SessionIOMock.cast()
-    httpclient.current_app.dependency_overrides[get_sessionio] = lambda: session_mock
+    context_mock = ContextMock.context_session_mock()
+    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
     people_mock = People(
         id=people_id, first_name=fake.first_name(), last_name=fake.last_name()
     )
@@ -64,8 +64,8 @@ def test_get_people_not_found(
     people_id = 99999
 
     # MOCK
-    session_mock = SessionIOMock.cast()
-    httpclient.current_app.dependency_overrides[get_sessionio] = lambda: session_mock
+    context_mock = ContextMock.context_session_mock()
+    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
     people_service_mock.get_people.side_effect = NoResultFound(
         "No row was found when one was required"
     )
@@ -87,8 +87,8 @@ def test_get_people_not_found_2(
     people_id = 99999
 
     # MOCK
-    session_mock = SessionIOMock.cast()
-    httpclient.current_app.dependency_overrides[get_sessionio] = lambda: session_mock
+    context_mock = ContextMock.context_session_mock()
+    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
     people_service_mock.get_people.side_effect = NotFoundError(
         "No row was found when one was required"
     )
@@ -110,8 +110,8 @@ def test_get_people_internal_server_error(
     people_id = 500
 
     # MOCK
-    session_mock = SessionIOMock.cast()
-    httpclient.current_app.dependency_overrides[get_sessionio] = lambda: session_mock
+    context_mock = ContextMock.context_session_mock()
+    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
     message_error = 'insert or update on table "people" violates foreign key constraint "people_some_column_fkey"'
     people_service_mock.get_people.side_effect = IntegrityError(
         orig=Exception(message_error),
@@ -134,8 +134,8 @@ def test_all_people_ok(
     httpclient: HttpClient,
 ):
     # MOCK
-    session_mock = SessionIOMock.cast()
-    httpclient.current_app.dependency_overrides[get_sessionio] = lambda: session_mock
+    context_mock = ContextMock.context_session_mock()
+    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
     people_mock = [
         People(id=idx + 1, first_name=fake.first_name(), last_name=fake.last_name())
         for idx in range(10)
@@ -159,8 +159,8 @@ def test_all_people_nocontent(
     httpclient: HttpClient,
 ):
     # MOCK
-    session_mock = SessionIOMock.cast()
-    httpclient.current_app.dependency_overrides[get_sessionio] = lambda: session_mock
+    context_mock = ContextMock.context_session_mock()
+    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
     people_service_mock.all_people.return_value = []
 
     # WHEN
@@ -177,8 +177,8 @@ def test_create_people_ok(
     httpclient: HttpClient,
 ):
     # MOCK
-    session_mock = SessionIOMock.cast()
-    httpclient.current_app.dependency_overrides[get_sessionio] = lambda: session_mock
+    context_mock = ContextMock.context_session_mock()
+    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
     people_mock = People(
         id=fake.pyint(), first_name=fake.first_name(), last_name=fake.last_name()
     )
@@ -204,8 +204,8 @@ def test_create_people_validation_error(
     httpclient: HttpClient,
 ):
     # MOCK
-    session_mock = SessionIOMock.cast()
-    httpclient.current_app.dependency_overrides[get_sessionio] = lambda: session_mock
+    context_mock = ContextMock.context_session_mock()
+    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
     people_mock = People(
         id=fake.pyint(), first_name=fake.first_name(), last_name=fake.last_name()
     )
@@ -231,8 +231,8 @@ def test_create_people_business_error(
     httpclient: HttpClient,
 ):
     # MOCK
-    session_mock = SessionIOMock.cast()
-    httpclient.current_app.dependency_overrides[get_sessionio] = lambda: session_mock
+    context_mock = ContextMock.context_session_mock()
+    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
     people_mock = People(
         id=fake.pyint(), first_name=fake.first_name(), last_name=fake.last_name()
     )

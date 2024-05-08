@@ -8,7 +8,7 @@ from server.core.db import SessionIO
 from server.models.people_model import People
 from server.resources.people_resources import CreatePeople
 from server.services import people_service
-from tests.mocks.async_session_mock import SessionIOMock
+from tests.mocks.context_mock import ContextMock
 
 fake = Faker("pt_BR")
 Faker.seed(0)
@@ -24,11 +24,11 @@ async def test_get_people_ok(people_repository_mock: AsyncMock):
     people_mock = People(
         id=people_id, first_name=fake.first_name(), last_name=fake.last_name()
     )
-    session_mock = SessionIOMock.cast()
+    context_mock = ContextMock.context_session_mock()
     people_repository_mock.get.return_value = people_mock
 
     # WHEN
-    res = await people_service.get_people(session=session_mock, pk=people_id)
+    res = await people_service.get_people(context_mock, pk=people_id)
 
     # THEN
     assert res.id == people_id
@@ -44,12 +44,12 @@ async def test_get_people_not_found(people_repository_mock: AsyncMock):
 
     # MOCK
     error_message = "No row was found when one was required"
-    session_mock = SessionIOMock.cast()
+    context_mock = ContextMock.context_session_mock()
     people_repository_mock.get.side_effect = NoResultFound(error_message)
 
     # WHEN
     with pytest.raises(NoResultFound) as exc_info:
-        await people_service.get_people(session=session_mock, pk=people_id)
+        await people_service.get_people(context_mock, pk=people_id)
 
     # THEN
     assert error_message in str(exc_info.value)
@@ -63,11 +63,11 @@ async def test_all_people_ok(people_repository_mock: AsyncMock):
         People(id=idx + 1, first_name=fake.first_name(), last_name=fake.last_name())
         for idx in range(10)
     ]
-    session_mock = SessionIOMock.cast()
+    context_mock = ContextMock.context_session_mock()
     people_repository_mock.get_all.return_value = people_mock
 
     # WHEN
-    res = await people_service.all_people(session=session_mock)
+    res = await people_service.all_people(context_mock)
 
     # THEN
     assert len(res) == len(people_mock)
@@ -86,7 +86,7 @@ async def test_create_people_ok(people_repository_mock: AsyncMock):
     )
 
     # MOCK
-    session_mock = SessionIOMock.cast()
+    context_mock = ContextMock.context_session_mock()
 
     async def create_mock(session: SessionIO, people: People):
         people.id = 1
@@ -95,7 +95,7 @@ async def test_create_people_ok(people_repository_mock: AsyncMock):
 
     # WHEN
     people = await people_service.create_people(
-        session=session_mock, create_people=create_people
+        context_mock, create_people=create_people
     )
 
     # THEN
@@ -114,16 +114,14 @@ async def test_create_people_error(people_repository_mock: AsyncMock):
 
     # MOCK
     error_message = 'insert or update on table "people" violates foreign key constraint "people_some_column_fkey"'
-    session_mock = SessionIOMock.cast()
+    context_mock = ContextMock.context_session_mock()
     people_repository_mock.create.side_effect = IntegrityError(
         orig=Exception(error_message), params={}, statement=""
     )
 
     # WHEN
     with pytest.raises(IntegrityError) as exc_info:
-        await people_service.create_people(
-            session=session_mock, create_people=create_people
-        )
+        await people_service.create_people(context_mock, create_people=create_people)
 
     # THEN
     assert error_message in str(exc_info.value)
