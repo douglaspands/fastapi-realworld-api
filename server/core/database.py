@@ -12,9 +12,9 @@ class SessionIO(AsyncSession):
 
 
 @cache
-def _make_session() -> async_sessionmaker[SessionIO]:
+def sessionio_maker() -> async_sessionmaker[SessionIO]:
     config = get_settings()
-    async_session = async_sessionmaker(
+    session_local = async_sessionmaker(
         bind=create_async_engine(
             url=str(config.db_url),
             echo=config.db_debug,
@@ -22,13 +22,13 @@ def _make_session() -> async_sessionmaker[SessionIO]:
         class_=SessionIO,
         expire_on_commit=False,
     )
-    return async_session
+    return session_local
 
 
 async def get_sessionio() -> AsyncGenerator[SessionIO, Any]:
-    async_session = _make_session()
-    async with async_session() as session:
+    session_local = await sessionio_maker()
+    async with session_local() as session:
         yield session
 
 
-__all__ = ("get_sessionio", "SessionIO")
+__all__ = ("sessionio_maker", "get_sessionio", "SessionIO")

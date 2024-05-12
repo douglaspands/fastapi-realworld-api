@@ -36,3 +36,6 @@ def init_app(app: FastAPI):
     app.exception_handler(StarletteHTTPException)(http_exception_handler)
     app.exception_handler(HTTPException)(http_exception_handler)
     app.exception_handler(BusinessError)(http_exception_handler)
+
+
+__all__ = ("init_app",)
