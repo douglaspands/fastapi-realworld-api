@@ -1,0 +1,38 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "FastAPI: Debugger",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "--reload",
+                "--reload-dir",
+                "server",
+                "--port",
+                "5000",
+                "server.api:app",
+            ],
+            "jinja": true
+        },
+        {
+            "name": "Pytest: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "console": "integratedTerminal",
+            "args": [
+                "-vv",
+                "--no-cov",
+                "${file}"
+            ],
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        },
+    ]
+}
