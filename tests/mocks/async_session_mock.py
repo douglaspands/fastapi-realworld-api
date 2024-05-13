@@ -72,7 +72,13 @@ class SessionIOMock:
 
     def add(self: Self, model: T):
         self._add_count = getattr(self, "_add_count", 0) + 1
-        setattr(model, "id", randint(1, 1000))
+        if not getattr(model, "id", None):
+            setattr(model, "id", randint(1, 1000))
+        if self._side_effect:
+            raise self._side_effect
+
+    async def delete(self: Self, model: T):
+        self._delete_count = getattr(self, "_delete_count", 0) + 1
         if self._side_effect:
             raise self._side_effect
 

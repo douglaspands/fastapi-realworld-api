@@ -1,10 +1,13 @@
+from copy import copy
+from typing import cast
+
 import pytest
 from faker import Faker
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
 from server.models.people_model import People
 from server.repositories import people_repository
-from tests.mocks.async_session_mock import SessionIOMock
+from tests.mocks.async_session_mock import SessionIO, SessionIOMock
 
 fake = Faker("pt_BR")
 Faker.seed(0)
@@ -99,6 +102,95 @@ async def test_people_save_error():
     # WHEN
     with pytest.raises(IntegrityError) as exc_info:
         await people_repository.create(session=session_mock, people=create_people)
+
+    # THEN
+    assert error_message in str(exc_info.value)
+
+
+@pytest.mark.asyncio
+async def test_people_update_ok():
+    # MOCK
+    mock_people = People(
+        id=fake.random_int(min=1, max=10),
+        first_name=fake.first_name(),
+        last_name=fake.last_name(),
+    )
+    session_mock = SessionIOMock.cast(return_value=copy(mock_people))
+
+    # GIVEN
+    people_id = mock_people.id
+    first_name = fake.first_name()
+
+    # WHEN
+    people_updated = await people_repository.update(
+        session=session_mock, pk=people_id, first_name=first_name
+    )
+
+    # THEN
+    assert people_updated.id == people_id
+    assert people_updated.first_name == first_name
+
+
+@pytest.mark.asyncio
+async def test_people_update_error():
+    # MOCK
+    error_message = 'insert or update on table "people" violates foreign key constraint "people_some_column_fkey"'
+    session_mock = SessionIOMock.cast(
+        side_effect=IntegrityError(
+            orig=Exception(error_message), params={}, statement=""
+        )
+    )
+
+    # GIVEN
+    people_id = fake.random_int(min=10000, max=999999)
+    first_name = fake.first_name()
+
+    # WHEN
+    with pytest.raises(IntegrityError) as exc_info:
+        await people_repository.update(
+            session=session_mock, pk=people_id, first_name=first_name
+        )
+
+    # THEN
+    assert error_message in str(exc_info.value)
+
+
+@pytest.mark.asyncio
+async def test_people_delete_ok():
+    # MOCK
+    mock_people = People(
+        id=fake.random_int(min=1, max=10),
+        first_name=fake.first_name(),
+        last_name=fake.last_name(),
+    )
+    session_mock = SessionIOMock(return_value=mock_people)
+
+    # GIVEN
+    people_id = mock_people.id
+
+    # WHEN
+    await people_repository.delete(session=cast(SessionIO, session_mock), pk=people_id)
+
+    # THEN
+    assert session_mock._delete_count == 1
+
+
+@pytest.mark.asyncio
+async def test_people_delete_error():
+    # MOCK
+    error_message = 'insert or update on table "people" violates foreign key constraint "people_some_column_fkey"'
+    session_mock = SessionIOMock.cast(
+        side_effect=IntegrityError(
+            orig=Exception(error_message), params={}, statement=""
+        )
+    )
+
+    # GIVEN
+    people_id = fake.random_int(min=10000, max=999999)
+
+    # WHEN
+    with pytest.raises(IntegrityError) as exc_info:
+        await people_repository.delete(session=session_mock, pk=people_id)
 
     # THEN
     assert error_message in str(exc_info.value)

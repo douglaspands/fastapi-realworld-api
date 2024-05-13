@@ -29,18 +29,18 @@ async def create_people(ctx: Context, create_people: CreatePeople) -> People:
     return people
 
 
+async def update_people(ctx: Context, pk: int, update_people: UpdatePeople) -> People:
+    async with ctx.session.begin():
+        values = update_people.model_dump()
+        people = await people_repository.update(ctx.session, pk=pk, **values)
+    return people
+
+
 async def update_people_optional(
     ctx: Context, pk: int, update_people: UpdatePeopleOptional
 ) -> People:
     async with ctx.session.begin():
         values = update_people.model_dump(exclude_none=True)
-        people = await people_repository.update(ctx.session, pk=pk, **values)
-    return people
-
-
-async def update_people(ctx: Context, pk: int, update_people: UpdatePeople) -> People:
-    async with ctx.session.begin():
-        values = update_people.model_dump()
         people = await people_repository.update(ctx.session, pk=pk, **values)
     return people
 
