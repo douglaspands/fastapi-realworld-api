@@ -25,6 +25,7 @@ async def get_all(
 
 
 async def update(session: SessionIO, pk: int, **values: Any) -> People:
+    values.pop("id", None)
     people = await get(session=session, pk=pk)
     people.sqlmodel_update(values)
     session.add(people)

@@ -1,4 +1,4 @@
-# fastapi-realworld-api [EM DESENVOLVIMENTO]
+# fastapi-realworld-api
 Exemplo de projeto com `FastAPI` e `SQLModel` usando `async/await` utilizado no mundo real.   
 Meu desejo é apresentar um motor de API REST utilizando o que considero que tem de melhor no universo Python. `[MINHA OPINIÃO]`
 

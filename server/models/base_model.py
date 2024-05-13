@@ -1,13 +1,13 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel as PydanticBaseModel
 from sqlmodel import Column as SQLModelColumn
 from sqlmodel import DateTime as SQLModelDatetime
 from sqlmodel import Field as SQLModelField
+from sqlmodel import SQLModel
 
 
-class BaseModel(PydanticBaseModel):
+class BaseModel(SQLModel):
     id: Optional[int] = SQLModelField(default=None, primary_key=True)
 
     created_at: Optional[datetime] = SQLModelField(

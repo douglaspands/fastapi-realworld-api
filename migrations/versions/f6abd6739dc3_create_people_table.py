@@ -1,4 +1,4 @@
-"""create table people
+"""create people table
 
 Revision ID: f6abd6739dc3
 Revises:
