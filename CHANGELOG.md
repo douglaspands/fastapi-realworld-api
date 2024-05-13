@@ -7,6 +7,8 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 
 ## [Não Lançado]
 
+## [0.1.0] - 2024-05-12
+
 ### Adicionado
 
 - Incluido people controller;
