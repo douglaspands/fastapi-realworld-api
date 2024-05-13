@@ -5,6 +5,8 @@ from shlex import quote
 
 from rich.console import Console
 
+from . import message
+
 console = Console()
 
 SERVER_FOLDER = Path.cwd() / "server"
@@ -15,7 +17,7 @@ API_WORKERS = 3
 
 
 def _shell(cmd: str) -> int:
-    console.print(f"[yellow]$[/yellow] {cmd}")
+    console.print(f"[yellow]%[/yellow] {cmd}")
     return os.system(cmd)
 
 
@@ -34,35 +36,32 @@ def test():
 def lint():
     results = []
     cmd_tools = ("mypy {folder}", "ruff check {folder}")
-    folders = (str(SERVER_FOLDER), str(TEST_FOLDER))
+    folders = " ".join((str(SERVER_FOLDER), str(TEST_FOLDER)))
     for cmd in cmd_tools:
-        for folder in folders:
-            results.append(_shell(cmd.format(folder=folder)))
+        results.append(_shell(cmd.format(folder=folders)))
     if not all(sc == 0 for sc in results):
-        _print("LINT ERROR", is_error=True)
+        _print(message.LINT_ERROR, is_error=True)
         sys.exit(1)
-    _print("LINT SUCCESSFUL")
+    _print(message.LINT_SUCCESSFUL)
 
 
 def format():
     cmd = "ruff format {folder}"
-    folders = (str(SERVER_FOLDER), str(TEST_FOLDER))
-    for folder in folders:
-        _shell(cmd.format(folder=folder))
+    folders = " ".join((str(SERVER_FOLDER), str(TEST_FOLDER)))
+    _shell(cmd.format(folder=folders))
 
 
 def build():
     results = []
     cmd_tools = ("mypy {folder}", "ruff check {folder}")
-    folders = (str(SERVER_FOLDER), str(TEST_FOLDER))
+    folders = " ".join((str(SERVER_FOLDER), str(TEST_FOLDER)))
     for cmd in cmd_tools:
-        for folder in folders:
-            results.append(_shell(cmd.format(folder=folder)))
+        results.append(_shell(cmd.format(folder=folders)))
     results.append(_shell("pytest -v"))
     if not all(sc == 0 for sc in results):
-        _print("BUILD ERROR", is_error=True)
+        _print(message.BUILD_ERROR, is_error=True)
         sys.exit(1)
-    _print("BUILD SUCCESSFUL")
+    _print(message.BUILD_SUCCESSFUL)
 
 
 def migrate():

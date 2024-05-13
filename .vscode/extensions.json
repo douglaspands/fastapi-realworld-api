@@ -3,7 +3,6 @@
         "tamasfe.even-better-toml",
         "charliermarsh.ruff",
         "ms-python.mypy-type-checker",
-        "aaron-bond.better-comments",
         "njpwerner.autodocstring",
         "diogonolasco.pyinit",
         "kevinrose.vsc-python-indent",

@@ -26,7 +26,7 @@ def sessionio_maker() -> async_sessionmaker[SessionIO]:
 
 
 async def get_sessionio() -> AsyncGenerator[SessionIO, Any]:
-    session_local = await sessionio_maker()
+    session_local = sessionio_maker()
     async with session_local() as session:
         yield session
 
