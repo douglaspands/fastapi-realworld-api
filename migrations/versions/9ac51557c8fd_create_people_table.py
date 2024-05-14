@@ -1,8 +1,8 @@
 """create people table
 
-Revision ID: f6abd6739dc3
+Revision ID: 9ac51557c8fd
 Revises:
-Create Date: 2024-05-05 14:25:40.292910
+Create Date: 2024-05-13 20:41:16.455871
 
 """
 
@@ -12,8 +12,7 @@ import sqlalchemy as sa
 import sqlmodel
 from alembic import op
 
-# revision identifiers, used by Alembic.
-revision: str = "f6abd6739dc3"
+revision: str = "9ac51557c8fd"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -25,7 +24,7 @@ def upgrade() -> None:
         "people",
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("created_at", sa.DateTime(), nullable=False),
-        sa.Column("updated_at", sa.DateTime(), nullable=True),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.Column("first_name", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("last_name", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.PrimaryKeyConstraint("id"),

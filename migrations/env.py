@@ -3,6 +3,7 @@ import os
 from importlib import import_module
 from logging.config import fileConfig
 from pathlib import Path
+from typing import Any
 
 from alembic import context
 from sqlalchemy import pool
@@ -40,6 +41,7 @@ target_metadata = SQLModel.metadata
 # ... etc.
 settings = get_settings()
 config.set_main_option("sqlalchemy.url", str(settings.db_url))
+extra_config: dict[str, Any] = {}
 
 
 def run_migrations_offline() -> None:
@@ -60,7 +62,7 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
-        compare_type=False,
+        **extra_config,
     )
 
     with context.begin_transaction():
@@ -69,7 +71,7 @@ def run_migrations_offline() -> None:
 
 def do_run_migrations(connection: Connection) -> None:
     context.configure(
-        connection=connection, target_metadata=target_metadata, compare_type=False
+        connection=connection, target_metadata=target_metadata, **extra_config
     )
 
     with context.begin_transaction():
