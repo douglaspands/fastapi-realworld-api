@@ -194,3 +194,48 @@ async def test_people_delete_error():
 
     # THEN
     assert error_message in str(exc_info.value)
+
+
+@pytest.mark.asyncio
+async def test_people_get_or_create_ok_01():
+    # MOCK
+    people_mock = People(
+        id=fake.random_int(min=1, max=999),
+        first_name=fake.first_name(),
+        last_name=fake.last_name(),
+    )
+    session_mock = SessionIOMock.cast(return_value=[people_mock])
+
+    # GIVEN
+    people = People(
+        first_name=people_mock.first_name,
+        last_name=people_mock.last_name,
+    )
+
+    # WHEN
+    res = await people_repository.get_or_create(session=session_mock, people=people)
+
+    # THEN
+    assert res.id == people_mock.id
+    assert res.first_name == people_mock.first_name
+    assert res.last_name == people_mock.last_name
+
+
+@pytest.mark.asyncio
+async def test_people_get_or_create_ok_02():
+    # MOCK
+    session_mock = SessionIOMock.cast(return_value=[])
+
+    # GIVEN
+    people = People(
+        first_name=fake.first_name(),
+        last_name=fake.last_name(),
+    )
+
+    # WHEN
+    res = await people_repository.get_or_create(session=session_mock, people=people)
+
+    # THEN
+    assert isinstance(res.id, int)
+    assert res.first_name == people.first_name
+    assert res.last_name == people.last_name

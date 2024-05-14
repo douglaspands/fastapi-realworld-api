@@ -6,8 +6,9 @@ from server.core.database import SessionIO
 from server.models.people_model import People
 
 
-async def create(session: SessionIO, people: People):
+async def create(session: SessionIO, people: People) -> People:
     session.add(people)
+    return people
 
 
 async def get(session: SessionIO, pk: int) -> People:
@@ -19,7 +20,7 @@ async def get(session: SessionIO, pk: int) -> People:
 async def get_all(
     session: SessionIO, limit: int = 250, **values: Any
 ) -> Sequence[People]:
-    statement = select(People).where(**values).limit(limit)
+    statement = select(People).filter_by(**values).limit(limit)
     result = await session.exec(statement)
     return result.all()
 
@@ -37,10 +38,29 @@ async def delete(session: SessionIO, pk: int):
     await session.delete(people)
 
 
+async def get_or_create(session: SessionIO, people: People) -> People:
+    values = dict(
+        [
+            (k, v)
+            for k, v in people.__dict__.items()
+            if not (
+                k.startswith("_")
+                or k.startswith("model_")
+                or k in ("id", "created_at", "updated_at")
+            )
+        ]
+    )
+    people_ = await get_all(session=session, limit=1, **values)
+    if people_:
+        return people_[0]
+    return await create(session=session, people=people)
+
+
 __all__ = (
     "get",
     "get_all",
     "create",
     "update",
     "delete",
+    "get_or_create",
 )

@@ -10,8 +10,8 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 ### Adicionado
 
 - Incluido user model;
-- Incluido user repository; [AGUARDANDO]
-- Incluido função get_or_create no people repository; [AGUARDANDO]
+- Incluido user repository;
+- Incluido função get_or_create no people repository;
 - Incluido user service; [AGUARDANDO]
 - Incluido user resource; [AGUARDANDO]
 - Incluido user controller; [AGUARDANDO]

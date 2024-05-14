@@ -18,7 +18,7 @@ class User(SQLModel, table=True):
     active: bool = True
     # relationship
     people_id: int = Field(foreign_key="people.id", nullable=False)
-    people: People = Relationship(back_populates="people")
+    people: People = Relationship()
     # timestamp
     created_at: datetime | None = Field(
         sa_column=Column(

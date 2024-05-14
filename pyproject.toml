@@ -15,6 +15,7 @@ pydantic-settings = "^2.2.1"
 gunicorn = "^22.0.0"
 aiosqlite = "^0.20.0"
 pydash = "^8.0.1"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.2"
@@ -40,6 +41,19 @@ testpaths = "tests"
 norecursedirs = ["__pycache__"]
 asyncio_mode = "auto"
 
+[tool.coverage.report]
+exclude_also = [
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+    ]
 
 [tool.poetry.scripts]
 server = 'scripts.poetry:server'
