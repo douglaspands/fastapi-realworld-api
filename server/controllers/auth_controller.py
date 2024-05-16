@@ -9,8 +9,8 @@ from server.resources.token_resource import Token
 from server.services import auth_service
 
 router = APIRouter(
-    prefix="/token",
-    tags=["token"],
+    prefix="/auth",
+    tags=["Auth"],
 )
 
 

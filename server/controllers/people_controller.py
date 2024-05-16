@@ -17,7 +17,7 @@ from server.services.auth_service import check_access_token
 
 router = APIRouter(
     prefix="/people",
-    tags=["people"],
+    tags=["People"],
 )
 
 
