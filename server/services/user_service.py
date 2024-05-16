@@ -6,7 +6,7 @@ from server.models.people_model import People
 from server.models.user_model import User
 from server.repositories import people_repository, user_repository
 from server.resources.user_resource import (
-    CreateUserAndPeople,
+    CreateUserPeople,
     UpdateUser,
     UpdateUserOptional,
     UpdateUserPassword,
@@ -15,7 +15,7 @@ from server.services import auth_service
 
 
 async def create_user_people(
-    ctx: Context, user_people_create: CreateUserAndPeople
+    ctx: Context, user_people_create: CreateUserPeople
 ) -> User:
     people = await people_repository.get_or_create(
         session=ctx.session,

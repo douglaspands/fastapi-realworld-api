@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlmodel import Column, DateTime, Field, SQLModel
 
@@ -13,15 +13,15 @@ class People(SQLModel, table=True):
     created_at: datetime | None = Field(
         sa_column=Column(
             DateTime,
-            default=datetime.now,
+            default=lambda: datetime.now(timezone.utc),
             nullable=False,
         )
     )
     updated_at: datetime | None = Field(
         sa_column=Column(
             DateTime,
-            default=datetime.now,
-            onupdate=datetime.now,
+            default=lambda: datetime.now(timezone.utc),
+            onupdate=lambda: datetime.now(timezone.utc),
             nullable=False,
         )
     )

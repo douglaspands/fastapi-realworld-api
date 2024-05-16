@@ -6,6 +6,7 @@ from server.core.context import Context
 from server.core.exceptions import NoContentError
 from server.core.openapi import response_generator
 from server.core.schema import ResponseOK
+from server.enums.openapi_enum import OpenApiTagEnum
 from server.resources.people_resources import (
     CreatePeople,
     People,
@@ -17,7 +18,7 @@ from server.services.auth_service import check_access_token
 
 router = APIRouter(
     prefix="/people",
-    tags=["People"],
+    tags=[OpenApiTagEnum.PEOPLE],
 )
 
 
@@ -38,7 +39,7 @@ async def get_people(ctx: Annotated[Context, Depends(check_access_token)], pk: i
     status_code=status.HTTP_200_OK,
     responses=response_generator(204, 401, 500),
 )
-async def all_people(ctx: Annotated[Context, Depends(check_access_token)]):
+async def get_all_people(ctx: Annotated[Context, Depends(check_access_token)]):
     data = await people_service.all_people(ctx)
     if not data:
         raise NoContentError()

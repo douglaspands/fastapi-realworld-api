@@ -5,12 +5,13 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from server.core.context import Context, get_context
 from server.core.openapi import response_generator
+from server.enums.openapi_enum import OpenApiTagEnum
 from server.resources.token_resource import Token
 from server.services import auth_service
 
 router = APIRouter(
     prefix="/auth",
-    tags=["Auth"],
+    tags=[OpenApiTagEnum.AUTH],
 )
 
 

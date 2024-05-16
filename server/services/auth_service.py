@@ -7,8 +7,9 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 
 from server.core.context import Context
-from server.core.database import get_sessionio
+from server.core.database import SessionIO, get_sessionio
 from server.core.settings import get_settings
+from server.models.user_model import User
 from server.repositories import user_repository
 from server.resources.token_resource import Token
 
@@ -32,13 +33,19 @@ def get_password_hash(password: str) -> str:
     return pass_context.hash(password)
 
 
-async def authenticate_user(ctx: Context, username: str, password: str) -> Token:
+async def get_active_user_by_username(session: SessionIO, username: str) -> User | None:
     users = await user_repository.get_all(
-        session=ctx.session, limit=1, username=username, active=True
+        session=session, limit=1, username=username, active=True
     )
     if not users:
+        return None
+    return users[0]
+
+
+async def authenticate_user(ctx: Context, username: str, password: str) -> Token:
+    user = await get_active_user_by_username(session=ctx.session, username=username)
+    if not user:
         raise credentials_error
-    user = users[0]
     if not verify_password(plain_password=password, hashed_password=user.password):
         raise credentials_error
     expire = datetime.now(timezone.utc) + timedelta(
@@ -65,13 +72,10 @@ async def check_access_token(
             username: str = payload.get("sub", "")
             if not username:
                 raise credentials_error
-            users = await user_repository.get_all(
-                session=session, limit=1, username=username, active=True
-            )
-            if not (users and users[0].active):
+            user = await get_active_user_by_username(session=session, username=username)
+            if not user:
                 raise credentials_error
-            yield Context(session=session, user=users[0])
-            break
+            yield Context(session=session, user=user)
     except JWTError:
         raise credentials_error
 

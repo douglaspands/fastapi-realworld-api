@@ -6,7 +6,7 @@ from server.resources.base_resource import AllOptionalMetaclass, BaseResource
 from server.resources.people_resources import CreatePeople
 
 
-class CreateUserAndPeople(CreatePeople):
+class CreateUserPeople(CreatePeople):
     username: str
     password: str
     password_check: str
@@ -49,7 +49,7 @@ class User(UpdateUser):
 
 
 __all__ = (
-    "CreateUserAndPeople",
+    "CreateUserPeople",
     "User",
     "UpdateUserPassword",
     "UpdateUser",

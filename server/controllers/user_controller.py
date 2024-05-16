@@ -6,8 +6,9 @@ from server.core.context import Context, get_context
 from server.core.exceptions import NoContentError
 from server.core.openapi import response_generator
 from server.core.schema import ResponseOK
+from server.enums.openapi_enum import OpenApiTagEnum
 from server.resources.user_resource import (
-    CreateUserAndPeople,
+    CreateUserPeople,
     UpdateUser,
     UpdateUserOptional,
     UpdateUserPassword,
@@ -18,19 +19,19 @@ from server.services.auth_service import check_access_token
 
 router = APIRouter(
     prefix="/users",
-    tags=["User"],
+    tags=[OpenApiTagEnum.USER],
 )
 
 
 @router.post(
-    "/v1/users",
+    "/v1/user-people",
     response_model=ResponseOK[User],
     status_code=status.HTTP_201_CREATED,
     responses=response_generator(400, 422),
 )
 async def create_user_and_people(
     ctx: Annotated[Context, Depends(get_context)],
-    user_people_create: CreateUserAndPeople,
+    user_people_create: CreateUserPeople,
 ):
     data = await user_service.create_user_people(
         ctx=ctx, user_people_create=user_people_create
@@ -44,7 +45,7 @@ async def create_user_and_people(
     status_code=status.HTTP_200_OK,
     responses=response_generator(400, 401, 422),
 )
-async def update_password(
+async def update_user_password(
     ctx: Annotated[Context, Depends(check_access_token)],
     pk: int,
     update_password: UpdateUserPassword,
@@ -72,7 +73,7 @@ async def get_user(ctx: Annotated[Context, Depends(check_access_token)], pk: int
     status_code=status.HTTP_200_OK,
     responses=response_generator(204, 500),
 )
-async def all_users(ctx: Annotated[Context, Depends(check_access_token)]):
+async def get_all_users(ctx: Annotated[Context, Depends(check_access_token)]):
     data = await user_service.all_user(ctx)
     if not data:
         raise NoContentError()

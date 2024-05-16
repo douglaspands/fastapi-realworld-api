@@ -12,16 +12,18 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 - Incluido user model;
 - Incluido user repository;
 - Incluido função get_or_create no people repository;
-- Incluido user service; [AGUARDANDO]
-- Incluido user resource; [AGUARDANDO]
-- Incluido user controller; [AGUARDANDO]
-- Incluido user no context; [AGUARDANDO]
-- Incluido gerador de token; [AGUARDANDO]
-- Incluido validador de token; [AGUARDANDO]
-- Incluido Depends para o validador de token em todas as people controllers; [AGUARDANDO]
-- Incluido Depends para o validador de token em todas as user controllers (menos create user); [AGUARDANDO]
-- Alembic: incluido script de criação da tabela user; [AGUARDANDO]
+- Incluido user service;
+- Incluido user resource;
+- Incluido user controller;
+- Incluido user no context;
+- Incluido gerador de token;
+- Incluido validador de token;
+- Incluido Depends para o validador de token em todas as people controllers;
+- Incluido Depends para o validador de token em todas as user controllers (menos create user);
+- Alembic: incluido script de criação da tabela user;
 - Cobertura de teste de 100% do codigo; [AGUARDANDO]
+- Incluido configurações do OpenAPIDocs no Settings;
+- Incluido configurações do token no Settings;
 
 ### Modificado
 
