@@ -13,7 +13,7 @@ class User(SQLModel, table=True):
     # pk
     id: int | None = Field(default=None, primary_key=True)
     # columns
-    username: str = Field(index=True, nullable=False)
+    username: str = Field(index=True, unique=True, nullable=False)
     password: str
     active: bool = True
     # relationship

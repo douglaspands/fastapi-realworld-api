@@ -18,16 +18,19 @@ DatabaseDsn = Annotated[
 
 class Settings(BaseSettings):
     # app
-    app_name: str = "fastapi-realworld-api"
+    app_name: str = "FastAPI RealWorld API"
+    app_version: str = "0.2.0"
+    app_description: str = (
+        "Exemplo de projeto com <b>FastAPI</b> e <b>SQLModel</b> usando <b>async/await</b> utilizado no mundo real.<br>"
+        "Meu desejo é apresentar um motor de API REST utilizando o que considero que tem de melhor no universo Python. <b>[MINHA OPINIÃO]</b>"
+    )
 
     # database
     db_debug: bool = False
     db_url: DatabaseDsn = Field(default=None)
 
     # token
-    token_secret_key: str = (
-        "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
-    )
+    token_secret_key: str = Field(default=None)
     token_algorithm: str = "HS256"
     token_expire_minutes: int = 30
 

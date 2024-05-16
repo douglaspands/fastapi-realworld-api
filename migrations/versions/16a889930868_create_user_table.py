@@ -1,8 +1,8 @@
 """create user table
 
-Revision ID: 0080b4d9f66d
+Revision ID: 16a889930868
 Revises: 9ac51557c8fd
-Create Date: 2024-05-13 21:36:29.734509
+Create Date: 2024-05-16 00:25:48.017088
 
 """
 
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 import sqlmodel
 from alembic import op
 
-revision: str = "0080b4d9f66d"
+revision: str = "16a889930868"
 down_revision: Union[str, None] = "9ac51557c8fd"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -35,7 +35,7 @@ def upgrade() -> None:
         ),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(op.f("ix_user_username"), "user", ["username"], unique=False)
+    op.create_index(op.f("ix_user_username"), "user", ["username"], unique=True)
     # ### end Alembic commands ###
 
 

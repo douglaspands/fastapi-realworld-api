@@ -6,8 +6,9 @@ from server.core.database import SessionIO
 from server.models.user_model import User
 
 
-async def create(session: SessionIO, user: User):
+async def create(session: SessionIO, user: User) -> User:
     session.add(user)
+    return user
 
 
 async def get(session: SessionIO, pk: int) -> User:

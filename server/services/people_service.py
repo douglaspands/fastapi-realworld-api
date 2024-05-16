@@ -48,3 +48,13 @@ async def update_people_optional(
 async def delete_people(ctx: Context, pk: int):
     async with ctx.session.begin():
         await people_repository.delete(ctx.session, pk=pk)
+
+
+__all__ = (
+    "all_people",
+    "get_people",
+    "create_people",
+    "update_people",
+    "update_people_optional",
+    "delete_people",
+)

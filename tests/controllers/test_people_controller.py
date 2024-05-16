@@ -6,7 +6,6 @@ from faker import Faker
 from pydash import camel_case, get
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
-from server.controllers.people_controller import get_context
 from server.core.exceptions import BusinessError, NotFoundError
 from server.models.people_model import People
 from server.resources.people_resources import (
@@ -14,6 +13,7 @@ from server.resources.people_resources import (
     UpdatePeople,
     UpdatePeopleOptional,
 )
+from server.services.auth_service import check_access_token
 from tests.mocks.context_mock import ContextMock
 from tests.utils.http_client import HttpClient
 
@@ -44,7 +44,9 @@ def test_get_people_ok(
 
     # MOCK
     context_mock = ContextMock.context_session_mock()
-    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
+    httpclient.current_app.dependency_overrides[check_access_token] = (
+        lambda: context_mock
+    )
     people_mock = People(
         id=people_id, first_name=fake.first_name(), last_name=fake.last_name()
     )
@@ -69,7 +71,9 @@ def test_get_people_not_found(
 
     # MOCK
     context_mock = ContextMock.context_session_mock()
-    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
+    httpclient.current_app.dependency_overrides[check_access_token] = (
+        lambda: context_mock
+    )
     people_service_mock.get_people.side_effect = NoResultFound(
         "No row was found when one was required"
     )
@@ -92,7 +96,9 @@ def test_get_people_not_found_2(
 
     # MOCK
     context_mock = ContextMock.context_session_mock()
-    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
+    httpclient.current_app.dependency_overrides[check_access_token] = (
+        lambda: context_mock
+    )
     people_service_mock.get_people.side_effect = NotFoundError(
         "No row was found when one was required"
     )
@@ -115,7 +121,9 @@ def test_get_people_internal_server_error(
 
     # MOCK
     context_mock = ContextMock.context_session_mock()
-    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
+    httpclient.current_app.dependency_overrides[check_access_token] = (
+        lambda: context_mock
+    )
     message_error = 'insert or update on table "people" violates foreign key constraint "people_some_column_fkey"'
     people_service_mock.get_people.side_effect = IntegrityError(
         orig=Exception(message_error),
@@ -139,7 +147,9 @@ def test_all_people_ok(
 ):
     # MOCK
     context_mock = ContextMock.context_session_mock()
-    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
+    httpclient.current_app.dependency_overrides[check_access_token] = (
+        lambda: context_mock
+    )
     people_mock = [
         People(id=idx + 1, first_name=fake.first_name(), last_name=fake.last_name())
         for idx in range(10)
@@ -164,7 +174,9 @@ def test_all_people_nocontent(
 ):
     # MOCK
     context_mock = ContextMock.context_session_mock()
-    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
+    httpclient.current_app.dependency_overrides[check_access_token] = (
+        lambda: context_mock
+    )
     people_service_mock.all_people.return_value = []
 
     # WHEN
@@ -182,7 +194,9 @@ def test_create_people_ok(
 ):
     # MOCK
     context_mock = ContextMock.context_session_mock()
-    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
+    httpclient.current_app.dependency_overrides[check_access_token] = (
+        lambda: context_mock
+    )
     people_mock = People(
         id=fake.pyint(), first_name=fake.first_name(), last_name=fake.last_name()
     )
@@ -209,7 +223,9 @@ def test_create_people_validation_error(
 ):
     # MOCK
     context_mock = ContextMock.context_session_mock()
-    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
+    httpclient.current_app.dependency_overrides[check_access_token] = (
+        lambda: context_mock
+    )
     people_mock = People(
         id=fake.pyint(), first_name=fake.first_name(), last_name=fake.last_name()
     )
@@ -236,7 +252,9 @@ def test_create_people_business_error(
 ):
     # MOCK
     context_mock = ContextMock.context_session_mock()
-    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
+    httpclient.current_app.dependency_overrides[check_access_token] = (
+        lambda: context_mock
+    )
     people_mock = People(
         id=fake.pyint(), first_name=fake.first_name(), last_name=fake.last_name()
     )
@@ -270,7 +288,9 @@ def test_update_people_ok(
 
     # MOCK
     context_mock = ContextMock.context_session_mock()
-    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
+    httpclient.current_app.dependency_overrides[check_access_token] = (
+        lambda: context_mock
+    )
     people_mock = People(
         id=people_id,
         first_name=people_update.first_name,
@@ -298,7 +318,9 @@ def test_update_people_optional_ok(
 
     # MOCK
     context_mock = ContextMock.context_session_mock()
-    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
+    httpclient.current_app.dependency_overrides[check_access_token] = (
+        lambda: context_mock
+    )
     people_mock = People(
         id=people_id,
         first_name=people_update.first_name,
@@ -324,7 +346,9 @@ def test_delete_people_ok(
     people_id = fake.pyint()
     # MOCK
     context_mock = ContextMock.context_session_mock()
-    httpclient.current_app.dependency_overrides[get_context] = lambda: context_mock
+    httpclient.current_app.dependency_overrides[check_access_token] = (
+        lambda: context_mock
+    )
 
     # WHEN
     url = f"/people/v1/people/{people_id}"
