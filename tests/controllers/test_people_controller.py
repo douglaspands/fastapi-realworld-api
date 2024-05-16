@@ -1,3 +1,4 @@
+from datetime import datetime
 from http import HTTPStatus
 from typing import Any
 from unittest.mock import AsyncMock, patch
@@ -48,7 +49,11 @@ def test_get_people_ok(
         lambda: context_mock
     )
     people_mock = People(
-        id=people_id, first_name=fake.first_name(), last_name=fake.last_name()
+        id=people_id,
+        first_name=fake.first_name(),
+        last_name=fake.last_name(),
+        updated_at=datetime.now(),
+        created_at=datetime.now(),
     )
     people_service_mock.get_people.return_value = people_mock
 
@@ -58,7 +63,9 @@ def test_get_people_ok(
 
     # THEN
     assert response.status_code == HTTPStatus.OK
-    assert response.json() == {"data": snake_to_camel(people_mock.model_dump())}
+    assert response.json() == {
+        "data": snake_to_camel(people_mock.model_dump(mode="json"))
+    }
 
 
 @patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
@@ -151,7 +158,13 @@ def test_all_people_ok(
         lambda: context_mock
     )
     people_mock = [
-        People(id=idx + 1, first_name=fake.first_name(), last_name=fake.last_name())
+        People(
+            id=idx + 1,
+            first_name=fake.first_name(),
+            last_name=fake.last_name(),
+            updated_at=datetime.now(),
+            created_at=datetime.now(),
+        )
         for idx in range(10)
     ]
     people_service_mock.all_people.return_value = people_mock
@@ -163,7 +176,7 @@ def test_all_people_ok(
     # THEN
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {
-        "data": [snake_to_camel(p.model_dump()) for p in people_mock]
+        "data": [snake_to_camel(p.model_dump(mode="json")) for p in people_mock]
     }
 
 
@@ -198,7 +211,11 @@ def test_create_people_ok(
         lambda: context_mock
     )
     people_mock = People(
-        id=fake.pyint(), first_name=fake.first_name(), last_name=fake.last_name()
+        id=fake.pyint(),
+        first_name=fake.first_name(),
+        last_name=fake.last_name(),
+        updated_at=datetime.now(),
+        created_at=datetime.now(),
     )
     people_service_mock.create_people.return_value = people_mock
 
@@ -213,7 +230,9 @@ def test_create_people_ok(
 
     # THEN
     assert response.status_code == HTTPStatus.CREATED
-    assert response.json() == {"data": snake_to_camel(people_mock.model_dump())}
+    assert response.json() == {
+        "data": snake_to_camel(people_mock.model_dump(mode="json"))
+    }
 
 
 @patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
@@ -256,7 +275,11 @@ def test_create_people_business_error(
         lambda: context_mock
     )
     people_mock = People(
-        id=fake.pyint(), first_name=fake.first_name(), last_name=fake.last_name()
+        id=fake.pyint(),
+        first_name=fake.first_name(),
+        last_name=fake.last_name(),
+        updated_at=datetime.now(),
+        created_at=datetime.now(),
     )
     message_error = "Business error mock"
     people_service_mock.create_people.side_effect = BusinessError(message_error)
@@ -268,7 +291,7 @@ def test_create_people_business_error(
 
     # WHEN
     url = "/people/v1/people"
-    response = httpclient.post(url, json=create_people.model_dump())
+    response = httpclient.post(url, json=create_people.model_dump(mode="json"))
 
     # THEN
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
@@ -295,6 +318,8 @@ def test_update_people_ok(
         id=people_id,
         first_name=people_update.first_name,
         last_name=people_update.last_name,
+        updated_at=datetime.now(),
+        created_at=datetime.now(),
     )
     people_service_mock.update_people.return_value = people_mock
 
@@ -304,7 +329,9 @@ def test_update_people_ok(
 
     # THEN
     assert response.status_code == HTTPStatus.OK
-    assert response.json() == {"data": snake_to_camel(people_mock.model_dump())}
+    assert response.json() == {
+        "data": snake_to_camel(people_mock.model_dump(mode="json"))
+    }
 
 
 @patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
@@ -325,6 +352,8 @@ def test_update_people_optional_ok(
         id=people_id,
         first_name=people_update.first_name,
         last_name=fake.last_name(),
+        updated_at=datetime.now(),
+        created_at=datetime.now(),
     )
     people_service_mock.update_people_optional.return_value = people_mock
 
@@ -334,7 +363,9 @@ def test_update_people_optional_ok(
 
     # THEN
     assert response.status_code == HTTPStatus.OK
-    assert response.json() == {"data": snake_to_camel(people_mock.model_dump())}
+    assert response.json() == {
+        "data": snake_to_camel(people_mock.model_dump(mode="json"))
+    }
 
 
 @patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)

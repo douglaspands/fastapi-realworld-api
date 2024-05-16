@@ -10,7 +10,7 @@ def create_app() -> FastAPI:
     app = FastAPI(
         title=settings.app_name,
         version=settings.app_version,
-        description=settings.app_description,
+        description=settings.openapi_description,
         with_google_fonts=True,
     )
     middleware.init_app(app)

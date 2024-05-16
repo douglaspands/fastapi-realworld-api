@@ -5,11 +5,8 @@ from passlib.context import CryptContext
 
 
 class CryptInterface(Protocol):
-    def check_password(self: Self, password: str, hashed_password: str) -> bool:
-        pass
-
-    def hash_password(self: Self, password: str) -> str:
-        pass
+    def check_password(self: Self, password: str, hashed_password: str) -> bool: ...
+    def hash_password(self: Self, password: str) -> str: ...
 
 
 class PasslibCore(CryptInterface):

@@ -41,7 +41,7 @@ build-backend = "poetry.core.masonry.api"
 minversion = "6.0"
 addopts = "-ra -q --cov=server --cov-report html --cov-fail-under=85"
 python_files = "test_*.py"
-testpaths = "tests"
+# testpaths = "tests"
 norecursedirs = ["__pycache__"]
 asyncio_mode = "auto"
 

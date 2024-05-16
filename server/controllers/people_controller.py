@@ -41,7 +41,7 @@ async def get_people(ctx: Annotated[Context, Depends(check_access_token)], pk: i
 )
 async def get_all_people(ctx: Annotated[Context, Depends(check_access_token)]):
     data = await people_service.all_people(ctx)
-    if not data:
+    if not len(data):
         raise NoContentError()
     return ResponseOK(data=data)
 

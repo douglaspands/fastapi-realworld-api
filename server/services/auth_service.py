@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from typing import Annotated, Any, AsyncGenerator
 
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 
@@ -12,6 +12,7 @@ from server.core.settings import get_settings
 from server.models.user_model import User
 from server.repositories import user_repository
 from server.resources.token_resource import Token
+from server.resources.user_resource import User as UserResource
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/v1/token")
 
@@ -52,6 +53,7 @@ async def authenticate_user(ctx: Context, username: str, password: str) -> Token
 
 
 async def check_access_token(
+    request: Request,
     token: Annotated[str, Depends(oauth2_scheme)],
 ) -> AsyncGenerator[Context, Any]:
     try:
@@ -67,7 +69,8 @@ async def check_access_token(
             user = await get_active_user_by_username(session=session, username=username)
             if not user:
                 raise credentials_error
-            yield Context(session=session, user=user)
+            user_resource = UserResource(**user.model_dump())
+            yield Context(session=session, user=user_resource, request=request)
     except JWTError:
         raise credentials_error
 

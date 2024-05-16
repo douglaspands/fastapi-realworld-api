@@ -30,6 +30,7 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 - Remoção do `[EM DESENVOLVIMENTO]` do titulo do README.md;
 - Modificado a versão para `0.2.0` do `pyproject.toml`;
 - No people repository foi modificado para remover o id dos values no update;
+- Melhoria na organização das pastas de recursos;
 
 ## [0.1.0] - 2024-05-12
 

@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
 
-from server.core.context import Context, get_context
+from server.core.context import Context, get_context_with_request
 from server.core.openapi import response_generator
 from server.enums.openapi_enum import OpenApiTagEnum
 from server.resources.token_resource import Token
@@ -23,7 +23,7 @@ router = APIRouter(
     # include_in_schema=False,
 )
 async def get_token(
-    ctx: Annotated[Context, Depends(get_context)],
+    ctx: Annotated[Context, Depends(get_context_with_request)],
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ):
     data = await auth_service.authenticate_user(

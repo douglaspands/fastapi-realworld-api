@@ -20,7 +20,9 @@ class Settings(BaseSettings):
     # app
     app_name: str = "FastAPI RealWorld API"
     app_version: str = "0.2.0"
-    app_description: str = (
+
+    # openapi_doc
+    openapi_description: str = (
         "Exemplo de projeto com <b>FastAPI</b> e <b>SQLModel</b> usando <b>async/await</b> utilizado no mundo real.<br>"
         "Meu desejo é apresentar um motor de API REST utilizando o que considero que tem de melhor no universo Python. <b>[MINHA OPINIÃO]</b>"
     )

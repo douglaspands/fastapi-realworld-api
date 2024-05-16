@@ -2,7 +2,7 @@ from typing import Annotated, Sequence
 
 from fastapi import APIRouter, Depends, Response, status
 
-from server.core.context import Context, get_context
+from server.core.context import Context, get_context_with_request
 from server.core.exceptions import NoContentError
 from server.core.openapi import response_generator
 from server.core.schema import ResponseOK
@@ -30,7 +30,7 @@ router = APIRouter(
     responses=response_generator(400, 422),
 )
 async def create_user_and_people(
-    ctx: Annotated[Context, Depends(get_context)],
+    ctx: Annotated[Context, Depends(get_context_with_request)],
     user_people_create: CreateUserPeople,
 ):
     data = await user_service.create_user_people(
