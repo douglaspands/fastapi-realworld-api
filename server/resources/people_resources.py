@@ -1,4 +1,6 @@
-from server.resources.base_resource import AllOptionalMetaclass, BaseResource
+from server.resources.base_resource import BaseResource
+from server.resources.metaclasses.all_optional_metaclass import AllOptionalMetaclass
+from server.resources.mixins.timestamp_mixin import TimestampMixin
 
 
 class CreatePeople(BaseResource):
@@ -14,7 +16,7 @@ class UpdatePeopleOptional(CreatePeople, metaclass=AllOptionalMetaclass):
     pass
 
 
-class People(CreatePeople):
+class People(TimestampMixin, CreatePeople):
     id: int
 
 
