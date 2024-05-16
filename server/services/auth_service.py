@@ -4,16 +4,15 @@ from typing import Annotated, Any, AsyncGenerator
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-from passlib.context import CryptContext
 
 from server.core.context import Context
+from server.core.crypt import get_crypt
 from server.core.database import SessionIO, get_sessionio
 from server.core.settings import get_settings
 from server.models.user_model import User
 from server.repositories import user_repository
 from server.resources.token_resource import Token
 
-pass_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/v1/token")
 
 credentials_error = HTTPException(
@@ -22,15 +21,8 @@ credentials_error = HTTPException(
     headers={"WWW-Authenticate": "Bearer"},
 )
 
+crypt = get_crypt()
 settings = get_settings()
-
-
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pass_context.verify(plain_password, hashed_password)
-
-
-def get_password_hash(password: str) -> str:
-    return pass_context.hash(password)
 
 
 async def get_active_user_by_username(session: SessionIO, username: str) -> User | None:
@@ -46,7 +38,7 @@ async def authenticate_user(ctx: Context, username: str, password: str) -> Token
     user = await get_active_user_by_username(session=ctx.session, username=username)
     if not user:
         raise credentials_error
-    if not verify_password(plain_password=password, hashed_password=user.password):
+    if not crypt.check_password(password=password, hashed_password=user.password):
         raise credentials_error
     expire = datetime.now(timezone.utc) + timedelta(
         minutes=settings.token_expire_minutes
@@ -80,4 +72,4 @@ async def check_access_token(
         raise credentials_error
 
 
-__all__ = ("check_access_token", "authenticate_user", "get_password_hash")
+__all__ = ("check_access_token", "authenticate_user")

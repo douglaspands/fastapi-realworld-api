@@ -15,9 +15,9 @@ pydantic-settings = "^2.2.1"
 gunicorn = "^22.0.0"
 aiosqlite = "^0.20.0"
 pydash = "^8.0.1"
-passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 python-multipart = "^0.0.9"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.2"

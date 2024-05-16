@@ -2,6 +2,7 @@ from typing import Any, Sequence
 
 from sqlmodel import select
 
+from server.core import utils
 from server.core.database import SessionIO
 from server.models.people_model import People
 
@@ -26,7 +27,7 @@ async def get_all(
 
 
 async def update(session: SessionIO, pk: int, **values: Any) -> People:
-    values.pop("id", None)
+    utils.repository_columns_can_update(values)
     people = await get(session=session, pk=pk)
     people.sqlmodel_update(values)
     session.add(people)
@@ -39,18 +40,12 @@ async def delete(session: SessionIO, pk: int):
 
 
 async def get_or_create(session: SessionIO, people: People) -> People:
-    values = dict(
-        [
-            (k, v)
-            for k, v in people.__dict__.items()
-            if not (
-                k.startswith("_")
-                or k.startswith("model_")
-                or k in ("id", "created_at", "updated_at")
-            )
-        ]
+    people_ = await get_all(
+        session=session,
+        limit=1,
+        first_name=people.first_name,
+        last_name=people.last_name,
     )
-    people_ = await get_all(session=session, limit=1, **values)
     if people_:
         return people_[0]
     return await create(session=session, people=people)

@@ -20,7 +20,6 @@ def sessionio_maker() -> async_sessionmaker[SessionIO]:
             echo=config.db_debug,
         ),
         class_=SessionIO,
-        autoflush=True,
         expire_on_commit=False,
     )
     return session_local

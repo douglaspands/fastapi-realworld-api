@@ -2,6 +2,7 @@ from typing import Any, Sequence
 
 from sqlmodel import select
 
+from server.core import utils
 from server.core.database import SessionIO
 from server.models.user_model import User
 
@@ -26,7 +27,7 @@ async def get_all(
 
 
 async def update(session: SessionIO, pk: int, **values: Any) -> User:
-    values.pop("id", None)
+    utils.repository_columns_can_update(values)
     user = await get(session=session, pk=pk)
     user.sqlmodel_update(values)
     session.add(user)

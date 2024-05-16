@@ -36,12 +36,12 @@ class UpdateUserPassword(BaseResource):
 
 class UpdateUser(BaseResource):
     username: str
+    active: bool
     people_id: int
 
 
 class UpdateUserOptional(UpdateUser, metaclass=AllOptionalMetaclass):
-    username: str
-    people_id: int
+    pass
 
 
 class User(UpdateUser):

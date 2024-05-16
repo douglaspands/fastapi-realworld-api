@@ -1,6 +1,7 @@
 from typing import Sequence
 
 from server.core.context import Context
+from server.core.crypt import get_crypt
 from server.core.exceptions import BusinessError
 from server.models.people_model import People
 from server.models.user_model import User
@@ -11,28 +12,31 @@ from server.resources.user_resource import (
     UpdateUserOptional,
     UpdateUserPassword,
 )
-from server.services import auth_service
+
+crypt = get_crypt()
 
 
 async def create_user_people(
     ctx: Context, user_people_create: CreateUserPeople
 ) -> User:
-    people = await people_repository.get_or_create(
-        session=ctx.session,
-        people=People(
-            first_name=user_people_create.first_name,
-            last_name=user_people_create.last_name,
-        ),
-    )
-    password_hash = auth_service.get_password_hash(user_people_create.password)
-    user = await user_repository.create(
-        session=ctx.session,
-        user=User(
-            username=user_people_create.username,
-            password=password_hash,
-            people_id=people.id,
-        ),
-    )
+    async with ctx.session.begin():
+        people = await people_repository.get_or_create(
+            session=ctx.session,
+            people=People(
+                first_name=user_people_create.first_name,
+                last_name=user_people_create.last_name,
+            ),
+        )
+    async with ctx.session.begin():
+        password_hash = crypt.hash_password(user_people_create.password)
+        user = await user_repository.create(
+            session=ctx.session,
+            user=User(
+                username=user_people_create.username,
+                password=password_hash,
+                people_id=people.id,
+            ),
+        )
     return user
 
 
@@ -40,13 +44,12 @@ async def change_password(
     ctx: Context, user_id: int, update_password: UpdateUserPassword
 ) -> User:
     user = await user_repository.get(session=ctx.session, pk=user_id)
-    if not auth_service.verify_password(
-        update_password.current_password, user.password
-    ):
+    if not crypt.check_password(update_password.current_password, user.password):
         raise BusinessError("current password invalid")
-    res = await user_repository.update(
-        session=ctx.session, pk=user_id, password=update_password.new_password
-    )
+    async with ctx.session.begin():
+        res = await user_repository.update(
+            session=ctx.session, pk=user_id, password=update_password.new_password
+        )
     return res
 
 
