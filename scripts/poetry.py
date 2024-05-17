@@ -57,7 +57,7 @@ def build():
     folders = " ".join((str(SERVER_FOLDER), str(TEST_FOLDER)))
     for cmd in cmd_tools:
         results.append(_shell(cmd.format(folder=folders)))
-    results.append(_shell("pytest -vv tests"))
+    results.append(_shell("pytest -v tests"))
     if not all(sc == 0 for sc in results):
         _print(message.BUILD_ERROR, is_error=True)
         sys.exit(1)

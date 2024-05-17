@@ -64,10 +64,8 @@ async def check_access_token(
                 algorithms=[settings.token_algorithm],
             )
             username: str = payload.get("sub", "")
-            if not username:
-                raise credentials_error
             user = await get_active_user_by_username(session=session, username=username)
-            if not user:
+            if not (username and user):
                 raise credentials_error
             user_resource = UserResource(**user.model_dump())
             yield Context(session=session, user=user_resource, request=request)
