@@ -1,10 +1,9 @@
 from datetime import datetime
 from http import HTTPStatus
-from typing import Any
 from unittest.mock import AsyncMock, patch
 
 from faker import Faker
-from pydash import camel_case, get
+from pydash import get
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
 from server.core.exceptions import BusinessError, NotFoundError
@@ -17,22 +16,10 @@ from server.resources.people_resources import (
 from server.services.auth_service import check_access_token
 from tests.mocks.context_mock import ContextMock
 from tests.utils.http_client import HttpClient
+from tests.utils.utils import snake_to_camel
 
 fake = Faker("pt_BR")
 Faker.seed(0)
-
-
-def snake_to_camel(d: dict[str, Any]) -> dict[str, Any]:
-    r: dict[str, Any] = {}
-    for k, v in d.items():
-        if isinstance(v, (list, set, tuple)):
-            il = []
-            for i in v:
-                il.append(snake_to_camel(i) if isinstance(i, dict) else i)
-            r[camel_case(k)] = il
-        else:
-            r[camel_case(k)] = snake_to_camel(v) if isinstance(v, dict) else v
-    return r
 
 
 @patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
