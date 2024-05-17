@@ -5,7 +5,7 @@ from pydantic import model_validator
 from server.resources.base_resource import BaseResource
 from server.resources.metaclasses.all_optional_metaclass import AllOptionalMetaclass
 from server.resources.mixins.timestamp_mixin import TimestampMixin
-from server.resources.people_resources import CreatePeople
+from server.resources.people_resource import CreatePeople
 
 
 class CreateUserPeople(CreatePeople):

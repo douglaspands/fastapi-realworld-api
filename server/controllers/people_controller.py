@@ -7,7 +7,7 @@ from server.core.exceptions import NoContentError
 from server.core.openapi import response_generator
 from server.core.schema import ResponseOK
 from server.enums.openapi_enum import OpenApiTagEnum
-from server.resources.people_resources import (
+from server.resources.people_resource import (
     CreatePeople,
     People,
     UpdatePeople,

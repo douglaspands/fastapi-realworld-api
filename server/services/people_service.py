@@ -3,7 +3,7 @@ from typing import Sequence
 from server.core.context import Context
 from server.models.people_model import People
 from server.repositories import people_repository
-from server.resources.people_resources import (
+from server.resources.people_resource import (
     CreatePeople,
     UpdatePeople,
     UpdatePeopleOptional,

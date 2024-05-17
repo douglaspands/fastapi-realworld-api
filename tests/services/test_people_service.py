@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError, NoResultFound
 
 from server.core.database import SessionIO
 from server.models.people_model import People
-from server.resources.people_resources import (
+from server.resources.people_resource import (
     CreatePeople,
     UpdatePeople,
     UpdatePeopleOptional,
