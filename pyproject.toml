@@ -65,6 +65,9 @@ lint = 'scripts.poetry:lint'
 format = 'scripts.poetry:format'
 test = 'scripts.poetry:test'
 build = 'scripts.poetry:build'
+# migrations
 migrate = 'scripts.poetry:migrate'
+sqlmigrate = 'scripts.poetry:sqlmigrate'
+makemigrations = 'scripts.poetry:make_migrations'
 # production
-server_production = 'scripts.poetry:server_production'
+prodution_server = 'scripts.poetry:prodution_server'

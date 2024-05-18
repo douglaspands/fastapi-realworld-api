@@ -4,6 +4,7 @@ from pathlib import Path
 from shlex import quote
 
 from rich.console import Console
+from rich.prompt import Prompt
 
 from . import message
 
@@ -69,6 +70,21 @@ def migrate():
     _shell(cmd)
 
 
+def sqlmigrate():
+    cmd = "alembic upgrade head --sql"
+    _shell(cmd)
+
+
+def make_migrations():
+    message = Prompt.ask("[yellow]Enter your migration message[/yellow]").strip()
+    if not message:
+        _print("migration's message is required", is_error=True)
+        return sys.exit(1)
+    cmd = f"alembic revision --autogenerate -m {quote(message)}"
+    _shell(cmd)
+    _print("migration's script created")
+
+
 def server():
     cmd = (
         "uvicorn "
@@ -80,7 +96,7 @@ def server():
     _shell(cmd)
 
 
-def server_production():
+def prodution_server():
     cmd = (
         "gunicorn "
         f"--workers {API_WORKERS} "

@@ -41,7 +41,7 @@ target_metadata = SQLModel.metadata
 # ... etc.
 settings = get_settings()
 config.set_main_option("sqlalchemy.url", str(settings.db_url))
-extra_config: dict[str, Any] = {}
+extra_config: dict[str, Any] = {"version_table": "migration_version"}
 
 
 def run_migrations_offline() -> None:

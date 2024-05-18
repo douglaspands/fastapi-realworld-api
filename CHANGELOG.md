@@ -24,6 +24,8 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 - Cobertura de teste de 100% do codigo; [AGUARDANDO]
 - Incluido configurações do OpenAPIDocs no Settings;
 - Incluido configurações do token no Settings;
+- Poetry: Incluido script de `sqlmigrate`;
+- Poetry: Incluido script de `makemigrations`;
 
 ### Modificado
 
@@ -31,6 +33,8 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 - Modificado a versão para `0.2.0` do `pyproject.toml`;
 - No people repository foi modificado para remover o id dos values no update;
 - Melhoria na organização das pastas de recursos;
+- Melhorias na configuração das migrations;
+- Poetry: mudança no comando `server_production` para `production_server`;
 
 ## [0.1.0] - 2024-05-12
 
