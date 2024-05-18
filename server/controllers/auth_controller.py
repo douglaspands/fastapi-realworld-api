@@ -19,7 +19,9 @@ router = APIRouter(
     "/v1/token",
     response_model=Token,
     status_code=status.HTTP_200_OK,
-    responses=response_generator(401),
+    responses=response_generator(
+        status.HTTP_401_UNAUTHORIZED, status.HTTP_500_INTERNAL_SERVER_ERROR
+    ),
     # include_in_schema=False,
 )
 async def get_token(

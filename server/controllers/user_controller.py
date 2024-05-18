@@ -27,7 +27,11 @@ router = APIRouter(
     "/v1/user-people",
     response_model=ResponseOK[User],
     status_code=status.HTTP_201_CREATED,
-    responses=response_generator(400, 422),
+    responses=response_generator(
+        status.HTTP_400_BAD_REQUEST,
+        status.HTTP_401_UNAUTHORIZED,
+        status.HTTP_500_INTERNAL_SERVER_ERROR,
+    ),
 )
 async def create_user_and_people(
     ctx: Annotated[Context, Depends(get_context_with_request)],
@@ -43,7 +47,12 @@ async def create_user_and_people(
     "/v1/users/{pk}/change-password",
     response_model=ResponseOK[User],
     status_code=status.HTTP_200_OK,
-    responses=response_generator(400, 401, 422),
+    responses=response_generator(
+        status.HTTP_400_BAD_REQUEST,
+        status.HTTP_401_UNAUTHORIZED,
+        status.HTTP_422_UNPROCESSABLE_ENTITY,
+        status.HTTP_500_INTERNAL_SERVER_ERROR,
+    ),
 )
 async def update_user_password(
     ctx: Annotated[Context, Depends(check_access_token)],
@@ -60,7 +69,11 @@ async def update_user_password(
     "/v1/users/{pk}",
     response_model=ResponseOK[User],
     status_code=status.HTTP_200_OK,
-    responses=response_generator(404, 500),
+    responses=response_generator(
+        status.HTTP_401_UNAUTHORIZED,
+        status.HTTP_404_NOT_FOUND,
+        status.HTTP_500_INTERNAL_SERVER_ERROR,
+    ),
 )
 async def get_user(ctx: Annotated[Context, Depends(check_access_token)], pk: int):
     data = await user_service.get_user(ctx, pk=pk)
@@ -71,7 +84,11 @@ async def get_user(ctx: Annotated[Context, Depends(check_access_token)], pk: int
     "/v1/users",
     response_model=ResponseOK[Sequence[User]],
     status_code=status.HTTP_200_OK,
-    responses=response_generator(204, 500),
+    responses=response_generator(
+        status.HTTP_204_NO_CONTENT,
+        status.HTTP_401_UNAUTHORIZED,
+        status.HTTP_500_INTERNAL_SERVER_ERROR,
+    ),
 )
 async def get_all_users(ctx: Annotated[Context, Depends(check_access_token)]):
     data = await user_service.all_users(ctx)
@@ -84,7 +101,11 @@ async def get_all_users(ctx: Annotated[Context, Depends(check_access_token)]):
     "/v1/users/{pk}",
     response_model=ResponseOK[User],
     status_code=status.HTTP_200_OK,
-    responses=response_generator(400, 422, 500),
+    responses=response_generator(
+        status.HTTP_400_BAD_REQUEST,
+        status.HTTP_401_UNAUTHORIZED,
+        status.HTTP_500_INTERNAL_SERVER_ERROR,
+    ),
 )
 async def update_user(
     ctx: Annotated[Context, Depends(check_access_token)],
@@ -99,7 +120,11 @@ async def update_user(
     "/v1/users/{pk}",
     response_model=ResponseOK[User],
     status_code=status.HTTP_200_OK,
-    responses=response_generator(400, 422, 500),
+    responses=response_generator(
+        status.HTTP_400_BAD_REQUEST,
+        status.HTTP_401_UNAUTHORIZED,
+        status.HTTP_500_INTERNAL_SERVER_ERROR,
+    ),
 )
 async def update_user_optional(
     ctx: Annotated[Context, Depends(check_access_token)],
@@ -114,7 +139,11 @@ async def update_user_optional(
     "/v1/users/{pk}",
     status_code=status.HTTP_200_OK,
     response_class=Response,
-    responses=response_generator(404, 500),
+    responses=response_generator(
+        status.HTTP_401_UNAUTHORIZED,
+        status.HTTP_404_NOT_FOUND,
+        status.HTTP_500_INTERNAL_SERVER_ERROR,
+    ),
 )
 async def delete_user(ctx: Annotated[Context, Depends(check_access_token)], pk: int):
     await user_service.delete_user(ctx, pk=pk)

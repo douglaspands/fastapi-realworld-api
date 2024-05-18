@@ -26,7 +26,11 @@ router = APIRouter(
     "/v1/people/{pk}",
     response_model=ResponseOK[People],
     status_code=status.HTTP_200_OK,
-    responses=response_generator(401, 404, 500),
+    responses=response_generator(
+        status.HTTP_401_UNAUTHORIZED,
+        status.HTTP_404_NOT_FOUND,
+        status.HTTP_500_INTERNAL_SERVER_ERROR,
+    ),
 )
 async def get_people(ctx: Annotated[Context, Depends(check_access_token)], pk: int):
     data = await people_service.get_people(ctx, pk=pk)
@@ -37,7 +41,11 @@ async def get_people(ctx: Annotated[Context, Depends(check_access_token)], pk: i
     "/v1/people",
     response_model=ResponseOK[Sequence[People]],
     status_code=status.HTTP_200_OK,
-    responses=response_generator(204, 401, 500),
+    responses=response_generator(
+        status.HTTP_204_NO_CONTENT,
+        status.HTTP_401_UNAUTHORIZED,
+        status.HTTP_500_INTERNAL_SERVER_ERROR,
+    ),
 )
 async def get_all_people(ctx: Annotated[Context, Depends(check_access_token)]):
     data = await people_service.all_people(ctx)
@@ -50,7 +58,11 @@ async def get_all_people(ctx: Annotated[Context, Depends(check_access_token)]):
     "/v1/people",
     response_model=ResponseOK[People],
     status_code=status.HTTP_201_CREATED,
-    responses=response_generator(400, 401, 422, 500),
+    responses=response_generator(
+        status.HTTP_400_BAD_REQUEST,
+        status.HTTP_401_UNAUTHORIZED,
+        status.HTTP_500_INTERNAL_SERVER_ERROR,
+    ),
 )
 async def create_people(
     ctx: Annotated[Context, Depends(check_access_token)], create_people: CreatePeople
@@ -63,7 +75,11 @@ async def create_people(
     "/v1/people/{pk}",
     response_model=ResponseOK[People],
     status_code=status.HTTP_200_OK,
-    responses=response_generator(400, 401, 422, 500),
+    responses=response_generator(
+        status.HTTP_400_BAD_REQUEST,
+        status.HTTP_401_UNAUTHORIZED,
+        status.HTTP_500_INTERNAL_SERVER_ERROR,
+    ),
 )
 async def update_people(
     ctx: Annotated[Context, Depends(check_access_token)],
@@ -78,7 +94,11 @@ async def update_people(
     "/v1/people/{pk}",
     response_model=ResponseOK[People],
     status_code=status.HTTP_200_OK,
-    responses=response_generator(400, 401, 422, 500),
+    responses=response_generator(
+        status.HTTP_400_BAD_REQUEST,
+        status.HTTP_401_UNAUTHORIZED,
+        status.HTTP_500_INTERNAL_SERVER_ERROR,
+    ),
 )
 async def update_people_optional(
     ctx: Annotated[Context, Depends(check_access_token)],
@@ -95,7 +115,11 @@ async def update_people_optional(
     "/v1/people/{pk}",
     status_code=status.HTTP_200_OK,
     response_class=Response,
-    responses=response_generator(401, 404, 500),
+    responses=response_generator(
+        status.HTTP_401_UNAUTHORIZED,
+        status.HTTP_404_NOT_FOUND,
+        status.HTTP_500_INTERNAL_SERVER_ERROR,
+    ),
 )
 async def delete_people(ctx: Annotated[Context, Depends(check_access_token)], pk: int):
     await people_service.delete_people(ctx, pk=pk)
