@@ -41,14 +41,17 @@ async def create_user_people(
 
 
 async def change_password(
-    ctx: Context, user_id: int, update_password: UpdateUserPassword
+    ctx: Context, pk: int, update_password: UpdateUserPassword
 ) -> User:
-    user = await user_repository.get(session=ctx.session, pk=user_id)
+    user = await user_repository.get(session=ctx.session, pk=pk)
     if not crypt.check_password(update_password.current_password, user.password):
         raise BusinessError("current password invalid")
     async with ctx.session.begin():
+        password_hash = crypt.hash_password(update_password.new_password)
         res = await user_repository.update(
-            session=ctx.session, pk=user_id, password=update_password.new_password
+            session=ctx.session,
+            pk=pk,
+            password=password_hash,
         )
     return res
 
@@ -87,7 +90,7 @@ async def delete_user(ctx: Context, pk: int):
 __all__ = (
     "create_user_people",
     "change_password",
-    "all_user",
+    "all_users",
     "get_user",
     "update_user",
     "update_user_optional",

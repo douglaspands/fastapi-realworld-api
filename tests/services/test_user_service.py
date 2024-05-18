@@ -6,9 +6,17 @@ from faker import Faker
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
 from server.core.database import SessionIO
+from server.core.exceptions import BusinessError
+from server.models.people_model import People
 from server.models.user_model import User
-from server.resources.user_resource import UpdateUser, UpdateUserOptional
+from server.resources.user_resource import (
+    CreateUserPeople,
+    UpdateUser,
+    UpdateUserOptional,
+    UpdateUserPassword,
+)
 from server.services import user_service
+from server.services.auth_service import crypt
 from tests.mocks.context_mock import ContextMock
 
 fake = Faker("pt_BR")
@@ -25,7 +33,7 @@ async def test_get_user_ok(user_repository_mock: AsyncMock):
     user_mock = User(
         id=user_id,
         username=fake.user_name(),
-        password=fake.password(),
+        password=crypt.hash_password(fake.password(10)),
         people_id=fake.pyint(1, 999),
         created_at=fake.date_time(),
         updated_at=fake.date_time(),
@@ -73,7 +81,7 @@ async def test_all_users_ok(user_repository_mock: AsyncMock):
         User(
             id=idx + 1,
             username=fake.user_name(),
-            password=fake.password(),
+            password=crypt.hash_password(fake.password(10)),
             people_id=fake.pyint(1, 999),
             created_at=fake.date_time(),
             updated_at=fake.date_time(),
@@ -120,8 +128,8 @@ async def test_update_user_ok(user_repository_mock: AsyncMock):
     user_id = 1
     update_user = UpdateUser(
         username=fake.user_name(),
-        active=fake.pybool(),
-        people_id=fake.pyint(1, 999),
+        active=True,
+        people_id=fake.pyint(1, 10),
     )
 
     # MOCK
@@ -129,8 +137,9 @@ async def test_update_user_ok(user_repository_mock: AsyncMock):
     user_mock = User(
         id=user_id,
         username=fake.user_name(),
-        password=fake.password(),
-        people_id=fake.pyint(1, 999),
+        password=crypt.hash_password(fake.password(10)),
+        active=False,
+        people_id=fake.pyint(11, 20),
         created_at=fake.date_time(),
         updated_at=fake.date_time(),
     )
@@ -199,7 +208,7 @@ async def test_update_user_optional_ok(user_repository_mock: AsyncMock):
     user_mock = User(
         id=user_id,
         username=fake.user_name(),
-        password=fake.password(),
+        password=crypt.hash_password(fake.password(10)),
         people_id=fake.pyint(1, 999),
         created_at=fake.date_time(),
         updated_at=fake.date_time(),
@@ -285,3 +294,161 @@ async def test_delete_user_error(user_repository_mock: AsyncMock):
 
     # THEN
     assert error_message in str(exc_info.value)
+
+
+@pytest.mark.asyncio
+@patch("server.services.user_service.user_repository", new_callable=AsyncMock)
+async def test_change_password_ok(user_repository_mock: AsyncMock):
+    # GIVEN
+    user_id = 1
+    new_password = fake.password(10)
+    update_password = UpdateUserPassword(
+        current_password=fake.password(10),
+        new_password=new_password,
+        new_password_check=new_password,
+    )
+
+    # MOCK
+    context_mock = ContextMock.context_session_mock()
+    user_mock = User(
+        id=user_id,
+        username=fake.user_name(),
+        password=crypt.hash_password(update_password.current_password),
+        people_id=fake.pyint(1, 999),
+        created_at=fake.date_time(),
+        updated_at=fake.date_time(),
+    )
+
+    async def update_mock(session: SessionIO, pk: int, **values):
+        user = copy(user_mock)
+        for k, v in values.items():
+            setattr(user, k, v)
+        return user
+
+    user_repository_mock.get.return_value = user_mock
+    user_repository_mock.update = update_mock
+
+    # WHEN
+    user = await user_service.change_password(
+        ctx=context_mock, pk=user_id, update_password=update_password
+    )
+
+    # THEN
+    assert user.id == user_id
+    assert user.username == user_mock.username
+    assert user.password != user_mock.password
+    assert crypt.check_password(update_password.new_password, user.password)
+    assert user.active == user_mock.active
+    assert user.people_id == user_mock.people_id
+    assert user.created_at == user_mock.created_at
+    assert user.updated_at == user_mock.updated_at
+
+
+@pytest.mark.asyncio
+@patch("server.services.user_service.user_repository", new_callable=AsyncMock)
+async def test_change_password_notfound(user_repository_mock: AsyncMock):
+    # GIVEN
+    user_id = 9999
+    new_password = fake.password(10)
+    update_password = UpdateUserPassword(
+        current_password=fake.password(10),
+        new_password=new_password,
+        new_password_check=new_password,
+    )
+
+    # MOCK
+    error_message = "No row was found when one was required"
+    context_mock = ContextMock.context_session_mock()
+    user_repository_mock.get.side_effect = NoResultFound(error_message)
+
+    # WHEN
+    with pytest.raises(NoResultFound) as exc_info:
+        await user_service.change_password(
+            ctx=context_mock, pk=user_id, update_password=update_password
+        )
+
+    # THEN
+    assert error_message in str(exc_info.value)
+
+
+@pytest.mark.asyncio
+@patch("server.services.user_service.user_repository", new_callable=AsyncMock)
+async def test_change_password_invalid(user_repository_mock: AsyncMock):
+    # GIVEN
+    user_id = 1
+    new_password = fake.password(10)
+    update_password = UpdateUserPassword(
+        current_password=fake.password(10),
+        new_password=new_password,
+        new_password_check=new_password,
+    )
+
+    # MOCK
+    context_mock = ContextMock.context_session_mock()
+    user_mock = User(
+        id=user_id,
+        username=fake.user_name(),
+        password=crypt.hash_password(fake.password(10)),
+        people_id=fake.pyint(1, 999),
+        created_at=fake.date_time(),
+        updated_at=fake.date_time(),
+    )
+    user_repository_mock.get.return_value = user_mock
+
+    # WHEN
+    with pytest.raises(BusinessError) as exc_info:
+        await user_service.change_password(
+            ctx=context_mock, pk=user_id, update_password=update_password
+        )
+
+    # THEN
+    assert "current password invalid" in str(exc_info.value)
+
+
+@pytest.mark.asyncio
+@patch("server.services.user_service.user_repository", new_callable=AsyncMock)
+@patch("server.services.user_service.people_repository", new_callable=AsyncMock)
+async def test_create_user_people_ok(
+    people_repository_mock: AsyncMock, user_repository_mock: AsyncMock
+):
+    # GIVEN
+    new_password = fake.password(10)
+    create_user = CreateUserPeople(
+        first_name=fake.first_name(),
+        last_name=fake.last_name(),
+        username=fake.user_name(),
+        password=new_password,
+        password_check=new_password,
+    )
+
+    # MOCK
+    context_mock = ContextMock.context_session_mock()
+    people_mock = People(
+        id=fake.pyint(1, 999),
+        first_name=create_user.first_name,
+        last_name=create_user.last_name,
+    )
+    user_mock = User(
+        id=fake.pyint(1, 999),
+        username=create_user.username,
+        password=crypt.hash_password(create_user.password),
+        people_id=people_mock.id,
+        active=fake.pybool(),
+        created_at=fake.date_time(),
+        updated_at=fake.date_time(),
+    )
+
+    people_repository_mock.get_or_create.return_value = people_mock
+    user_repository_mock.create.return_value = user_mock
+
+    # WHEN
+    user = await user_service.create_user_people(
+        ctx=context_mock, user_people_create=create_user
+    )
+
+    # THEN
+    assert user.id
+    assert user.username == create_user.username
+    assert crypt.check_password(create_user.password, user.password)
+    assert user.active == user_mock.active
+    assert user.people_id == people_mock.id

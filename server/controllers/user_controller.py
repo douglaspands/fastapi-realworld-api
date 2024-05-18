@@ -51,7 +51,7 @@ async def update_user_password(
     update_password: UpdateUserPassword,
 ):
     data = await user_service.change_password(
-        ctx=ctx, user_id=pk, update_password=update_password
+        ctx=ctx, pk=pk, update_password=update_password
     )
     return ResponseOK(data=data)
 
