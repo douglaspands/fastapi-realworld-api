@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlmodel import Column, DateTime, Field, SQLModel
 
-from server.core.utils import datetime_now_utc
+from server.core.utils import datetime_now
 
 
 class People(SQLModel, table=True):
@@ -15,15 +15,15 @@ class People(SQLModel, table=True):
     created_at: datetime | None = Field(
         sa_column=Column(
             DateTime,
-            default=datetime_now_utc,
+            default=datetime_now,
             nullable=False,
         )
     )
     updated_at: datetime | None = Field(
         sa_column=Column(
             DateTime,
-            default=datetime_now_utc,
-            onupdate=datetime_now_utc,
+            default=datetime_now,
+            onupdate=datetime_now,
             nullable=False,
         )
     )
