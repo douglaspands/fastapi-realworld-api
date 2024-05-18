@@ -74,7 +74,7 @@ async def get_user(ctx: Annotated[Context, Depends(check_access_token)], pk: int
     responses=response_generator(204, 500),
 )
 async def get_all_users(ctx: Annotated[Context, Depends(check_access_token)]):
-    data = await user_service.all_user(ctx)
+    data = await user_service.all_users(ctx)
     if not data:
         raise NoContentError()
     return ResponseOK(data=data)

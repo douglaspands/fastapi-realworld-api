@@ -53,7 +53,7 @@ async def change_password(
     return res
 
 
-async def all_user(ctx: Context) -> Sequence[User]:
+async def all_users(ctx: Context) -> Sequence[User]:
     user = await user_repository.get_all(ctx.session)
     return user
 
