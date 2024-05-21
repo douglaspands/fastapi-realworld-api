@@ -1,11 +1,9 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import TYPE_CHECKING
 
 from sqlmodel import Column, DateTime, Field, Relationship, SQLModel
-
-from server.core.utils import datetime_now
 
 if TYPE_CHECKING:
     from server.models.people_model import People
@@ -25,15 +23,15 @@ class User(SQLModel, table=True):
     created_at: datetime | None = Field(
         sa_column=Column(
             DateTime,
-            default=datetime_now,
+            default=lambda: datetime.now(timezone.utc),
             nullable=False,
         )
     )
     updated_at: datetime | None = Field(
         sa_column=Column(
             DateTime,
-            default=datetime_now,
-            onupdate=datetime_now,
+            default=lambda: datetime.now(timezone.utc),
+            onupdate=lambda: datetime.now(timezone.utc),
             nullable=False,
         )
     )
