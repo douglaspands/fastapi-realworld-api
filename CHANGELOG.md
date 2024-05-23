@@ -14,6 +14,11 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 - Teste Integrado: Dominio de Person; [AGUARDANDO]
 - Teste Integrado: Dominio de Auth; [AGUARDANDO]
 
+### Modificado
+
+- Modificado a versão para `0.3.0` do `pyproject.toml`;
+- Modificado a versão para `0.3.0` do `core/settings.py`;
+
 ## [0.2.0] - 2024-05-23
 
 ### Adicionado
