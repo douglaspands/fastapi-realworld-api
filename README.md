@@ -42,12 +42,12 @@ Após iniciado, o `OpenAPI Specification` da aplicação estará disponivel em 2
 ## Qualidade
 Para executar os comandos a seguir, é necessario ter as [dependencias instaladas](#1-instalar-dependencias).
 
-### Validação de Código (Linter)
+### Validação de código (Linter)
 ```sh
 poetry run lint
 ```
 
-### Testes Unitarios
+### Testes unitarios
 ```sh
 poetry run test
 ``` 
