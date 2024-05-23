@@ -33,7 +33,7 @@ async def test_get_person_ok(person_repository_mock: AsyncMock):
     person_repository_mock.get.return_value = person_mock
 
     # WHEN
-    res = await person_service.get_person(context_mock, pk=person_id)
+    res = await person_service.get_person(context_mock, person_id=person_id)
 
     # THEN
     assert res.id == person_id
@@ -54,7 +54,7 @@ async def test_get_person_not_found(person_repository_mock: AsyncMock):
 
     # WHEN
     with pytest.raises(NoResultFound) as exc_info:
-        await person_service.get_person(context_mock, pk=person_id)
+        await person_service.get_person(context_mock, person_id=person_id)
 
     # THEN
     assert error_message in str(exc_info.value)
@@ -151,7 +151,7 @@ async def test_update_person_ok(person_repository_mock: AsyncMock):
 
     # WHEN
     person = await person_service.update_person(
-        context_mock, pk=person_id, update_person=update_person
+        context_mock, person_id=person_id, update_person=update_person
     )
 
     # THEN
@@ -179,7 +179,7 @@ async def test_update_person_error(person_repository_mock: AsyncMock):
     # WHEN
     with pytest.raises(IntegrityError) as exc_info:
         await person_service.update_person(
-            context_mock, pk=person_id, update_person=update_person
+            context_mock, person_id=person_id, update_person=update_person
         )
 
     # THEN
@@ -211,7 +211,7 @@ async def test_update_person_optional_ok(person_repository_mock: AsyncMock):
 
     # WHEN
     person = await person_service.update_person_optional(
-        context_mock, pk=person_id, update_person=update_person
+        context_mock, person_id=person_id, update_person=update_person
     )
 
     # THEN
@@ -238,7 +238,7 @@ async def test_update_person_optional_error(person_repository_mock: AsyncMock):
     # WHEN
     with pytest.raises(IntegrityError) as exc_info:
         await person_service.update_person_optional(
-            context_mock, pk=person_id, update_person=update_person
+            context_mock, person_id=person_id, update_person=update_person
         )
 
     # THEN
@@ -255,7 +255,7 @@ async def test_delete_person_ok(person_repository_mock: AsyncMock):
     context_mock = ContextMock.context_session_mock()
 
     # WHEN
-    await person_service.delete_person(context_mock, pk=person_id)
+    await person_service.delete_person(context_mock, person_id=person_id)
 
     # THEN
     assert True
@@ -276,7 +276,7 @@ async def test_delete_person_error(person_repository_mock: AsyncMock):
 
     # WHEN
     with pytest.raises(IntegrityError) as exc_info:
-        await person_service.delete_person(context_mock, pk=person_id)
+        await person_service.delete_person(context_mock, person_id=person_id)
 
     # THEN
     assert error_message in str(exc_info.value)

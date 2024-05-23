@@ -23,7 +23,7 @@ router = APIRouter(
 
 
 @router.get(
-    "/v1/persons/{pk}",
+    "/v1/persons/{person_id}",
     response_model=ResponseOK[Person],
     status_code=status.HTTP_200_OK,
     responses=response_generator(
@@ -32,8 +32,10 @@ router = APIRouter(
         status.HTTP_500_INTERNAL_SERVER_ERROR,
     ),
 )
-async def get_person(ctx: Annotated[Context, Depends(check_access_token)], pk: int):
-    data = await person_service.get_person(ctx, pk=pk)
+async def get_person(
+    ctx: Annotated[Context, Depends(check_access_token)], person_id: int
+):
+    data = await person_service.get_person(ctx, person_id=person_id)
     return ResponseOK(data=data)
 
 
@@ -72,7 +74,7 @@ async def create_person(
 
 
 @router.put(
-    "/v1/persons/{pk}",
+    "/v1/persons/{person_id}",
     response_model=ResponseOK[Person],
     status_code=status.HTTP_200_OK,
     responses=response_generator(
@@ -83,15 +85,17 @@ async def create_person(
 )
 async def update_person(
     ctx: Annotated[Context, Depends(check_access_token)],
-    pk: int,
+    person_id: int,
     update_person: UpdatePerson,
 ):
-    data = await person_service.update_person(ctx, pk=pk, update_person=update_person)
+    data = await person_service.update_person(
+        ctx, person_id=person_id, update_person=update_person
+    )
     return ResponseOK(data=data)
 
 
 @router.patch(
-    "/v1/persons/{pk}",
+    "/v1/persons/{person_id}",
     response_model=ResponseOK[Person],
     status_code=status.HTTP_200_OK,
     responses=response_generator(
@@ -102,17 +106,17 @@ async def update_person(
 )
 async def update_person_optional(
     ctx: Annotated[Context, Depends(check_access_token)],
-    pk: int,
+    person_id: int,
     update_person: UpdatePersonOptional,
 ):
     data = await person_service.update_person_optional(
-        ctx, pk=pk, update_person=update_person
+        ctx, person_id=person_id, update_person=update_person
     )
     return ResponseOK(data=data)
 
 
 @router.delete(
-    "/v1/persons/{pk}",
+    "/v1/persons/{person_id}",
     status_code=status.HTTP_200_OK,
     response_class=Response,
     responses=response_generator(
@@ -121,8 +125,10 @@ async def update_person_optional(
         status.HTTP_500_INTERNAL_SERVER_ERROR,
     ),
 )
-async def delete_person(ctx: Annotated[Context, Depends(check_access_token)], pk: int):
-    await person_service.delete_person(ctx, pk=pk)
+async def delete_person(
+    ctx: Annotated[Context, Depends(check_access_token)], person_id: int
+):
+    await person_service.delete_person(ctx, person_id=person_id)
     return
 
 

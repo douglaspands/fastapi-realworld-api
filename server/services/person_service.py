@@ -15,8 +15,8 @@ async def get_all_persons(ctx: Context) -> Sequence[Person]:
     return person
 
 
-async def get_person(ctx: Context, pk: int) -> Person:
-    person = await person_repository.get(ctx.session, pk=pk)
+async def get_person(ctx: Context, person_id: int) -> Person:
+    person = await person_repository.get(ctx.session, pk=person_id)
     return person
 
 
@@ -29,25 +29,27 @@ async def create_person(ctx: Context, create_person: CreatePerson) -> Person:
     return person
 
 
-async def update_person(ctx: Context, pk: int, update_person: UpdatePerson) -> Person:
+async def update_person(
+    ctx: Context, person_id: int, update_person: UpdatePerson
+) -> Person:
     async with ctx.session.begin():
         values = update_person.model_dump()
-        person = await person_repository.update(ctx.session, pk=pk, **values)
+        person = await person_repository.update(ctx.session, pk=person_id, **values)
     return person
 
 
 async def update_person_optional(
-    ctx: Context, pk: int, update_person: UpdatePersonOptional
+    ctx: Context, person_id: int, update_person: UpdatePersonOptional
 ) -> Person:
     async with ctx.session.begin():
         values = update_person.model_dump(exclude_none=True)
-        person = await person_repository.update(ctx.session, pk=pk, **values)
+        person = await person_repository.update(ctx.session, pk=person_id, **values)
     return person
 
 
-async def delete_person(ctx: Context, pk: int):
+async def delete_person(ctx: Context, person_id: int):
     async with ctx.session.begin():
-        await person_repository.delete(ctx.session, pk=pk)
+        await person_repository.delete(ctx.session, pk=person_id)
 
 
 __all__ = (

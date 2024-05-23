@@ -72,7 +72,7 @@ def test_get_all_users_ok(
     httpclient.current_app.dependency_overrides[check_access_token] = (
         lambda: ContextMock.context_session_mock()
     )
-    user_service_mock.all_users.return_value = user_mock
+    user_service_mock.get_all_users.return_value = user_mock
 
     # WHEN
     url = "/users/v1/users"
@@ -97,7 +97,7 @@ def test_get_all_users_nocontent(
     httpclient.current_app.dependency_overrides[check_access_token] = (
         lambda: ContextMock.context_session_mock()
     )
-    user_service_mock.all_users.return_value = user_mock
+    user_service_mock.get_all_users.return_value = user_mock
 
     # WHEN
     url = "/users/v1/users"

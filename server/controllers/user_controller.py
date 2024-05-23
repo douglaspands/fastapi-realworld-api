@@ -44,7 +44,7 @@ async def create_user_and_person(
 
 
 @router.post(
-    "/v1/users/{pk}/change-password",
+    "/v1/users/{user_id}/change-password",
     response_model=ResponseOK[User],
     status_code=status.HTTP_200_OK,
     responses=response_generator(
@@ -56,17 +56,17 @@ async def create_user_and_person(
 )
 async def update_user_password(
     ctx: Annotated[Context, Depends(check_access_token)],
-    pk: int,
+    user_id: int,
     update_password: UpdateUserPassword,
 ):
     data = await user_service.change_password(
-        ctx=ctx, pk=pk, update_password=update_password
+        ctx=ctx, user_id=user_id, update_password=update_password
     )
     return ResponseOK(data=data)
 
 
 @router.get(
-    "/v1/users/{pk}",
+    "/v1/users/{user_id}",
     response_model=ResponseOK[User],
     status_code=status.HTTP_200_OK,
     responses=response_generator(
@@ -75,8 +75,8 @@ async def update_user_password(
         status.HTTP_500_INTERNAL_SERVER_ERROR,
     ),
 )
-async def get_user(ctx: Annotated[Context, Depends(check_access_token)], pk: int):
-    data = await user_service.get_user(ctx, pk=pk)
+async def get_user(ctx: Annotated[Context, Depends(check_access_token)], user_id: int):
+    data = await user_service.get_user(ctx, user_id=user_id)
     return ResponseOK(data=data)
 
 
@@ -91,14 +91,14 @@ async def get_user(ctx: Annotated[Context, Depends(check_access_token)], pk: int
     ),
 )
 async def get_all_users(ctx: Annotated[Context, Depends(check_access_token)]):
-    data = await user_service.all_users(ctx)
+    data = await user_service.get_all_users(ctx)
     if not data:
         raise NoContentError()
     return ResponseOK(data=data)
 
 
 @router.put(
-    "/v1/users/{pk}",
+    "/v1/users/{user_id}",
     response_model=ResponseOK[User],
     status_code=status.HTTP_200_OK,
     responses=response_generator(
@@ -109,15 +109,15 @@ async def get_all_users(ctx: Annotated[Context, Depends(check_access_token)]):
 )
 async def update_user(
     ctx: Annotated[Context, Depends(check_access_token)],
-    pk: int,
+    user_id: int,
     update_user: UpdateUser,
 ):
-    data = await user_service.update_user(ctx, pk=pk, update_user=update_user)
+    data = await user_service.update_user(ctx, user_id=user_id, update_user=update_user)
     return ResponseOK(data=data)
 
 
 @router.patch(
-    "/v1/users/{pk}",
+    "/v1/users/{user_id}",
     response_model=ResponseOK[User],
     status_code=status.HTTP_200_OK,
     responses=response_generator(
@@ -128,15 +128,17 @@ async def update_user(
 )
 async def update_user_optional(
     ctx: Annotated[Context, Depends(check_access_token)],
-    pk: int,
+    user_id: int,
     update_user: UpdateUserOptional,
 ):
-    data = await user_service.update_user_optional(ctx, pk=pk, update_user=update_user)
+    data = await user_service.update_user_optional(
+        ctx, user_id=user_id, update_user=update_user
+    )
     return ResponseOK(data=data)
 
 
 @router.delete(
-    "/v1/users/{pk}",
+    "/v1/users/{user_id}",
     status_code=status.HTTP_200_OK,
     response_class=Response,
     responses=response_generator(
@@ -145,8 +147,10 @@ async def update_user_optional(
         status.HTTP_500_INTERNAL_SERVER_ERROR,
     ),
 )
-async def delete_user(ctx: Annotated[Context, Depends(check_access_token)], pk: int):
-    await user_service.delete_user(ctx, pk=pk)
+async def delete_user(
+    ctx: Annotated[Context, Depends(check_access_token)], user_id: int
+):
+    await user_service.delete_user(ctx, user_id=user_id)
     return
 
 

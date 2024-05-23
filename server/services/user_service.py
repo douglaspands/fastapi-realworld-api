@@ -41,16 +41,16 @@ async def create_user_person(
 
 
 async def change_password(
-    ctx: Context, pk: int, update_password: UpdateUserPassword
+    ctx: Context, user_id: int, update_password: UpdateUserPassword
 ) -> User:
-    user = await user_repository.get(session=ctx.session, pk=pk)
+    user = await user_repository.get(session=ctx.session, pk=user_id)
     if not crypt.check_password(update_password.current_password, user.password):
         raise BusinessError("current password invalid")
     async with ctx.session.begin():
         password_hash = crypt.hash_password(update_password.new_password)
         res = await user_repository.update(
             session=ctx.session,
-            pk=pk,
+            pk=user_id,
             password=password_hash,
         )
     return res
@@ -61,30 +61,30 @@ async def get_all_users(ctx: Context) -> Sequence[User]:
     return user
 
 
-async def get_user(ctx: Context, pk: int) -> User:
-    user = await user_repository.get(ctx.session, pk=pk)
+async def get_user(ctx: Context, user_id: int) -> User:
+    user = await user_repository.get(ctx.session, pk=user_id)
     return user
 
 
-async def update_user(ctx: Context, pk: int, update_user: UpdateUser) -> User:
+async def update_user(ctx: Context, user_id: int, update_user: UpdateUser) -> User:
     async with ctx.session.begin():
         values = update_user.model_dump()
-        user = await user_repository.update(ctx.session, pk=pk, **values)
+        user = await user_repository.update(ctx.session, pk=user_id, **values)
     return user
 
 
 async def update_user_optional(
-    ctx: Context, pk: int, update_user: UpdateUserOptional
+    ctx: Context, user_id: int, update_user: UpdateUserOptional
 ) -> User:
     async with ctx.session.begin():
         values = update_user.model_dump(exclude_none=True)
-        user = await user_repository.update(ctx.session, pk=pk, **values)
+        user = await user_repository.update(ctx.session, pk=user_id, **values)
     return user
 
 
-async def delete_user(ctx: Context, pk: int):
+async def delete_user(ctx: Context, user_id: int):
     async with ctx.session.begin():
-        await user_repository.delete(ctx.session, pk=pk)
+        await user_repository.delete(ctx.session, pk=user_id)
 
 
 __all__ = (

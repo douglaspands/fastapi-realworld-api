@@ -42,7 +42,7 @@ async def test_get_user_ok(user_repository_mock: AsyncMock):
     user_repository_mock.get.return_value = user_mock
 
     # WHEN
-    user = await user_service.get_user(context_mock, pk=user_id)
+    user = await user_service.get_user(context_mock, user_id=user_id)
 
     # THEN
     assert user.id == user_mock.id
@@ -67,7 +67,7 @@ async def test_get_user_not_found(user_repository_mock: AsyncMock):
 
     # WHEN
     with pytest.raises(NoResultFound) as exc_info:
-        await user_service.get_user(context_mock, pk=user_id)
+        await user_service.get_user(context_mock, user_id=user_id)
 
     # THEN
     assert error_message in str(exc_info.value)
@@ -154,7 +154,7 @@ async def test_update_user_ok(user_repository_mock: AsyncMock):
 
     # WHEN
     user = await user_service.update_user(
-        context_mock, pk=user_id, update_user=update_user
+        context_mock, user_id=user_id, update_user=update_user
     )
 
     # THEN
@@ -189,7 +189,7 @@ async def test_update_user_error(user_repository_mock: AsyncMock):
     # WHEN
     with pytest.raises(IntegrityError) as exc_info:
         await user_service.update_user(
-            context_mock, pk=user_id, update_user=update_user
+            context_mock, user_id=user_id, update_user=update_user
         )
 
     # THEN
@@ -224,7 +224,7 @@ async def test_update_user_optional_ok(user_repository_mock: AsyncMock):
 
     # WHEN
     user = await user_service.update_user_optional(
-        context_mock, pk=user_id, update_user=update_user
+        context_mock, user_id=user_id, update_user=update_user
     )
 
     # THEN
@@ -252,7 +252,7 @@ async def test_update_user_optional_error(user_repository_mock: AsyncMock):
     # WHEN
     with pytest.raises(IntegrityError) as exc_info:
         await user_service.update_user_optional(
-            context_mock, pk=user_id, update_user=update_user
+            context_mock, user_id=user_id, update_user=update_user
         )
 
     # THEN
@@ -269,7 +269,7 @@ async def test_delete_user_ok(user_repository_mock: AsyncMock):
     context_mock = ContextMock.context_session_mock()
 
     # WHEN
-    await user_service.delete_user(context_mock, pk=user_id)
+    await user_service.delete_user(context_mock, user_id=user_id)
 
     # THEN
     assert True
@@ -290,7 +290,7 @@ async def test_delete_user_error(user_repository_mock: AsyncMock):
 
     # WHEN
     with pytest.raises(IntegrityError) as exc_info:
-        await user_service.delete_user(context_mock, pk=user_id)
+        await user_service.delete_user(context_mock, user_id=user_id)
 
     # THEN
     assert error_message in str(exc_info.value)
@@ -330,7 +330,7 @@ async def test_change_password_ok(user_repository_mock: AsyncMock):
 
     # WHEN
     user = await user_service.change_password(
-        ctx=context_mock, pk=user_id, update_password=update_password
+        ctx=context_mock, user_id=user_id, update_password=update_password
     )
 
     # THEN
@@ -364,7 +364,7 @@ async def test_change_password_notfound(user_repository_mock: AsyncMock):
     # WHEN
     with pytest.raises(NoResultFound) as exc_info:
         await user_service.change_password(
-            ctx=context_mock, pk=user_id, update_password=update_password
+            ctx=context_mock, user_id=user_id, update_password=update_password
         )
 
     # THEN
@@ -398,7 +398,7 @@ async def test_change_password_invalid(user_repository_mock: AsyncMock):
     # WHEN
     with pytest.raises(BusinessError) as exc_info:
         await user_service.change_password(
-            ctx=context_mock, pk=user_id, update_password=update_password
+            ctx=context_mock, user_id=user_id, update_password=update_password
         )
 
     # THEN
