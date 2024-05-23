@@ -19,7 +19,7 @@ DatabaseDsn = Annotated[
 class Settings(BaseSettings):
     # app
     app_name: str = "FastAPI RealWorld API"
-    app_version: str = "0.2.0"
+    app_version: str = "0.3.0"
 
     # openapi_doc
     openapi_description: str = (

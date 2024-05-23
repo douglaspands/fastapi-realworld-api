@@ -39,6 +39,25 @@ Após iniciado, o `OpenAPI Specification` da aplicação estará disponivel em 2
 - [http://localhost:5000/docs](http://localhost:5000/docs)
 - [http://localhost:5000/redoc](http://localhost:5000/redoc)
 
+## Qualidade
+Para executar os comandos a seguir, é necessario ter as [dependencias instaladas](#1-instalar-dependencias).
+
+### Validação de Código (Linter)
+```sh
+poetry run lint
+```
+
+### Testes Unitarios
+```sh
+poetry run test
+``` 
+
+### Build
+```sh
+poetry run build
+```
+> São executados: [validação de codigo](#validação-de-código-linter) e [testes unitarios](#testes-unitarios).
+
 ## Changelog
 
 Todas as notas de alteração deste projeto serão documentados no [CHANGELOG.md](./CHANGELOG.md).

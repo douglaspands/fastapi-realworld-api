@@ -9,9 +9,10 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 
 ### Adicionado
 
-- Teste Integrador: Dominio de User; [AGUARDANDO]
-- Teste Integrador: Dominio de Person; [AGUARDANDO]
-- Teste Integrador: Dominio de Auth; [AGUARDANDO]
+- README: Inclusão da seção de qualidade de código;
+- Teste Integrado: Dominio de User; [AGUARDANDO]
+- Teste Integrado: Dominio de Person; [AGUARDANDO]
+- Teste Integrado: Dominio de Auth; [AGUARDANDO]
 
 ## [0.2.0] - 2024-05-23
 
