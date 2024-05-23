@@ -5,14 +5,18 @@ from sqlalchemy.exc import NoResultFound
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from server.core.exceptions import BusinessError, NotFoundError
+from server.core.schema import ValidationError
 
 
 async def request_validation_error_handler(
     request: Request, exc: RequestValidationError
 ):
+    errors = exc.errors()
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
-        content={"errors": exc.errors()},
+        content={
+            "errors": [ValidationError(**err).model_dump(mode="json") for err in errors]
+        },
     )
 
 

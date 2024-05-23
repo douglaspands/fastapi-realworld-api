@@ -1,4 +1,4 @@
-# fastapi-realworld-api [EM DESENVOLVIMENTO]
+# fastapi-realworld-api
 Exemplo de projeto com `FastAPI` e `SQLModel` usando `async/await` utilizado no mundo real.   
 Meu desejo é apresentar um motor de API REST utilizando o que considero que tem de melhor no universo Python. `[MINHA OPINIÃO]`
 
@@ -21,6 +21,7 @@ Criar o arquivo `.env` na raiz do projeto com:
 ```sh
 db_url=sqlite+aiosqlite:///database.db
 db_debug=1
+token_secret_key=09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7
 ``` 
 
 ### 3. Executar migrações

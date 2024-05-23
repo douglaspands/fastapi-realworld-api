@@ -4,6 +4,7 @@ from pathlib import Path
 from shlex import quote
 
 from rich.console import Console
+from rich.prompt import Prompt
 
 from . import message
 
@@ -29,7 +30,7 @@ def _print(msg: str, is_error: bool = False):
 
 
 def test():
-    cmd = "pytest -vv"
+    cmd = "pytest -vv tests"
     _shell(cmd)
 
 
@@ -57,7 +58,7 @@ def build():
     folders = " ".join((str(SERVER_FOLDER), str(TEST_FOLDER)))
     for cmd in cmd_tools:
         results.append(_shell(cmd.format(folder=folders)))
-    results.append(_shell("pytest -v"))
+    results.append(_shell("pytest -v tests"))
     if not all(sc == 0 for sc in results):
         _print(message.BUILD_ERROR, is_error=True)
         sys.exit(1)
@@ -67,6 +68,21 @@ def build():
 def migrate():
     cmd = "alembic upgrade head"
     _shell(cmd)
+
+
+def sqlmigrate():
+    cmd = "alembic upgrade head --sql"
+    _shell(cmd)
+
+
+def make_migrations():
+    message = Prompt.ask("[yellow]Enter your migration message[/yellow]").strip()
+    if not message:
+        _print("migration's message is required", is_error=True)
+        return sys.exit(1)
+    cmd = f"alembic revision --autogenerate -m {quote(message)}"
+    _shell(cmd)
+    _print("migration's script created")
 
 
 def server():
@@ -80,7 +96,7 @@ def server():
     _shell(cmd)
 
 
-def server_production():
+def prodution_server():
     cmd = (
         "gunicorn "
         f"--workers {API_WORKERS} "
