@@ -7,24 +7,24 @@ from server.core.exceptions import NoContentError
 from server.core.openapi import response_generator
 from server.core.schema import ResponseOK
 from server.enums.openapi_enum import OpenApiTagEnum
-from server.resources.people_resource import (
-    CreatePeople,
-    People,
-    UpdatePeople,
-    UpdatePeopleOptional,
+from server.resources.person_resource import (
+    CreatePerson,
+    Person,
+    UpdatePerson,
+    UpdatePersonOptional,
 )
-from server.services import people_service
+from server.services import person_service
 from server.services.auth_service import check_access_token
 
 router = APIRouter(
-    prefix="/people",
-    tags=[OpenApiTagEnum.PEOPLE],
+    prefix="/persons",
+    tags=[OpenApiTagEnum.PERSON],
 )
 
 
 @router.get(
-    "/v1/people/{pk}",
-    response_model=ResponseOK[People],
+    "/v1/persons/{pk}",
+    response_model=ResponseOK[Person],
     status_code=status.HTTP_200_OK,
     responses=response_generator(
         status.HTTP_401_UNAUTHORIZED,
@@ -32,14 +32,14 @@ router = APIRouter(
         status.HTTP_500_INTERNAL_SERVER_ERROR,
     ),
 )
-async def get_people(ctx: Annotated[Context, Depends(check_access_token)], pk: int):
-    data = await people_service.get_people(ctx, pk=pk)
+async def get_person(ctx: Annotated[Context, Depends(check_access_token)], pk: int):
+    data = await person_service.get_person(ctx, pk=pk)
     return ResponseOK(data=data)
 
 
 @router.get(
-    "/v1/people",
-    response_model=ResponseOK[Sequence[People]],
+    "/v1/persons",
+    response_model=ResponseOK[Sequence[Person]],
     status_code=status.HTTP_200_OK,
     responses=response_generator(
         status.HTTP_204_NO_CONTENT,
@@ -47,16 +47,16 @@ async def get_people(ctx: Annotated[Context, Depends(check_access_token)], pk: i
         status.HTTP_500_INTERNAL_SERVER_ERROR,
     ),
 )
-async def get_all_people(ctx: Annotated[Context, Depends(check_access_token)]):
-    data = await people_service.all_people(ctx)
+async def get_all_person(ctx: Annotated[Context, Depends(check_access_token)]):
+    data = await person_service.get_all_persons(ctx)
     if not len(data):
         raise NoContentError()
     return ResponseOK(data=data)
 
 
 @router.post(
-    "/v1/people",
-    response_model=ResponseOK[People],
+    "/v1/persons",
+    response_model=ResponseOK[Person],
     status_code=status.HTTP_201_CREATED,
     responses=response_generator(
         status.HTTP_400_BAD_REQUEST,
@@ -64,16 +64,16 @@ async def get_all_people(ctx: Annotated[Context, Depends(check_access_token)]):
         status.HTTP_500_INTERNAL_SERVER_ERROR,
     ),
 )
-async def create_people(
-    ctx: Annotated[Context, Depends(check_access_token)], create_people: CreatePeople
+async def create_person(
+    ctx: Annotated[Context, Depends(check_access_token)], create_person: CreatePerson
 ):
-    data = await people_service.create_people(ctx, create_people=create_people)
+    data = await person_service.create_person(ctx, create_person=create_person)
     return ResponseOK(data=data)
 
 
 @router.put(
-    "/v1/people/{pk}",
-    response_model=ResponseOK[People],
+    "/v1/persons/{pk}",
+    response_model=ResponseOK[Person],
     status_code=status.HTTP_200_OK,
     responses=response_generator(
         status.HTTP_400_BAD_REQUEST,
@@ -81,18 +81,18 @@ async def create_people(
         status.HTTP_500_INTERNAL_SERVER_ERROR,
     ),
 )
-async def update_people(
+async def update_person(
     ctx: Annotated[Context, Depends(check_access_token)],
     pk: int,
-    update_people: UpdatePeople,
+    update_person: UpdatePerson,
 ):
-    data = await people_service.update_people(ctx, pk=pk, update_people=update_people)
+    data = await person_service.update_person(ctx, pk=pk, update_person=update_person)
     return ResponseOK(data=data)
 
 
 @router.patch(
-    "/v1/people/{pk}",
-    response_model=ResponseOK[People],
+    "/v1/persons/{pk}",
+    response_model=ResponseOK[Person],
     status_code=status.HTTP_200_OK,
     responses=response_generator(
         status.HTTP_400_BAD_REQUEST,
@@ -100,19 +100,19 @@ async def update_people(
         status.HTTP_500_INTERNAL_SERVER_ERROR,
     ),
 )
-async def update_people_optional(
+async def update_person_optional(
     ctx: Annotated[Context, Depends(check_access_token)],
     pk: int,
-    update_people: UpdatePeopleOptional,
+    update_person: UpdatePersonOptional,
 ):
-    data = await people_service.update_people_optional(
-        ctx, pk=pk, update_people=update_people
+    data = await person_service.update_person_optional(
+        ctx, pk=pk, update_person=update_person
     )
     return ResponseOK(data=data)
 
 
 @router.delete(
-    "/v1/people/{pk}",
+    "/v1/persons/{pk}",
     status_code=status.HTTP_200_OK,
     response_class=Response,
     responses=response_generator(
@@ -121,8 +121,8 @@ async def update_people_optional(
         status.HTTP_500_INTERNAL_SERVER_ERROR,
     ),
 )
-async def delete_people(ctx: Annotated[Context, Depends(check_access_token)], pk: int):
-    await people_service.delete_people(ctx, pk=pk)
+async def delete_person(ctx: Annotated[Context, Depends(check_access_token)], pk: int):
+    await person_service.delete_person(ctx, pk=pk)
     return
 
 

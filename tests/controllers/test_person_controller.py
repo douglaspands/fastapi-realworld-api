@@ -7,11 +7,11 @@ from pydash import get
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
 from server.core.exceptions import BusinessError, NotFoundError
-from server.models.people_model import People
-from server.resources.people_resource import (
-    CreatePeople,
-    UpdatePeople,
-    UpdatePeopleOptional,
+from server.models.person_model import Person
+from server.resources.person_resource import (
+    CreatePerson,
+    UpdatePerson,
+    UpdatePersonOptional,
 )
 from server.services.auth_service import check_access_token
 from tests.mocks.context_mock import ContextMock
@@ -22,111 +22,111 @@ fake = Faker("pt_BR")
 Faker.seed(0)
 
 
-@patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
-def test_get_people_ok(
-    people_service_mock: AsyncMock,
+@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+def test_get_person_ok(
+    person_service_mock: AsyncMock,
     httpclient: HttpClient,
 ):
     # GIVEN
-    people_id = 1
+    person_id = 1
 
     # MOCK
     context_mock = ContextMock.context_session_mock()
     httpclient.current_app.dependency_overrides[check_access_token] = (
         lambda: context_mock
     )
-    people_mock = People(
-        id=people_id,
+    person_mock = Person(
+        id=person_id,
         first_name=fake.first_name(),
         last_name=fake.last_name(),
         updated_at=datetime.now(),
         created_at=datetime.now(),
     )
-    people_service_mock.get_people.return_value = people_mock
+    person_service_mock.get_person.return_value = person_mock
 
     # WHEN
-    url = f"/people/v1/people/{people_id}"
+    url = f"/persons/v1/persons/{person_id}"
     response = httpclient.get(url)
 
     # THEN
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {
-        "data": snake_to_camel(people_mock.model_dump(mode="json"))
+        "data": snake_to_camel(person_mock.model_dump(mode="json"))
     }
 
 
-@patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
-def test_get_people_not_found(
-    people_service_mock: AsyncMock,
+@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+def test_get_person_not_found(
+    person_service_mock: AsyncMock,
     httpclient: HttpClient,
 ):
     # GIVEN
-    people_id = 99999
+    person_id = 99999
 
     # MOCK
     context_mock = ContextMock.context_session_mock()
     httpclient.current_app.dependency_overrides[check_access_token] = (
         lambda: context_mock
     )
-    people_service_mock.get_people.side_effect = NoResultFound(
+    person_service_mock.get_person.side_effect = NoResultFound(
         "No row was found when one was required"
     )
 
     # WHEN
-    url = f"/people/v1/people/{people_id}"
+    url = f"/persons/v1/persons/{person_id}"
     response = httpclient.get(url)
 
     # THEN
     assert response.status_code == HTTPStatus.NOT_FOUND
 
 
-@patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
-def test_get_people_not_found_2(
-    people_service_mock: AsyncMock,
+@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+def test_get_person_not_found_2(
+    person_service_mock: AsyncMock,
     httpclient: HttpClient,
 ):
     # GIVEN
-    people_id = 99999
+    person_id = 99999
 
     # MOCK
     context_mock = ContextMock.context_session_mock()
     httpclient.current_app.dependency_overrides[check_access_token] = (
         lambda: context_mock
     )
-    people_service_mock.get_people.side_effect = NotFoundError(
+    person_service_mock.get_person.side_effect = NotFoundError(
         "No row was found when one was required"
     )
 
     # WHEN
-    url = f"/people/v1/people/{people_id}"
+    url = f"/persons/v1/persons/{person_id}"
     response = httpclient.get(url)
 
     # THEN
     assert response.status_code == HTTPStatus.NOT_FOUND
 
 
-@patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
-def test_get_people_internal_server_error(
-    people_service_mock: AsyncMock,
+@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+def test_get_person_internal_server_error(
+    person_service_mock: AsyncMock,
     httpclient: HttpClient,
 ):
     # GIVEN
-    people_id = 500
+    person_id = 500
 
     # MOCK
     context_mock = ContextMock.context_session_mock()
     httpclient.current_app.dependency_overrides[check_access_token] = (
         lambda: context_mock
     )
-    message_error = 'insert or update on table "people" violates foreign key constraint "people_some_column_fkey"'
-    people_service_mock.get_people.side_effect = IntegrityError(
+    message_error = 'insert or update on table "person" violates foreign key constraint "person_some_column_fkey"'
+    person_service_mock.get_person.side_effect = IntegrityError(
         orig=Exception(message_error),
         params={},
         statement="",
     )
 
     # WHEN
-    url = f"/people/v1/people/{people_id}"
+    url = f"/persons/v1/persons/{person_id}"
     response = httpclient.get(url)
 
     # THEN
@@ -134,9 +134,9 @@ def test_get_people_internal_server_error(
     assert message_error in get(response.json(), "errors[0].message")
 
 
-@patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
-def test_all_people_ok(
-    people_service_mock: AsyncMock,
+@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+def test_all_person_ok(
+    person_service_mock: AsyncMock,
     httpclient: HttpClient,
 ):
     # MOCK
@@ -144,8 +144,8 @@ def test_all_people_ok(
     httpclient.current_app.dependency_overrides[check_access_token] = (
         lambda: context_mock
     )
-    people_mock = [
-        People(
+    person_mock = [
+        Person(
             id=idx + 1,
             first_name=fake.first_name(),
             last_name=fake.last_name(),
@@ -154,22 +154,22 @@ def test_all_people_ok(
         )
         for idx in range(10)
     ]
-    people_service_mock.all_people.return_value = people_mock
+    person_service_mock.get_all_persons.return_value = person_mock
 
     # WHEN
-    url = "/people/v1/people"
+    url = "/persons/v1/persons"
     response = httpclient.get(url)
 
     # THEN
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {
-        "data": [snake_to_camel(p.model_dump(mode="json")) for p in people_mock]
+        "data": [snake_to_camel(p.model_dump(mode="json")) for p in person_mock]
     }
 
 
-@patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
-def test_all_people_nocontent(
-    people_service_mock: AsyncMock,
+@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+def test_all_person_nocontent(
+    person_service_mock: AsyncMock,
     httpclient: HttpClient,
 ):
     # MOCK
@@ -177,19 +177,19 @@ def test_all_people_nocontent(
     httpclient.current_app.dependency_overrides[check_access_token] = (
         lambda: context_mock
     )
-    people_service_mock.all_people.return_value = []
+    person_service_mock.get_all_persons.return_value = []
 
     # WHEN
-    url = "/people/v1/people"
+    url = "/persons/v1/persons"
     response = httpclient.get(url)
 
     # THEN
     assert response.status_code == HTTPStatus.NO_CONTENT
 
 
-@patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
-def test_create_people_ok(
-    people_service_mock: AsyncMock,
+@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+def test_create_person_ok(
+    person_service_mock: AsyncMock,
     httpclient: HttpClient,
 ):
     # MOCK
@@ -197,34 +197,34 @@ def test_create_people_ok(
     httpclient.current_app.dependency_overrides[check_access_token] = (
         lambda: context_mock
     )
-    people_mock = People(
+    person_mock = Person(
         id=fake.pyint(),
         first_name=fake.first_name(),
         last_name=fake.last_name(),
         updated_at=datetime.now(),
         created_at=datetime.now(),
     )
-    people_service_mock.create_people.return_value = people_mock
+    person_service_mock.create_person.return_value = person_mock
 
     # GIVEN
-    create_people = CreatePeople(
-        first_name=people_mock.first_name, last_name=people_mock.last_name
+    create_person = CreatePerson(
+        first_name=person_mock.first_name, last_name=person_mock.last_name
     )
 
     # WHEN
-    url = "/people/v1/people"
-    response = httpclient.post(url, json=create_people.model_dump())
+    url = "/persons/v1/persons"
+    response = httpclient.post(url, json=create_person.model_dump())
 
     # THEN
     assert response.status_code == HTTPStatus.CREATED
     assert response.json() == {
-        "data": snake_to_camel(people_mock.model_dump(mode="json"))
+        "data": snake_to_camel(person_mock.model_dump(mode="json"))
     }
 
 
-@patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
-def test_create_people_validation_error(
-    people_service_mock: AsyncMock,
+@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+def test_create_person_validation_error(
+    person_service_mock: AsyncMock,
     httpclient: HttpClient,
 ):
     # MOCK
@@ -232,28 +232,28 @@ def test_create_people_validation_error(
     httpclient.current_app.dependency_overrides[check_access_token] = (
         lambda: context_mock
     )
-    people_mock = People(
+    person_mock = Person(
         id=fake.pyint(), first_name=fake.first_name(), last_name=fake.last_name()
     )
-    people_service_mock.create_people.return_value = people_mock
+    person_service_mock.create_person.return_value = person_mock
 
     # GIVEN
-    create_people = {
-        "firstName": people_mock.first_name,
+    create_person = {
+        "firstName": person_mock.first_name,
         "lastName": None,
     }
 
     # WHEN
-    url = "/people/v1/people"
-    response = httpclient.post(url, json=create_people)
+    url = "/persons/v1/persons"
+    response = httpclient.post(url, json=create_person)
 
     # THEN
     assert response.status_code == HTTPStatus.BAD_REQUEST
 
 
-@patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
-def test_create_people_business_error(
-    people_service_mock: AsyncMock,
+@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+def test_create_person_business_error(
+    person_service_mock: AsyncMock,
     httpclient: HttpClient,
 ):
     # MOCK
@@ -261,7 +261,7 @@ def test_create_people_business_error(
     httpclient.current_app.dependency_overrides[check_access_token] = (
         lambda: context_mock
     )
-    people_mock = People(
+    person_mock = Person(
         id=fake.pyint(),
         first_name=fake.first_name(),
         last_name=fake.last_name(),
@@ -269,30 +269,30 @@ def test_create_people_business_error(
         created_at=datetime.now(),
     )
     message_error = "Business error mock"
-    people_service_mock.create_people.side_effect = BusinessError(message_error)
+    person_service_mock.create_person.side_effect = BusinessError(message_error)
 
     # GIVEN
-    create_people = CreatePeople(
-        first_name=people_mock.first_name, last_name=people_mock.last_name
+    create_person = CreatePerson(
+        first_name=person_mock.first_name, last_name=person_mock.last_name
     )
 
     # WHEN
-    url = "/people/v1/people"
-    response = httpclient.post(url, json=create_people.model_dump(mode="json"))
+    url = "/persons/v1/persons"
+    response = httpclient.post(url, json=create_person.model_dump(mode="json"))
 
     # THEN
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
     assert message_error == get(response.json(), "errors[0].message")
 
 
-@patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
-def test_update_people_ok(
-    people_service_mock: AsyncMock,
+@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+def test_update_person_ok(
+    person_service_mock: AsyncMock,
     httpclient: HttpClient,
 ):
     # GIVEN
-    people_id = fake.pyint()
-    people_update = UpdatePeople(
+    person_id = fake.pyint()
+    person_update = UpdatePerson(
         first_name=fake.first_name(), last_name=fake.last_name()
     )
 
@@ -301,67 +301,67 @@ def test_update_people_ok(
     httpclient.current_app.dependency_overrides[check_access_token] = (
         lambda: context_mock
     )
-    people_mock = People(
-        id=people_id,
-        first_name=people_update.first_name,
-        last_name=people_update.last_name,
+    person_mock = Person(
+        id=person_id,
+        first_name=person_update.first_name,
+        last_name=person_update.last_name,
         updated_at=datetime.now(),
         created_at=datetime.now(),
     )
-    people_service_mock.update_people.return_value = people_mock
+    person_service_mock.update_person.return_value = person_mock
 
     # WHEN
-    url = f"/people/v1/people/{people_id}"
-    response = httpclient.put(url, json=people_update.model_dump())
+    url = f"/persons/v1/persons/{person_id}"
+    response = httpclient.put(url, json=person_update.model_dump())
 
     # THEN
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {
-        "data": snake_to_camel(people_mock.model_dump(mode="json"))
+        "data": snake_to_camel(person_mock.model_dump(mode="json"))
     }
 
 
-@patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
-def test_update_people_optional_ok(
-    people_service_mock: AsyncMock,
+@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+def test_update_person_optional_ok(
+    person_service_mock: AsyncMock,
     httpclient: HttpClient,
 ):
     # GIVEN
-    people_id = fake.pyint()
-    people_update = UpdatePeopleOptional(first_name=fake.first_name())  # type: ignore
+    person_id = fake.pyint()
+    person_update = UpdatePersonOptional(first_name=fake.first_name())  # type: ignore
 
     # MOCK
     context_mock = ContextMock.context_session_mock()
     httpclient.current_app.dependency_overrides[check_access_token] = (
         lambda: context_mock
     )
-    people_mock = People(
-        id=people_id,
-        first_name=people_update.first_name,
+    person_mock = Person(
+        id=person_id,
+        first_name=person_update.first_name,
         last_name=fake.last_name(),
         updated_at=datetime.now(),
         created_at=datetime.now(),
     )
-    people_service_mock.update_people_optional.return_value = people_mock
+    person_service_mock.update_person_optional.return_value = person_mock
 
     # WHEN
-    url = f"/people/v1/people/{people_id}"
-    response = httpclient.patch(url, json=people_update.model_dump())
+    url = f"/persons/v1/persons/{person_id}"
+    response = httpclient.patch(url, json=person_update.model_dump())
 
     # THEN
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {
-        "data": snake_to_camel(people_mock.model_dump(mode="json"))
+        "data": snake_to_camel(person_mock.model_dump(mode="json"))
     }
 
 
-@patch("server.controllers.people_controller.people_service", new_callable=AsyncMock)
-def test_delete_people_ok(
-    people_service_mock: AsyncMock,
+@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+def test_delete_person_ok(
+    person_service_mock: AsyncMock,
     httpclient: HttpClient,
 ):
     # GIVEN
-    people_id = fake.pyint()
+    person_id = fake.pyint()
     # MOCK
     context_mock = ContextMock.context_session_mock()
     httpclient.current_app.dependency_overrides[check_access_token] = (
@@ -369,7 +369,7 @@ def test_delete_people_ok(
     )
 
     # WHEN
-    url = f"/people/v1/people/{people_id}"
+    url = f"/persons/v1/persons/{person_id}"
     response = httpclient.delete(url)
 
     # THEN

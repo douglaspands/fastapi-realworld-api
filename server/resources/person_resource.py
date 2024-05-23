@@ -3,21 +3,21 @@ from server.resources.metaclasses.all_optional_metaclass import AllOptionalMetac
 from server.resources.mixins.timestamp_mixin import TimestampMixin
 
 
-class CreatePeople(BaseResource):
+class CreatePerson(BaseResource):
     first_name: str
     last_name: str
 
 
-class UpdatePeople(CreatePeople):
+class UpdatePerson(CreatePerson):
     pass
 
 
-class UpdatePeopleOptional(CreatePeople, metaclass=AllOptionalMetaclass):
+class UpdatePersonOptional(CreatePerson, metaclass=AllOptionalMetaclass):
     pass
 
 
-class People(TimestampMixin, CreatePeople):
+class Person(TimestampMixin, CreatePerson):
     id: int
 
 
-__all__ = ("CreatePeople", "People", "UpdatePeople", "UpdatePeopleOptional")
+__all__ = ("CreatePerson", "Person", "UpdatePerson", "UpdatePersonOptional")

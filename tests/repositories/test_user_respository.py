@@ -23,7 +23,7 @@ async def test_user_get_by_pk_ok():
         id=user_id,
         username=fake.user_name(),
         password=fake.password(digits=8),
-        people_id=fake.random_int(min=1, max=999),
+        person_id=fake.random_int(min=1, max=999),
     )
     session_mock = SessionIOMock.cast(return_value=user_mock)
 
@@ -61,7 +61,7 @@ async def test_user_get_all_ok():
             id=idx + 1,
             username=fake.user_name(),
             password=fake.password(digits=8),
-            people_id=fake.random_int(min=1, max=999),
+            person_id=fake.random_int(min=1, max=999),
         )
         for idx in range(10)
     ]
@@ -84,7 +84,7 @@ async def test_user_save_ok():
     create_user = User(
         username=fake.user_name(),
         password=fake.password(digits=8),
-        people_id=fake.random_int(min=1, max=999),
+        person_id=fake.random_int(min=1, max=999),
     )
 
     # MOCK
@@ -104,7 +104,7 @@ async def test_user_save_error():
     create_user = User(
         username=fake.user_name(),
         password=fake.password(digits=8),
-        people_id=fake.random_int(min=1, max=999),
+        person_id=fake.random_int(min=1, max=999),
     )
 
     # MOCK
@@ -130,7 +130,7 @@ async def test_user_update_ok():
         id=fake.random_int(min=1, max=10),
         username=fake.user_name(),
         password=fake.password(digits=8),
-        people_id=fake.random_int(min=1, max=999),
+        person_id=fake.random_int(min=1, max=999),
     )
     session_mock = SessionIOMock.cast(return_value=copy(mock_user))
 
@@ -179,7 +179,7 @@ async def test_user_delete_ok():
         id=fake.random_int(min=1, max=10),
         username=fake.user_name(),
         password=fake.password(digits=8),
-        people_id=fake.random_int(min=1, max=999),
+        person_id=fake.random_int(min=1, max=999),
     )
     session_mock = SessionIOMock(return_value=mock_user)
 

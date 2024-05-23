@@ -8,7 +8,7 @@ from server.core.openapi import response_generator
 from server.core.schema import ResponseOK
 from server.enums.openapi_enum import OpenApiTagEnum
 from server.resources.user_resource import (
-    CreateUserPeople,
+    CreateUserPerson,
     UpdateUser,
     UpdateUserOptional,
     UpdateUserPassword,
@@ -24,7 +24,7 @@ router = APIRouter(
 
 
 @router.post(
-    "/v1/user-people",
+    "/v1/user-person",
     response_model=ResponseOK[User],
     status_code=status.HTTP_201_CREATED,
     responses=response_generator(
@@ -33,12 +33,12 @@ router = APIRouter(
         status.HTTP_500_INTERNAL_SERVER_ERROR,
     ),
 )
-async def create_user_and_people(
+async def create_user_and_person(
     ctx: Annotated[Context, Depends(get_context_with_request)],
-    user_people_create: CreateUserPeople,
+    user_person_create: CreateUserPerson,
 ):
-    data = await user_service.create_user_people(
-        ctx=ctx, user_people_create=user_people_create
+    data = await user_service.create_user_person(
+        ctx=ctx, user_person_create=user_person_create
     )
     return ResponseOK(data=data)
 

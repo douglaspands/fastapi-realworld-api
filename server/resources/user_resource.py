@@ -5,10 +5,10 @@ from pydantic import model_validator
 from server.resources.base_resource import BaseResource
 from server.resources.metaclasses.all_optional_metaclass import AllOptionalMetaclass
 from server.resources.mixins.timestamp_mixin import TimestampMixin
-from server.resources.people_resource import CreatePeople
+from server.resources.person_resource import CreatePerson
 
 
-class CreateUserPeople(CreatePeople):
+class CreateUserPerson(CreatePerson):
     username: str
     password: str
     password_check: str
@@ -39,7 +39,7 @@ class UpdateUserPassword(BaseResource):
 class UpdateUser(BaseResource):
     username: str
     active: bool
-    people_id: int
+    person_id: int
 
 
 class UpdateUserOptional(UpdateUser, metaclass=AllOptionalMetaclass):
@@ -51,7 +51,7 @@ class User(TimestampMixin, UpdateUser):
 
 
 __all__ = (
-    "CreateUserPeople",
+    "CreateUserPerson",
     "User",
     "UpdateUserPassword",
     "UpdateUser",

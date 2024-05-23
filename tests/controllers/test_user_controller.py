@@ -28,7 +28,7 @@ def test_get_user_ok(
     user_mock = UserModel(
         id=pk,
         username=fake.user_name(),
-        people_id=fake.pyint(1, 999),
+        person_id=fake.pyint(1, 999),
         active=fake.pybool(),
         updated_at=datetime.now(),
         created_at=datetime.now(),
@@ -62,7 +62,7 @@ def test_get_all_users_ok(
         UserModel(
             id=fake.pyint(1, 999),
             username=fake.user_name(),
-            people_id=fake.pyint(1, 999),
+            person_id=fake.pyint(1, 999),
             active=fake.pybool(),
             updated_at=datetime.now(),
             created_at=datetime.now(),
@@ -93,7 +93,7 @@ def test_get_all_users_nocontent(
     # GIVEN
 
     # MOCK
-    user_mock = []
+    user_mock: list[Any] = []
     httpclient.current_app.dependency_overrides[check_access_token] = (
         lambda: ContextMock.context_session_mock()
     )
@@ -116,7 +116,7 @@ def test_update_user_ok(
     pk = fake.pyint(1, 999)
     update_user = UpdateUser(  # type: ignore
         username=fake.user_name(),
-        people_id=fake.pyint(1, 999),
+        person_id=fake.pyint(1, 999),
         active=fake.pybool(),
     )
 
@@ -124,7 +124,7 @@ def test_update_user_ok(
     user_mock = UserModel(
         id=pk,
         username=update_user.username,
-        people_id=update_user.people_id,
+        person_id=update_user.person_id,
         active=update_user.active,
         updated_at=datetime.now(),
         created_at=datetime.now(),
@@ -143,7 +143,7 @@ def test_update_user_ok(
     data: dict[str, Any] = response.json()["data"]
     assert not data.get("password")
     assert data.get("username") == update_user.username
-    assert data.get("peopleId") == update_user.people_id
+    assert data.get("personId") == update_user.person_id
     assert data.get("active") == update_user.active
 
 
@@ -162,7 +162,7 @@ def test_update_user_optional_ok(
     user_mock = UserModel(
         id=pk,
         username=update_user.username,
-        people_id=fake.pyint(1, 999),
+        person_id=fake.pyint(1, 999),
         active=fake.pybool(),
         updated_at=datetime.now(),
         created_at=datetime.now(),

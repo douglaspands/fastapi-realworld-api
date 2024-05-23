@@ -52,7 +52,7 @@ def test_context_ok_user():
         id=fake.random_int(1, 99),
         username=fake.user_name(),
         active=fake.boolean(50),
-        people_id=fake.random_int(1, 99),
+        person_id=fake.random_int(1, 99),
         updated_at=fake.date_time(),
         created_at=fake.date_time(),
     )

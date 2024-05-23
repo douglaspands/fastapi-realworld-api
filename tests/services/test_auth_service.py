@@ -29,7 +29,7 @@ async def token_mock(user_repository_mock: AsyncMock) -> Token:
             id=1,
             username=username,
             password=crypt.hash_password(password),
-            people_id=fake.pyint(1, 999),
+            person_id=fake.pyint(1, 999),
             created_at=fake.date_time(),
             updated_at=fake.date_time(),
         )
@@ -55,7 +55,7 @@ async def test_authenticate_user_ok(user_repository_mock: AsyncMock):
             id=fake.pyint(1, 999),
             username=username,
             password=crypt.hash_password(password),
-            people_id=fake.pyint(1, 999),
+            person_id=fake.pyint(1, 999),
             created_at=fake.date_time(),
             updated_at=fake.date_time(),
         )
@@ -107,7 +107,7 @@ async def test_authenticate_user_error_password_invalid(
             id=fake.pyint(1, 999),
             username=username,
             password=crypt.hash_password(fake.password(8)),
-            people_id=fake.pyint(1, 999),
+            person_id=fake.pyint(1, 999),
             created_at=fake.date_time(),
             updated_at=fake.date_time(),
         )
@@ -139,7 +139,7 @@ async def test_check_access_token_ok(
             id=1,
             username=username,
             password=crypt.hash_password(password),
-            people_id=fake.pyint(1, 999),
+            person_id=fake.pyint(1, 999),
             created_at=fake.date_time(),
             updated_at=fake.date_time(),
         )

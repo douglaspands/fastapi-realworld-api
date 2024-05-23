@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from sqlmodel import Column, DateTime, Field, SQLModel
 
 
-class People(SQLModel, table=True):
+class Person(SQLModel, table=True):
     # pk
     id: int | None = Field(default=None, primary_key=True)
     # columns
@@ -27,4 +27,4 @@ class People(SQLModel, table=True):
     )
 
 
-__all__ = ("People",)
+__all__ = ("Person",)

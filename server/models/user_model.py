@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from sqlmodel import Column, DateTime, Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
-    from server.models.people_model import People
+    from server.models.person_model import Person
 
 
 class User(SQLModel, table=True):
@@ -17,8 +17,8 @@ class User(SQLModel, table=True):
     password: str
     active: bool = True
     # relationship
-    people_id: int = Field(foreign_key="people.id", nullable=False)
-    people: People = Relationship()
+    person_id: int = Field(foreign_key="person.id", nullable=False)
+    person: Person = Relationship()
     # timestamp
     created_at: datetime | None = Field(
         sa_column=Column(

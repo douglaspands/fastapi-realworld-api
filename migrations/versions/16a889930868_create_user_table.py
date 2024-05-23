@@ -26,12 +26,12 @@ def upgrade() -> None:
         sa.Column("username", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("password", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("active", sa.Boolean(), nullable=False),
-        sa.Column("people_id", sa.Integer(), nullable=False),
+        sa.Column("person_id", sa.Integer(), nullable=False),
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
-            ["people_id"],
-            ["people.id"],
+            ["person_id"],
+            ["person.id"],
         ),
         sa.PrimaryKeyConstraint("id"),
     )

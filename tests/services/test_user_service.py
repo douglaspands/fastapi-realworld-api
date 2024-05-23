@@ -7,10 +7,10 @@ from sqlalchemy.exc import IntegrityError, NoResultFound
 
 from server.core.database import SessionIO
 from server.core.exceptions import BusinessError
-from server.models.people_model import People
+from server.models.person_model import Person
 from server.models.user_model import User
 from server.resources.user_resource import (
-    CreateUserPeople,
+    CreateUserPerson,
     UpdateUser,
     UpdateUserOptional,
     UpdateUserPassword,
@@ -34,7 +34,7 @@ async def test_get_user_ok(user_repository_mock: AsyncMock):
         id=user_id,
         username=fake.user_name(),
         password=crypt.hash_password(fake.password(10)),
-        people_id=fake.pyint(1, 999),
+        person_id=fake.pyint(1, 999),
         created_at=fake.date_time(),
         updated_at=fake.date_time(),
     )
@@ -49,7 +49,7 @@ async def test_get_user_ok(user_repository_mock: AsyncMock):
     assert user.username == user_mock.username
     assert user.password == user_mock.password
     assert user.active == user_mock.active
-    assert user.people_id == user_mock.people_id
+    assert user.person_id == user_mock.person_id
     assert user.created_at == user_mock.created_at
     assert user.updated_at == user_mock.updated_at
 
@@ -82,7 +82,7 @@ async def test_all_users_ok(user_repository_mock: AsyncMock):
             id=idx + 1,
             username=fake.user_name(),
             password=crypt.hash_password(fake.password(10)),
-            people_id=fake.pyint(1, 999),
+            person_id=fake.pyint(1, 999),
             created_at=fake.date_time(),
             updated_at=fake.date_time(),
         )
@@ -92,7 +92,7 @@ async def test_all_users_ok(user_repository_mock: AsyncMock):
     user_repository_mock.get_all.return_value = users_mock
 
     # WHEN
-    users = await user_service.all_users(context_mock)
+    users = await user_service.get_all_users(context_mock)
 
     # THEN
     assert len(users) == len(users_mock)
@@ -101,7 +101,7 @@ async def test_all_users_ok(user_repository_mock: AsyncMock):
         assert users[idx].username == users_mock[idx].username
         assert users[idx].password == users_mock[idx].password
         assert users[idx].active == users_mock[idx].active
-        assert users[idx].people_id == users_mock[idx].people_id
+        assert users[idx].person_id == users_mock[idx].person_id
         assert users[idx].created_at == users_mock[idx].created_at
         assert users[idx].updated_at == users_mock[idx].updated_at
 
@@ -115,7 +115,7 @@ async def test_all_users_nocontent(user_repository_mock: AsyncMock):
     user_repository_mock.get_all.return_value = users_mock
 
     # WHEN
-    users = await user_service.all_users(context_mock)
+    users = await user_service.get_all_users(context_mock)
 
     # THEN
     assert len(users) == len(users_mock)
@@ -129,7 +129,7 @@ async def test_update_user_ok(user_repository_mock: AsyncMock):
     update_user = UpdateUser(
         username=fake.user_name(),
         active=True,
-        people_id=fake.pyint(1, 10),
+        person_id=fake.pyint(1, 10),
     )
 
     # MOCK
@@ -139,7 +139,7 @@ async def test_update_user_ok(user_repository_mock: AsyncMock):
         username=fake.user_name(),
         password=crypt.hash_password(fake.password(10)),
         active=False,
-        people_id=fake.pyint(11, 20),
+        person_id=fake.pyint(11, 20),
         created_at=fake.date_time(),
         updated_at=fake.date_time(),
     )
@@ -164,8 +164,8 @@ async def test_update_user_ok(user_repository_mock: AsyncMock):
     assert user.password == user_mock.password
     assert user.active != user_mock.active
     assert user.active == update_user.active
-    assert user.people_id != user_mock.people_id
-    assert user.people_id == update_user.people_id
+    assert user.person_id != user_mock.person_id
+    assert user.person_id == update_user.person_id
 
 
 @pytest.mark.asyncio
@@ -176,7 +176,7 @@ async def test_update_user_error(user_repository_mock: AsyncMock):
     update_user = UpdateUser(
         username=fake.user_name(),
         active=fake.pybool(),
-        people_id=fake.pyint(1, 999),
+        person_id=fake.pyint(1, 999),
     )
 
     # MOCK
@@ -209,7 +209,7 @@ async def test_update_user_optional_ok(user_repository_mock: AsyncMock):
         id=user_id,
         username=fake.user_name(),
         password=crypt.hash_password(fake.password(10)),
-        people_id=fake.pyint(1, 999),
+        person_id=fake.pyint(1, 999),
         created_at=fake.date_time(),
         updated_at=fake.date_time(),
     )
@@ -232,7 +232,7 @@ async def test_update_user_optional_ok(user_repository_mock: AsyncMock):
     assert user.username != user_mock.username
     assert user.username == update_user.username
     assert user.password == user_mock.password
-    assert user.people_id == user_mock.people_id
+    assert user.person_id == user_mock.person_id
 
 
 @pytest.mark.asyncio
@@ -314,7 +314,7 @@ async def test_change_password_ok(user_repository_mock: AsyncMock):
         id=user_id,
         username=fake.user_name(),
         password=crypt.hash_password(update_password.current_password),
-        people_id=fake.pyint(1, 999),
+        person_id=fake.pyint(1, 999),
         created_at=fake.date_time(),
         updated_at=fake.date_time(),
     )
@@ -339,7 +339,7 @@ async def test_change_password_ok(user_repository_mock: AsyncMock):
     assert user.password != user_mock.password
     assert crypt.check_password(update_password.new_password, user.password)
     assert user.active == user_mock.active
-    assert user.people_id == user_mock.people_id
+    assert user.person_id == user_mock.person_id
     assert user.created_at == user_mock.created_at
     assert user.updated_at == user_mock.updated_at
 
@@ -389,7 +389,7 @@ async def test_change_password_invalid(user_repository_mock: AsyncMock):
         id=user_id,
         username=fake.user_name(),
         password=crypt.hash_password(fake.password(10)),
-        people_id=fake.pyint(1, 999),
+        person_id=fake.pyint(1, 999),
         created_at=fake.date_time(),
         updated_at=fake.date_time(),
     )
@@ -407,13 +407,13 @@ async def test_change_password_invalid(user_repository_mock: AsyncMock):
 
 @pytest.mark.asyncio
 @patch("server.services.user_service.user_repository", new_callable=AsyncMock)
-@patch("server.services.user_service.people_repository", new_callable=AsyncMock)
-async def test_create_user_people_ok(
-    people_repository_mock: AsyncMock, user_repository_mock: AsyncMock
+@patch("server.services.user_service.person_repository", new_callable=AsyncMock)
+async def test_create_user_person_ok(
+    person_repository_mock: AsyncMock, user_repository_mock: AsyncMock
 ):
     # GIVEN
     new_password = fake.password(10)
-    create_user = CreateUserPeople(
+    create_user = CreateUserPerson(
         first_name=fake.first_name(),
         last_name=fake.last_name(),
         username=fake.user_name(),
@@ -423,7 +423,7 @@ async def test_create_user_people_ok(
 
     # MOCK
     context_mock = ContextMock.context_session_mock()
-    people_mock = People(
+    person_mock = Person(
         id=fake.pyint(1, 999),
         first_name=create_user.first_name,
         last_name=create_user.last_name,
@@ -432,18 +432,18 @@ async def test_create_user_people_ok(
         id=fake.pyint(1, 999),
         username=create_user.username,
         password=crypt.hash_password(create_user.password),
-        people_id=people_mock.id,
+        person_id=person_mock.id,
         active=fake.pybool(),
         created_at=fake.date_time(),
         updated_at=fake.date_time(),
     )
 
-    people_repository_mock.get_or_create.return_value = people_mock
+    person_repository_mock.get_or_create.return_value = person_mock
     user_repository_mock.create.return_value = user_mock
 
     # WHEN
-    user = await user_service.create_user_people(
-        ctx=context_mock, user_people_create=create_user
+    user = await user_service.create_user_person(
+        ctx=context_mock, user_person_create=create_user
     )
 
     # THEN
@@ -451,4 +451,4 @@ async def test_create_user_people_ok(
     assert user.username == create_user.username
     assert crypt.check_password(create_user.password, user.password)
     assert user.active == user_mock.active
-    assert user.people_id == people_mock.id
+    assert user.person_id == person_mock.id
