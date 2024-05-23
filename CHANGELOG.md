@@ -9,6 +9,14 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 
 ### Adicionado
 
+- Teste Integrador: Dominio de User; [AGUARDANDO]
+- Teste Integrador: Dominio de Person; [AGUARDANDO]
+- Teste Integrador: Dominio de Auth; [AGUARDANDO]
+
+## [0.2.0] - 2024-05-23
+
+### Adicionado
+
 - Incluido user model;
 - Incluido user repository;
 - Incluido função get_or_create no people repository;
@@ -21,7 +29,7 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 - Incluido Depends para o validador de token em todas as people controllers;
 - Incluido Depends para o validador de token em todas as user controllers (menos create user);
 - Alembic: incluido script de criação da tabela user;
-- Cobertura de teste de 100% do codigo; [AGUARDANDO]
+- Cobertura de teste de 100% do codigo;
 - Incluido configurações do OpenAPIDocs no Settings;
 - Incluido configurações do token no Settings;
 - Poetry: Incluido script de `sqlmigrate`;
@@ -35,6 +43,7 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 - Melhoria na organização das pastas de recursos;
 - Melhorias na configuração das migrations;
 - Poetry: mudança no comando `server_production` para `production_server`;
+- Dominio `people` mudou para `person`;
 
 ## [0.1.0] - 2024-05-12
 
