@@ -135,7 +135,7 @@ def test_get_person_internal_server_error(
 
 
 @patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
-def test_all_person_ok(
+def test_get_all_persons_ok(
     person_service_mock: AsyncMock,
     httpclient: HttpClient,
 ):
@@ -232,14 +232,10 @@ def test_create_person_validation_error(
     httpclient.current_app.dependency_overrides[check_access_token] = (
         lambda: context_mock
     )
-    person_mock = Person(
-        id=fake.pyint(), first_name=fake.first_name(), last_name=fake.last_name()
-    )
-    person_service_mock.create_person.return_value = person_mock
 
     # GIVEN
     create_person = {
-        "firstName": person_mock.first_name,
+        "firstName": fake.first_name(),
         "lastName": None,
     }
 

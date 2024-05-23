@@ -7,6 +7,7 @@ from sqlalchemy.exc import IntegrityError, NoResultFound
 
 from server.models.user_model import User
 from server.repositories import user_repository
+from server.services.auth_service import crypt
 from tests.mocks.async_session_mock import SessionIO, SessionIOMock
 
 fake = Faker("pt_BR")
@@ -22,7 +23,7 @@ async def test_user_get_by_pk_ok():
     user_mock = User(
         id=user_id,
         username=fake.user_name(),
-        password=fake.password(digits=8),
+        password=crypt.hash_password(fake.password(digits=8)),
         person_id=fake.random_int(min=1, max=999),
     )
     session_mock = SessionIOMock.cast(return_value=user_mock)
@@ -60,7 +61,7 @@ async def test_user_get_all_ok():
         User(
             id=idx + 1,
             username=fake.user_name(),
-            password=fake.password(digits=8),
+            password=crypt.hash_password(fake.password(digits=8)),
             person_id=fake.random_int(min=1, max=999),
         )
         for idx in range(10)
@@ -83,7 +84,7 @@ async def test_user_save_ok():
     # GIVEN
     create_user = User(
         username=fake.user_name(),
-        password=fake.password(digits=8),
+        password=crypt.hash_password(fake.password(digits=8)),
         person_id=fake.random_int(min=1, max=999),
     )
 
@@ -103,7 +104,7 @@ async def test_user_save_error():
     # GIVEN
     create_user = User(
         username=fake.user_name(),
-        password=fake.password(digits=8),
+        password=crypt.hash_password(fake.password(digits=8)),
         person_id=fake.random_int(min=1, max=999),
     )
 
@@ -129,7 +130,7 @@ async def test_user_update_ok():
     mock_user = User(
         id=fake.random_int(min=1, max=10),
         username=fake.user_name(),
-        password=fake.password(digits=8),
+        password=crypt.hash_password(fake.password(digits=8)),
         person_id=fake.random_int(min=1, max=999),
     )
     session_mock = SessionIOMock.cast(return_value=copy(mock_user))
@@ -178,7 +179,7 @@ async def test_user_delete_ok():
     mock_user = User(
         id=fake.random_int(min=1, max=10),
         username=fake.user_name(),
-        password=fake.password(digits=8),
+        password=crypt.hash_password(fake.password(digits=8)),
         person_id=fake.random_int(min=1, max=999),
     )
     session_mock = SessionIOMock(return_value=mock_user)

@@ -1,4 +1,4 @@
-from typing import Any, Dict, Generic, Sequence, TypeVar
+from typing import Any, Dict, Generic, Optional, Sequence, TypeVar
 
 from pydantic import BaseModel
 
@@ -9,7 +9,7 @@ class ValidationError(BaseModel):
     type: str
     loc: Sequence[str]
     msg: str
-    input: Dict[str, Any]
+    input: Optional[Dict[str, Any]]
 
 
 class MessageError(BaseModel):
