@@ -89,8 +89,8 @@ def server():
     cmd = (
         "uvicorn "
         "--reload "
-        f"--reload-dir {quote(str(SERVER_FOLDER))} "
-        f"--port {API_PORT} "
+        f"--reload-dir {SERVER_FOLDER!s} "
+        f"--port {API_PORT!s} "
         f"{API_APP}"
     )
     _shell(cmd)
@@ -101,7 +101,7 @@ def prodution_server():
         "gunicorn "
         f"--workers {API_WORKERS} "
         "--worker-class uvicorn.workers.UvicornWorker "
-        f"--bind 0.0.0.0:{API_PORT} "
+        f"--bind 0.0.0.0:{API_PORT!s} "
         f"{API_APP}"
     )
     _shell(cmd)
