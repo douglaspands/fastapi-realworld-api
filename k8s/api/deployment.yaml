@@ -37,7 +37,7 @@ spec:
           - "uvicorn.workers.UvicornWorker"
           - "--bind"
           - "0.0.0.0:80"
-          - "server.api:app"
+          - "app.api:app"
         ports:
           - containerPort: 80
         env:
