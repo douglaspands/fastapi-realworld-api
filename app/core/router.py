@@ -1,14 +1,12 @@
 from fastapi import FastAPI
 
-from app.controllers.auth_controller import router as auth_router
-from app.controllers.person_controller import router as person_router
-from app.controllers.user_controller import router as user_router
+from app.controllers import auth_controller, person_controller, user_controller
 
 
 def init_app(app: FastAPI):
-    app.include_router(router=auth_router)
-    app.include_router(router=person_router)
-    app.include_router(router=user_router)
+    app.include_router(auth_controller.router)
+    app.include_router(person_controller.router)
+    app.include_router(user_controller.router)
 
 
 __all__ = ("init_app",)
