@@ -3,12 +3,13 @@ FROM python:3.12.4-bookworm
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
 
-WORKDIR /app
+WORKDIR /fastapi-realworld-api
 
 COPY ./requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r ./requirements.txt
 
-COPY ./server ./server
+ADD ./alembic.ini ./alembic.ini
 COPY ./migrations ./migrations
+COPY ./app ./app
 
 EXPOSE 80

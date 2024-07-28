@@ -2,20 +2,20 @@ from typing import Annotated, Sequence
 
 from fastapi import APIRouter, Depends, Response, status
 
-from server.core.context import Context, get_context_with_request
-from server.core.exceptions import NoContentError
-from server.core.openapi import response_generator
-from server.core.schema import ResponseOK
-from server.enums.openapi_enum import OpenApiTagEnum
-from server.resources.user_resource import (
+from app.core.context import Context, get_context_with_request
+from app.core.exceptions import NoContentError
+from app.core.openapi import response_generator
+from app.core.schema import ResponseOK
+from app.enums.openapi_enum import OpenApiTagEnum
+from app.resources.user_resource import (
     CreateUserPerson,
     UpdateUser,
     UpdateUserOptional,
     UpdateUserPassword,
     User,
 )
-from server.services import user_service
-from server.services.auth_service import check_access_token
+from app.services import user_service
+from app.services.auth_service import check_access_token
 
 router = APIRouter(
     prefix="/users",

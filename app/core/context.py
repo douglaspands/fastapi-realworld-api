@@ -5,10 +5,10 @@ from typing import TYPE_CHECKING, Any, AsyncGenerator, Self
 from fastapi import Request
 from pydantic import BaseModel, ConfigDict
 
-from server.core.database import SessionIO, get_sessionio
+from app.core.database import SessionIO, get_sessionio
 
 if TYPE_CHECKING:
-    from server.resources.user_resource import User
+    from app.resources.user_resource import User
 
 
 class Context(BaseModel):

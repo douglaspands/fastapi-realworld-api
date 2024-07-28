@@ -10,9 +10,12 @@ from . import message
 
 console = Console()
 
-SERVER_FOLDER = Path.cwd() / "server"
-TEST_FOLDER = Path.cwd() / "tests"
-API_APP = "server.api:app"
+ROOT_FOLDER = Path(__file__).parent.parent
+SERVER_FOLDER = ROOT_FOLDER / "app"
+MIGRATION_FOLDER = ROOT_FOLDER / "migrations"
+TEST_FOLDER = ROOT_FOLDER / "tests"
+
+API_APP = f"{SERVER_FOLDER.name}.api:app"
 API_PORT = 5000
 API_WORKERS = 3
 
@@ -48,7 +51,7 @@ def lint():
 
 def format():
     cmd = "ruff format {folder}"
-    folders = " ".join((str(SERVER_FOLDER), str(TEST_FOLDER)))
+    folders = " ".join((str(SERVER_FOLDER), str(TEST_FOLDER), str(MIGRATION_FOLDER)))
     _shell(cmd.format(folder=folders))
 
 

@@ -1,4 +1,4 @@
-from server.core.crypt import get_crypt
+from app.core.crypt import get_crypt
 
 
 def test_hash_password_ok():

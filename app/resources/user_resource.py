@@ -2,10 +2,10 @@ from typing import Self
 
 from pydantic import model_validator
 
-from server.resources.base_resource import BaseResource
-from server.resources.metaclasses.all_optional_metaclass import AllOptionalMetaclass
-from server.resources.mixins.timestamp_mixin import TimestampMixin
-from server.resources.person_resource import CreatePerson
+from app.resources.base_resource import BaseResource
+from app.resources.metaclasses.all_optional_metaclass import AllOptionalMetaclass
+from app.resources.mixins.timestamp_mixin import TimestampMixin
+from app.resources.person_resource import CreatePerson
 
 
 class CreateUserPerson(CreatePerson):

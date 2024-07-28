@@ -5,9 +5,9 @@ import pytest
 from faker import Faker
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
-from server.models.user_model import User
-from server.repositories import user_repository
-from server.services.auth_service import crypt
+from app.models.user_model import User
+from app.repositories import user_repository
+from app.services.auth_service import crypt
 from tests.mocks.async_session_mock import SessionIO, SessionIOMock
 
 fake = Faker("pt_BR")

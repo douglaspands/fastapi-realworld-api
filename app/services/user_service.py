@@ -1,12 +1,12 @@
 from typing import Sequence
 
-from server.core.context import Context
-from server.core.crypt import get_crypt
-from server.core.exceptions import BusinessError
-from server.models.person_model import Person
-from server.models.user_model import User
-from server.repositories import person_repository, user_repository
-from server.resources.user_resource import (
+from app.core.context import Context
+from app.core.crypt import get_crypt
+from app.core.exceptions import BusinessError
+from app.models.person_model import Person
+from app.models.user_model import User
+from app.repositories import person_repository, user_repository
+from app.resources.user_resource import (
     CreateUserPerson,
     UpdateUser,
     UpdateUserOptional,

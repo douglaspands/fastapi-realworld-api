@@ -6,14 +6,14 @@ from faker import Faker
 from pydash import get
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
-from server.core.exceptions import BusinessError, NotFoundError
-from server.models.person_model import Person
-from server.resources.person_resource import (
+from app.core.exceptions import BusinessError, NotFoundError
+from app.models.person_model import Person
+from app.resources.person_resource import (
     CreatePerson,
     UpdatePerson,
     UpdatePersonOptional,
 )
-from server.services.auth_service import check_access_token
+from app.services.auth_service import check_access_token
 from tests.mocks.context_mock import ContextMock
 from tests.utils.http_client import HttpClient
 from tests.utils.utils import snake_to_camel

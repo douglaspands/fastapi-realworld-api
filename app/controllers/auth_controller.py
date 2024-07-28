@@ -3,11 +3,11 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
 
-from server.core.context import Context, get_context_with_request
-from server.core.openapi import response_generator
-from server.enums.openapi_enum import OpenApiTagEnum
-from server.resources.token_resource import Token
-from server.services import auth_service
+from app.core.context import Context, get_context_with_request
+from app.core.openapi import response_generator
+from app.enums.openapi_enum import OpenApiTagEnum
+from app.resources.token_resource import Token
+from app.services import auth_service
 
 router = APIRouter(
     prefix="/auth",

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from server.core import handler, middleware, openapi, router
-from server.core.settings import get_settings
+from app.core import handler, middleware, openapi, router
+from app.core.settings import get_settings
 
 settings = get_settings()
 

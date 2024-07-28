@@ -23,6 +23,7 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 - Modificado a versão para `0.3.0` do `pyproject.toml`;
 - Modificado a versão para `0.3.0` do `core/settings.py`;
 - Migração: Quando for PostgreSQL, executar GRANT para usuario da API; [AGUARDANDO]
+- Pasta raiz da aplicação mudou de `server` para `app`;
 
 ## [0.2.0] - 2024-05-23
 

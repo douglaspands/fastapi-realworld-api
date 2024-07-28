@@ -5,14 +5,14 @@ import pytest
 from faker import Faker
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
-from server.core.database import SessionIO
-from server.models.person_model import Person
-from server.resources.person_resource import (
+from app.core.database import SessionIO
+from app.models.person_model import Person
+from app.resources.person_resource import (
     CreatePerson,
     UpdatePerson,
     UpdatePersonOptional,
 )
-from server.services import person_service
+from app.services import person_service
 from tests.mocks.context_mock import ContextMock
 
 fake = Faker("pt_BR")

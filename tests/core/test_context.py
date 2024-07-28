@@ -4,9 +4,9 @@ import pytest
 from faker import Faker
 from fastapi import Request
 
-from server.core.context import Context, get_context_with_request
-from server.core.settings import DatabaseDsn, Settings
-from server.resources.user_resource import User
+from app.core.context import Context, get_context_with_request
+from app.core.settings import DatabaseDsn, Settings
+from app.resources.user_resource import User
 from tests.mocks.async_session_mock import SessionIO, SessionIOMock
 
 fake = Faker("pt_BR")

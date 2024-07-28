@@ -2,8 +2,8 @@ from typing import Any, Generator
 
 import pytest
 
-from server.api import app
-from server.core.settings import Settings, get_settings
+from app.api import app
+from app.core.settings import Settings, get_settings
 from tests.utils.http_client import HttpClient
 
 

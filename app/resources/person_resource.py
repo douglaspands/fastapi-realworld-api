@@ -1,6 +1,6 @@
-from server.resources.base_resource import BaseResource
-from server.resources.metaclasses.all_optional_metaclass import AllOptionalMetaclass
-from server.resources.mixins.timestamp_mixin import TimestampMixin
+from app.resources.base_resource import BaseResource
+from app.resources.metaclasses.all_optional_metaclass import AllOptionalMetaclass
+from app.resources.mixins.timestamp_mixin import TimestampMixin
 
 
 class CreatePerson(BaseResource):

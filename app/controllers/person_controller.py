@@ -2,19 +2,19 @@ from typing import Annotated, Sequence
 
 from fastapi import APIRouter, Depends, Response, status
 
-from server.core.context import Context
-from server.core.exceptions import NoContentError
-from server.core.openapi import response_generator
-from server.core.schema import ResponseOK
-from server.enums.openapi_enum import OpenApiTagEnum
-from server.resources.person_resource import (
+from app.core.context import Context
+from app.core.exceptions import NoContentError
+from app.core.openapi import response_generator
+from app.core.schema import ResponseOK
+from app.enums.openapi_enum import OpenApiTagEnum
+from app.resources.person_resource import (
     CreatePerson,
     Person,
     UpdatePerson,
     UpdatePersonOptional,
 )
-from server.services import person_service
-from server.services.auth_service import check_access_token
+from app.services import person_service
+from app.services.auth_service import check_access_token
 
 router = APIRouter(
     prefix="/persons",

@@ -1,9 +1,9 @@
 import pytest
 from sqlalchemy.exc import OperationalError
 
-from server.core.database import get_sessionio
-from server.core.settings import DatabaseDsn, Settings
-from server.repositories import person_repository
+from app.core.database import get_sessionio
+from app.core.settings import DatabaseDsn, Settings
+from app.repositories import person_repository
 
 
 @pytest.mark.asyncio

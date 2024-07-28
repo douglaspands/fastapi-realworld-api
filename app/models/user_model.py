@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from sqlmodel import Column, DateTime, Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
-    from server.models.person_model import Person
+    from app.models.person_model import Person
 
 
 class User(SQLModel, table=True):

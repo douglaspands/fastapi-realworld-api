@@ -5,14 +5,14 @@ from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 
-from server.core.context import Context
-from server.core.crypt import get_crypt
-from server.core.database import SessionIO, get_sessionio
-from server.core.settings import get_settings
-from server.models.user_model import User
-from server.repositories import user_repository
-from server.resources.token_resource import Token
-from server.resources.user_resource import User as UserResource
+from app.core.context import Context
+from app.core.crypt import get_crypt
+from app.core.database import SessionIO, get_sessionio
+from app.core.settings import get_settings
+from app.models.user_model import User
+from app.repositories import user_repository
+from app.resources.token_resource import Token
+from app.resources.user_resource import User as UserResource
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/v1/token")
 

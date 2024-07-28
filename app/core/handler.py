@@ -4,8 +4,8 @@ from fastapi.responses import JSONResponse, Response
 from sqlalchemy.exc import NoResultFound
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from server.core.exceptions import BusinessError, NotFoundError
-from server.core.schema import ValidationError
+from app.core.exceptions import BusinessError, NotFoundError
+from app.core.schema import ValidationError
 
 
 async def request_validation_error_handler(

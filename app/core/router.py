@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
-from server.controllers.auth_controller import router as auth_router
-from server.controllers.person_controller import router as person_router
-from server.controllers.user_controller import router as user_router
+from app.controllers.auth_controller import router as auth_router
+from app.controllers.person_controller import router as person_router
+from app.controllers.user_controller import router as user_router
 
 
 def init_app(app: FastAPI):

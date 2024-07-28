@@ -1,9 +1,9 @@
 from typing import Sequence
 
-from server.core.context import Context
-from server.models.person_model import Person
-from server.repositories import person_repository
-from server.resources.person_resource import (
+from app.core.context import Context
+from app.models.person_model import Person
+from app.repositories import person_repository
+from app.resources.person_resource import (
     CreatePerson,
     UpdatePerson,
     UpdatePersonOptional,

@@ -4,7 +4,7 @@ from typing import Any, AsyncGenerator
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from server.core.settings import get_settings
+from app.core.settings import get_settings
 
 
 class SessionIO(AsyncSession):

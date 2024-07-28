@@ -2,9 +2,9 @@ from typing import Any, Sequence
 
 from sqlmodel import select
 
-from server.core import utils
-from server.core.database import SessionIO
-from server.models.person_model import Person
+from app.core import utils
+from app.core.database import SessionIO
+from app.models.person_model import Person
 
 
 async def create(session: SessionIO, person: Person) -> Person:
