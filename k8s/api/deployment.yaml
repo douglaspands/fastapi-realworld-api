@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-deploy
+  namespace: realworld
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastapi-deploy
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: fastapi-deploy
+    spec:
+      containers:
+      - name: fastapi-deploy
+        image: localhost:32000/fastapi-realword-api:latest  # microk8s register
+        # imagePullPolicy: Never
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        command: 
+          - "gunicorn"
+          - "--workers"
+          - "3"
+          - "--worker-class"
+          - "uvicorn.workers.UvicornWorker"
+          - "--bind"
+          - "0.0.0.0:80"
+          - "server.api:app"
+        ports:
+          - containerPort: 80
+        env:
+          - name: db_url
+            value: sqlite+aiosqlite:///database.db
+          - name: db_debug
+            value: "1"
+          - name: token_secret_key
+            value: 09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7

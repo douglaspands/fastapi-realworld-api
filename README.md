@@ -1,4 +1,4 @@
-# fastapi-realworld-api
+# fastapi-realworld-api [EM DESENVOLVIMENTO]
 Exemplo de projeto com `FastAPI` e `SQLModel` usando `async/await` utilizado no mundo real.   
 Meu desejo é apresentar um motor de API REST utilizando o que considero que tem de melhor no universo Python. `[MINHA OPINIÃO]`
 
@@ -57,6 +57,25 @@ poetry run test
 poetry run build
 ```
 > São executados: [validação de codigo](#validação-de-código-linter) e [testes unitarios](#testes-unitarios).
+
+## Kubernetes
+Os manifestos deste projeto foram desenvolvidos e testados utilizando [microK8s](https://microk8s.io/).
+
+### Namespaces
+```sh
+kubectl create namespace realworld
+```
+
+### Iniciar
+```
+kubectl apply -f k8s/api
+```
+
+### Service URL
+```sh
+curl -i fastapi-api.realworld.svc.cluster.local:5000/persons/v1/persons/1
+```
+| <service-name>.<namespace>.svc.cluster.local:<port>/persons/v1/persons/1
 
 ## Changelog
 

@@ -71,3 +71,5 @@ sqlmigrate = 'scripts.poetry:sqlmigrate'
 makemigrations = 'scripts.poetry:make_migrations'
 # production
 prodution_server = 'scripts.poetry:prodution_server'
+# docker
+makerequirements = 'scripts.poetry:make_requirements'

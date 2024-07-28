@@ -1,0 +1,13 @@
+services:
+  fastapi-realword-api:
+    image: localhost:32000/fastapi-realword-api:latest
+    build: 
+      dockerfile: Dockerfile
+      context: .
+    command: gunicorn --workers 3 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:80 server.api:app 
+    ports:
+      - "5000:80"
+    environment:
+      - db_url=sqlite+aiosqlite:///database.db
+      - db_debug=1
+      - token_secret_key=09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7

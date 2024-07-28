@@ -105,3 +105,23 @@ def prodution_server():
         f"{API_APP}"
     )
     _shell(cmd)
+
+
+def make_requirements():
+    cmd = "poetry export -f requirements.txt --without-hashes --output requirements.txt"
+    _shell(cmd)
+
+
+def docker_build():
+    cmd = "docker compose -f scripts/docker-compose.yaml build"
+    _shell(cmd)
+
+
+def compose_up():
+    cmd = "docker compose -f scripts/docker-compose.yaml up"
+    _shell(cmd)
+
+
+def deployment_apply():
+    cmd = "kubectl deployment apply scripts/deployment.yaml"
+    _shell(cmd)

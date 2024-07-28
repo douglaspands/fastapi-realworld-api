@@ -1,7 +1,6 @@
 # Changelog
 
-Todas as notas de alteração deste projeto serão documentados neste arquivo.
-
+Todas as notas de alteração deste projeto serão documentados neste arquivo.   
 O formato é baseado no [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/spec/v2.0.0.html).
 
@@ -10,14 +9,20 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 ### Adicionado
 
 - README: Inclusão da seção de qualidade de código;
+- README: Inclusão da seção de Kubernetes;
 - Teste Integrado: Dominio de User; [AGUARDANDO]
 - Teste Integrado: Dominio de Person; [AGUARDANDO]
 - Teste Integrado: Dominio de Auth; [AGUARDANDO]
+- K8S: Inclusão do manifesto de deployment;
+- K8S: Inclusão do manifesto de service;
+- K8S: Inclusão do manifesto de hpa;
+- DB: Inclusão do client de PostgreSQL; [AGUARDANDO]
 
 ### Modificado
 
 - Modificado a versão para `0.3.0` do `pyproject.toml`;
 - Modificado a versão para `0.3.0` do `core/settings.py`;
+- Migração: Quando for PostgreSQL, executar GRANT para usuario da API; [AGUARDANDO]
 
 ## [0.2.0] - 2024-05-23
 
