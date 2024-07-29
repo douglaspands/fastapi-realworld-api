@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: fastapi-api
+  name: fastapi-service
   namespace: realworld
 spec:
   type: ClusterIP

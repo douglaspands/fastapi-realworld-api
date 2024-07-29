@@ -67,15 +67,45 @@ kubectl create namespace realworld
 ```
 
 ### Iniciar
+1. Criar namespace:
+```
+kubectl apply -f k8s/common
+```
+2. Criar e configurar o banco de dados:
+```
+kubectl apply -f k8s/db
+```
+Assim que o banco estiver ativo, criar um `port-forward` para acessar o banco de dados:
+```sh
+kubectl -n realworld port-forward pod/postgres-pod 5432:5432
+```
+Com sua IDE favorita do Postgres, execute os seguintes comandos:
+```sql
+CREATE DATABASE fastapi;
+CREATE USER fastapi_user WITH PASSWORD '123456';
+GRANT CONNECT ON DATABASE fastapi TO fastapi_user;
+GRANT USAGE ON SCHEMA public TO fastapi_user;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO fastapi_user;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO fastapi_user;
+GRANT ALL ON ALL FUNCTIONS IN SCHEMA public TO fastapi_user;
+```
+
+3. Iniciar API:
 ```
 kubectl apply -f k8s/api
 ```
 
-### Service URL
+### DNS
+#### API
 ```sh
-curl -i fastapi-api.realworld.svc.cluster.local:5000/persons/v1/persons/1
+fastapi-service.realworld.svc.cluster.local:5000
 ```
 | <service-name>.<namespace>.svc.cluster.local:<port>/persons/v1/persons/1
+
+#### DB
+```sh
+postgres-service.realworld.svc.cluster.local:5432
+```
 
 ## Changelog
 
