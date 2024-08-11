@@ -11,6 +11,7 @@ DatabaseDsn = Annotated[
         host_required=True,
         allowed_schemes=[
             "sqlite+aiosqlite",
+            "postgresql+psycopg",
         ],
     ),
 ]

@@ -26,7 +26,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-model_path = Path("server") / "models"
+model_path = Path("app") / "models"
 for model_file in model_path.glob("**/*.py"):
     if "__pycache__" in model_file.parts:
         continue
@@ -40,7 +40,7 @@ target_metadata = SQLModel.metadata
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 settings = get_settings()
-config.set_main_option("sqlalchemy.url", str(settings.db_url))
+config.set_main_option("sqlalchemy.url", os.getenv("DB_ROOT_URL", str(settings.db_url)))
 extra_config: dict[str, Any] = {"version_table": "migration_version"}
 
 
