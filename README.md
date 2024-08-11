@@ -107,6 +107,11 @@ GRANT ALL ON ALL FUNCTIONS IN SCHEMA public TO fastapi_user;
 kubectl apply -f k8s/api
 ```
 
+4. Executar as migrações:
+```sh
+kubectl -n realworld exec pod/fastapi-pod -- bash -c 'DB_ROOT_URL="postgresql+psycopg://postgres:docker@postgres-service.realworld.svc.cluster.local:5432/fastapi" alembic upgrade head'
+```
+
 ### DNS
 #### API
 ```sh

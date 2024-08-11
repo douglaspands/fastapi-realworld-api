@@ -1,4 +1,4 @@
-CREATE DATABASE fastapi;
+-- CREATE DATABASE fastapi;
 CREATE USER fastapi_user WITH PASSWORD '123456';
 GRANT CONNECT ON DATABASE fastapi TO fastapi_user;
 GRANT USAGE ON SCHEMA public TO fastapi_user;
