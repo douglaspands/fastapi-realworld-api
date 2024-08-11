@@ -5,7 +5,7 @@ services:
     build: 
       dockerfile: Dockerfile
       context: .
-    command: gunicorn --workers 3 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:80 app.api:app 
+    command: uvicorn app.api:app --workers 3 --host 0.0.0.0 --port 80
     ports:
     - "5000:80"
     environment:
@@ -25,7 +25,7 @@ services:
     - "5432:5432"
     volumes:
     - fastapi-realword-pgdata:/var/lib/postgresql/data
-    - scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
       POSTGRES_USER: postgres

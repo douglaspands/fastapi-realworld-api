@@ -10,6 +10,7 @@ from typing import Sequence, Union
 import sqlalchemy as sa
 import sqlmodel
 from alembic import op
+from migrations import db
 ${imports if imports else ""}
 
 # revision identifiers, used by Alembic.
@@ -21,7 +22,7 @@ depends_on: Union[str, Sequence[str], None] = ${repr(depends_on)}
 
 def upgrade() -> None:
     ${upgrades if upgrades else "pass"}
-
+    db.grant()
 
 def downgrade() -> None:
     ${downgrades if downgrades else "pass"}

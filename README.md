@@ -58,6 +58,18 @@ poetry run build
 ```
 > São executados: [validação de codigo](#validação-de-código-linter) e [testes unitarios](#testes-unitarios).
 
+## Docker-Compose
+Iniciar a aplicação com o comando:
+```sh
+docker compose up
+```
+| Será feito o build caso seja a primeira vez.
+
+Executar os scripts de `migração` com o seguinte comando:
+```sh
+docker exec -it fastapi-realword-api bash -c 'DB_ROOT_URL="postgresql+psycopg://postgres:docker@fastapi-realword-db:5432/fastapi" alembic upgrade head'
+```
+
 ## Kubernetes
 Os manifestos deste projeto foram desenvolvidos e testados utilizando [microK8s](https://microk8s.io/).
 
@@ -108,5 +120,4 @@ postgres-service.realworld.svc.cluster.local:5432
 ```
 
 ## Changelog
-
 Todas as notas de alteração deste projeto serão documentados no [CHANGELOG.md](./CHANGELOG.md).
