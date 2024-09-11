@@ -3,11 +3,12 @@ kind: Service
 metadata:
   name: fastapi-service
   namespace: realworld
+  labels:
+    app: fastapi-service
 spec:
   type: ClusterIP
   selector:
     app: fastapi-deploy
   ports:
-  - port: 5000
-    protocol: TCP
+  - port: 4000
     targetPort: 80

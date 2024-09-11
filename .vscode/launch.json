@@ -12,10 +12,10 @@
             "args": [
                 "--reload",
                 "--reload-dir",
-                "server",
+                "app",
                 "--port",
                 "5000",
-                "server.api:app",
+                "app.api:app",
             ],
             "jinja": true
         },

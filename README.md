@@ -89,7 +89,7 @@ kubectl apply -f k8s/db
 ```
 Assim que o banco estiver ativo, criar um `port-forward` para acessar o banco de dados:
 ```sh
-kubectl -n realworld port-forward pod/postgres-pod 5432:5432
+kubectl -n realworld port-forward pod/postgres-deploy 5432:5432
 ```
 Com sua IDE favorita do Postgres, execute os seguintes comandos:
 ```sql
@@ -109,20 +109,34 @@ kubectl apply -f k8s/api
 
 4. Executar as migrações:
 ```sh
-kubectl -n realworld exec pod/fastapi-pod -- bash -c 'DB_ROOT_URL="postgresql+psycopg://postgres:docker@postgres-service.realworld.svc.cluster.local:5432/fastapi" alembic upgrade head'
+kubectl -n realworld exec pod/postgres-deploy -- bash -c 'DB_ROOT_URL="postgresql+psycopg://postgres:docker@postgres-service.realworld.svc.cluster.local:5432/fastapi" alembic upgrade head'
 ```
 
 ### DNS
-#### API
-```sh
-fastapi-service.realworld.svc.cluster.local:5000
+```yaml
+api: fastapi-service.realworld.svc.cluster.local:3000
+db: postgres-service.realworld.svc.cluster.local:5432
 ```
-| <service-name>.<namespace>.svc.cluster.local:<port>/persons/v1/persons/1
 
-#### DB
+## Dicas
+### MicroK8s? Serviços que precisam ser iniciados
 ```sh
-postgres-service.realworld.svc.cluster.local:5432
+microk8s enable dashboard
+microk8s enable dns
+microk8s enable registry
+microk8s enable ingress
 ```
+
+### Verificar DNS da API
+```sh
+kubectl -n realworld run mycurlpod --image=curlimages/curl -i --tty -- sh
+```
+execute o comando:
+```sh
+curl -i http://fastapi-service.realworld.svc.cluster.local:4000/docs
+
+```
+
 
 ## Changelog
 Todas as notas de alteração deste projeto serão documentados no [CHANGELOG.md](./CHANGELOG.md).
