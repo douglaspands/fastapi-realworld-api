@@ -91,6 +91,8 @@ Assim que o banco estiver ativo, criar um `port-forward` para acessar o banco de
 ```sh
 kubectl -n realworld port-forward pod/postgres-deploy 5432:5432
 ```
+| `pod/postgres-deploy` é um exemplo de nome para o pod.
+
 Com sua IDE favorita do Postgres, execute os seguintes comandos:
 ```sql
 CREATE DATABASE fastapi;
@@ -109,8 +111,9 @@ kubectl apply -f k8s/api
 
 4. Executar as migrações:
 ```sh
-kubectl -n realworld exec pod/postgres-deploy -- bash -c 'DB_ROOT_URL="postgresql+psycopg://postgres:docker@postgres-service.realworld.svc.cluster.local:5432/fastapi" alembic upgrade head'
+kubectl -n realworld exec pod/fastapi-deploy -- bash -c 'DB_ROOT_URL="postgresql+psycopg://postgres:docker@postgres-service.realworld.svc.cluster.local:5432/fastapi" alembic upgrade head'
 ```
+| `pod/fastapi-deploy` é um exemplo de nome para o pod.
 
 ### DNS
 ```yaml
