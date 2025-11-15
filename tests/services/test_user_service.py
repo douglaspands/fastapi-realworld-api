@@ -17,13 +17,14 @@ from app.resources.user_resource import (
 )
 from app.services import user_service
 from app.services.auth_service import crypt
+from tests.mocks.context_mock import ContextMock
 
 fake = Faker("pt_BR")
 Faker.seed(0)
 
 
 @pytest.mark.asyncio
-@patch("server.services.user_service.user_repository", new_callable=AsyncMock)
+@patch("app.services.user_service.user_repository", new_callable=AsyncMock)
 async def test_get_user_ok(user_repository_mock: AsyncMock):
     # GIVEN
     user_id = 1
@@ -54,7 +55,7 @@ async def test_get_user_ok(user_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.user_service.user_repository", new_callable=AsyncMock)
+@patch("app.services.user_service.user_repository", new_callable=AsyncMock)
 async def test_get_user_not_found(user_repository_mock: AsyncMock):
     # GIVEN
     user_id = 9999
@@ -73,7 +74,7 @@ async def test_get_user_not_found(user_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.user_service.user_repository", new_callable=AsyncMock)
+@patch("app.services.user_service.user_repository", new_callable=AsyncMock)
 async def test_all_users_ok(user_repository_mock: AsyncMock):
     # MOCK
     users_mock = [
@@ -106,7 +107,7 @@ async def test_all_users_ok(user_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.user_service.user_repository", new_callable=AsyncMock)
+@patch("app.services.user_service.user_repository", new_callable=AsyncMock)
 async def test_all_users_nocontent(user_repository_mock: AsyncMock):
     # MOCK
     users_mock: list[User] = []
@@ -121,7 +122,7 @@ async def test_all_users_nocontent(user_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.user_service.user_repository", new_callable=AsyncMock)
+@patch("app.services.user_service.user_repository", new_callable=AsyncMock)
 async def test_update_user_ok(user_repository_mock: AsyncMock):
     # GIVEN
     user_id = 1
@@ -168,7 +169,7 @@ async def test_update_user_ok(user_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.user_service.user_repository", new_callable=AsyncMock)
+@patch("app.services.user_service.user_repository", new_callable=AsyncMock)
 async def test_update_user_error(user_repository_mock: AsyncMock):
     # GIVEN
     user_id = 1
@@ -196,7 +197,7 @@ async def test_update_user_error(user_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.user_service.user_repository", new_callable=AsyncMock)
+@patch("app.services.user_service.user_repository", new_callable=AsyncMock)
 async def test_update_user_optional_ok(user_repository_mock: AsyncMock):
     # GIVEN
     user_id = 1
@@ -235,7 +236,7 @@ async def test_update_user_optional_ok(user_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.user_service.user_repository", new_callable=AsyncMock)
+@patch("app.services.user_service.user_repository", new_callable=AsyncMock)
 async def test_update_user_optional_error(user_repository_mock: AsyncMock):
     # GIVEN
     user_id = 999999
@@ -259,7 +260,7 @@ async def test_update_user_optional_error(user_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.user_service.user_repository", new_callable=AsyncMock)
+@patch("app.services.user_service.user_repository", new_callable=AsyncMock)
 async def test_delete_user_ok(user_repository_mock: AsyncMock):
     # GIVEN
     user_id = 1
@@ -275,7 +276,7 @@ async def test_delete_user_ok(user_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.user_service.user_repository", new_callable=AsyncMock)
+@patch("app.services.user_service.user_repository", new_callable=AsyncMock)
 async def test_delete_user_error(user_repository_mock: AsyncMock):
     # GIVEN
     user_id = 999999
@@ -296,7 +297,7 @@ async def test_delete_user_error(user_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.user_service.user_repository", new_callable=AsyncMock)
+@patch("app.services.user_service.user_repository", new_callable=AsyncMock)
 async def test_change_password_ok(user_repository_mock: AsyncMock):
     # GIVEN
     user_id = 1
@@ -344,7 +345,7 @@ async def test_change_password_ok(user_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.user_service.user_repository", new_callable=AsyncMock)
+@patch("app.services.user_service.user_repository", new_callable=AsyncMock)
 async def test_change_password_notfound(user_repository_mock: AsyncMock):
     # GIVEN
     user_id = 9999
@@ -371,7 +372,7 @@ async def test_change_password_notfound(user_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.user_service.user_repository", new_callable=AsyncMock)
+@patch("app.services.user_service.user_repository", new_callable=AsyncMock)
 async def test_change_password_invalid(user_repository_mock: AsyncMock):
     # GIVEN
     user_id = 1
@@ -405,8 +406,8 @@ async def test_change_password_invalid(user_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.user_service.user_repository", new_callable=AsyncMock)
-@patch("server.services.user_service.person_repository", new_callable=AsyncMock)
+@patch("app.services.user_service.user_repository", new_callable=AsyncMock)
+@patch("app.services.user_service.person_repository", new_callable=AsyncMock)
 async def test_create_user_person_ok(
     person_repository_mock: AsyncMock, user_repository_mock: AsyncMock
 ):

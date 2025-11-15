@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Self, Type, cast
 
+from app.infra.context import IContext
 from tests.mocks.async_session_mock import SessionIO, SessionIOMock
 
 
@@ -16,9 +17,9 @@ class ContextMock:
         cls: Type[ContextMock],
         return_value: Any = None,
         side_effect: BaseException | None = None,
-    ) -> Context:
+    ) -> IContext:
         return cast(
-            Context,
+            IContext,
             ContextMock(
                 session=SessionIOMock.cast(
                     return_value=return_value, side_effect=side_effect

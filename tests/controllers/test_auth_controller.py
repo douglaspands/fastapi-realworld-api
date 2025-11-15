@@ -12,7 +12,7 @@ fake = Faker("pt_BR")
 Faker.seed(0)
 
 
-@patch("server.controllers.auth_controller.auth_service", new_callable=AsyncMock)
+@patch("app.controllers.auth_controller.auth_service", new_callable=AsyncMock)
 def test_get_token_ok(
     auth_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -37,7 +37,7 @@ def test_get_token_ok(
     assert response.json() == token_mock.model_dump(mode="json")
 
 
-@patch("server.controllers.auth_controller.auth_service", new_callable=AsyncMock)
+@patch("app.controllers.auth_controller.auth_service", new_callable=AsyncMock)
 def test_get_token_error(
     auth_service_mock: AsyncMock,
     httpclient: HttpClient,

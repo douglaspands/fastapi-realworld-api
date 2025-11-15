@@ -14,6 +14,7 @@ from app.resources.person_resource import (
     UpdatePersonOptional,
 )
 from app.services.auth_service import check_access_token
+from tests.mocks.context_mock import ContextMock
 from tests.utils.http_client import HttpClient
 from tests.utils.utils import snake_to_camel
 
@@ -21,7 +22,7 @@ fake = Faker("pt_BR")
 Faker.seed(0)
 
 
-@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+@patch("app.controllers.person_controller.person_service", new_callable=AsyncMock)
 def test_get_person_ok(
     person_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -54,7 +55,7 @@ def test_get_person_ok(
     }
 
 
-@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+@patch("app.controllers.person_controller.person_service", new_callable=AsyncMock)
 def test_get_person_not_found(
     person_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -79,7 +80,7 @@ def test_get_person_not_found(
     assert response.status_code == HTTPStatus.NOT_FOUND
 
 
-@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+@patch("app.controllers.person_controller.person_service", new_callable=AsyncMock)
 def test_get_person_not_found_2(
     person_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -104,8 +105,8 @@ def test_get_person_not_found_2(
     assert response.status_code == HTTPStatus.NOT_FOUND
 
 
-@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
-def test_get_person_internal_server_error(
+@patch("app.controllers.person_controller.person_service", new_callable=AsyncMock)
+def test_get_person_internal_app_error(
     person_service_mock: AsyncMock,
     httpclient: HttpClient,
 ):
@@ -129,11 +130,11 @@ def test_get_person_internal_server_error(
     response = httpclient.get(url)
 
     # THEN
-    assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
+    assert response.status_code == HTTPStatus.INTERNAL_app_ERROR
     assert message_error in get(response.json(), "errors[0].message")
 
 
-@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+@patch("app.controllers.person_controller.person_service", new_callable=AsyncMock)
 def test_get_all_persons_ok(
     person_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -166,7 +167,7 @@ def test_get_all_persons_ok(
     }
 
 
-@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+@patch("app.controllers.person_controller.person_service", new_callable=AsyncMock)
 def test_all_person_nocontent(
     person_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -186,7 +187,7 @@ def test_all_person_nocontent(
     assert response.status_code == HTTPStatus.NO_CONTENT
 
 
-@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+@patch("app.controllers.person_controller.person_service", new_callable=AsyncMock)
 def test_create_person_ok(
     person_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -221,7 +222,7 @@ def test_create_person_ok(
     }
 
 
-@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+@patch("app.controllers.person_controller.person_service", new_callable=AsyncMock)
 def test_create_person_validation_error(
     person_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -246,7 +247,7 @@ def test_create_person_validation_error(
     assert response.status_code == HTTPStatus.BAD_REQUEST
 
 
-@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+@patch("app.controllers.person_controller.person_service", new_callable=AsyncMock)
 def test_create_person_business_error(
     person_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -280,7 +281,7 @@ def test_create_person_business_error(
     assert message_error == get(response.json(), "errors[0].message")
 
 
-@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+@patch("app.controllers.person_controller.person_service", new_callable=AsyncMock)
 def test_update_person_ok(
     person_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -316,7 +317,7 @@ def test_update_person_ok(
     }
 
 
-@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+@patch("app.controllers.person_controller.person_service", new_callable=AsyncMock)
 def test_update_person_optional_ok(
     person_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -350,7 +351,7 @@ def test_update_person_optional_ok(
     }
 
 
-@patch("server.controllers.person_controller.person_service", new_callable=AsyncMock)
+@patch("app.controllers.person_controller.person_service", new_callable=AsyncMock)
 def test_delete_person_ok(
     person_service_mock: AsyncMock,
     httpclient: HttpClient,

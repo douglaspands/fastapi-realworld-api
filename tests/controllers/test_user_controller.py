@@ -15,7 +15,7 @@ fake = Faker("pt_BR")
 Faker.seed(0)
 
 
-@patch("server.controllers.user_controller.user_service", new_callable=AsyncMock)
+@patch("app.controllers.user_controller.user_service", new_callable=AsyncMock)
 def test_get_user_ok(
     user_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -49,7 +49,7 @@ def test_get_user_ok(
     }
 
 
-@patch("server.controllers.user_controller.user_service", new_callable=AsyncMock)
+@patch("app.controllers.user_controller.user_service", new_callable=AsyncMock)
 def test_get_all_users_ok(
     user_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -84,7 +84,7 @@ def test_get_all_users_ok(
     }
 
 
-@patch("server.controllers.user_controller.user_service", new_callable=AsyncMock)
+@patch("app.controllers.user_controller.user_service", new_callable=AsyncMock)
 def test_get_all_users_nocontent(
     user_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -106,7 +106,7 @@ def test_get_all_users_nocontent(
     assert response.status_code == HTTPStatus.NO_CONTENT
 
 
-@patch("server.controllers.user_controller.user_service", new_callable=AsyncMock)
+@patch("app.controllers.user_controller.user_service", new_callable=AsyncMock)
 def test_update_user_ok(
     user_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -146,7 +146,7 @@ def test_update_user_ok(
     assert data.get("active") == update_user.active
 
 
-@patch("server.controllers.user_controller.user_service", new_callable=AsyncMock)
+@patch("app.controllers.user_controller.user_service", new_callable=AsyncMock)
 def test_update_user_optional_ok(
     user_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -182,7 +182,7 @@ def test_update_user_optional_ok(
     assert not data.get("password")
 
 
-@patch("server.controllers.user_controller.user_service", new_callable=AsyncMock)
+@patch("app.controllers.user_controller.user_service", new_callable=AsyncMock)
 def test_delete_user_ok(
     user_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -204,7 +204,7 @@ def test_delete_user_ok(
     assert response.status_code == HTTPStatus.OK
 
 
-@patch("server.controllers.user_controller.user_service", new_callable=AsyncMock)
+@patch("app.controllers.user_controller.user_service", new_callable=AsyncMock)
 def test_user_person_create_ok(
     user_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -248,7 +248,7 @@ def test_user_person_create_ok(
     assert data.get("active") == user_mock.active
 
 
-@patch("server.controllers.user_controller.user_service", new_callable=AsyncMock)
+@patch("app.controllers.user_controller.user_service", new_callable=AsyncMock)
 def test_user_person_create_pw_no_match(
     user_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -276,7 +276,7 @@ def test_user_person_create_pw_no_match(
     assert "passwords do not match" in response.text
 
 
-@patch("server.controllers.user_controller.user_service", new_callable=AsyncMock)
+@patch("app.controllers.user_controller.user_service", new_callable=AsyncMock)
 def test_update_user_password_ok(
     user_service_mock: AsyncMock,
     httpclient: HttpClient,
@@ -319,7 +319,7 @@ def test_update_user_password_ok(
     assert data.get("active") == user_mock.active
 
 
-@patch("server.controllers.user_controller.user_service", new_callable=AsyncMock)
+@patch("app.controllers.user_controller.user_service", new_callable=AsyncMock)
 def test_update_user_password_pw_no_match(
     user_service_mock: AsyncMock,
     httpclient: HttpClient,

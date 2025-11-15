@@ -13,13 +13,14 @@ from app.resources.person_resource import (
     UpdatePersonOptional,
 )
 from app.services import person_service
+from tests.mocks.context_mock import ContextMock
 
 fake = Faker("pt_BR")
 Faker.seed(0)
 
 
 @pytest.mark.asyncio
-@patch("server.services.person_service.person_repository", new_callable=AsyncMock)
+@patch("app.services.person_service.person_repository", new_callable=AsyncMock)
 async def test_get_person_ok(person_repository_mock: AsyncMock):
     # GIVEN
     person_id = 1
@@ -41,7 +42,7 @@ async def test_get_person_ok(person_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.person_service.person_repository", new_callable=AsyncMock)
+@patch("app.services.person_service.person_repository", new_callable=AsyncMock)
 async def test_get_person_not_found(person_repository_mock: AsyncMock):
     # GIVEN
     person_id = 9999
@@ -60,7 +61,7 @@ async def test_get_person_not_found(person_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.person_service.person_repository", new_callable=AsyncMock)
+@patch("app.services.person_service.person_repository", new_callable=AsyncMock)
 async def test_get_all_persons_ok(person_repository_mock: AsyncMock):
     # MOCK
     person_mock = [
@@ -82,7 +83,7 @@ async def test_get_all_persons_ok(person_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.person_service.person_repository", new_callable=AsyncMock)
+@patch("app.services.person_service.person_repository", new_callable=AsyncMock)
 async def test_create_person_ok(person_repository_mock: AsyncMock):
     # GIVEN
     create_person = CreatePerson(
@@ -109,7 +110,7 @@ async def test_create_person_ok(person_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.person_service.person_repository", new_callable=AsyncMock)
+@patch("app.services.person_service.person_repository", new_callable=AsyncMock)
 async def test_create_person_error(person_repository_mock: AsyncMock):
     # GIVEN
     create_person = CreatePerson(
@@ -132,7 +133,7 @@ async def test_create_person_error(person_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.person_service.person_repository", new_callable=AsyncMock)
+@patch("app.services.person_service.person_repository", new_callable=AsyncMock)
 async def test_update_person_ok(person_repository_mock: AsyncMock):
     # GIVEN
     person_id = 1
@@ -160,7 +161,7 @@ async def test_update_person_ok(person_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.person_service.person_repository", new_callable=AsyncMock)
+@patch("app.services.person_service.person_repository", new_callable=AsyncMock)
 async def test_update_person_error(person_repository_mock: AsyncMock):
     # GIVEN
     person_id = 1
@@ -186,7 +187,7 @@ async def test_update_person_error(person_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.person_service.person_repository", new_callable=AsyncMock)
+@patch("app.services.person_service.person_repository", new_callable=AsyncMock)
 async def test_update_person_optional_ok(person_repository_mock: AsyncMock):
     # GIVEN
     person_id = 1
@@ -221,7 +222,7 @@ async def test_update_person_optional_ok(person_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.person_service.person_repository", new_callable=AsyncMock)
+@patch("app.services.person_service.person_repository", new_callable=AsyncMock)
 async def test_update_person_optional_error(person_repository_mock: AsyncMock):
     # GIVEN
     person_id = 999999
@@ -245,7 +246,7 @@ async def test_update_person_optional_error(person_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.person_service.person_repository", new_callable=AsyncMock)
+@patch("app.services.person_service.person_repository", new_callable=AsyncMock)
 async def test_delete_person_ok(person_repository_mock: AsyncMock):
     # GIVEN
     person_id = 1
@@ -261,7 +262,7 @@ async def test_delete_person_ok(person_repository_mock: AsyncMock):
 
 
 @pytest.mark.asyncio
-@patch("server.services.person_service.person_repository", new_callable=AsyncMock)
+@patch("app.services.person_service.person_repository", new_callable=AsyncMock)
 async def test_delete_person_error(person_repository_mock: AsyncMock):
     # GIVEN
     person_id = 999999
