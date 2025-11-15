@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from functools import cache
 from typing import Any, AsyncGenerator
 
@@ -25,6 +26,7 @@ def sessionio_maker() -> async_sessionmaker[SessionIO]:
     return session_local
 
 
+@asynccontextmanager
 async def get_sessionio() -> AsyncGenerator[SessionIO, Any]:
     session_local = sessionio_maker()
     async with session_local() as session:

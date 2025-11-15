@@ -57,7 +57,7 @@ async def check_access_token(
     token: Annotated[str, Depends(oauth2_scheme)],
 ) -> AsyncGenerator[IContext, Any]:
     try:
-        async for session in get_sessionio():
+        async with get_sessionio() as session:
             payload = jwt.decode(
                 token=token,
                 key=settings.token_secret_key,
