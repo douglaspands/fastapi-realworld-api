@@ -8,7 +8,6 @@ from faker import Faker
 from app.controllers.user_controller import UpdateUser, UpdateUserOptional
 from app.models.user_model import User as UserModel
 from app.services.auth_service import check_access_token, crypt
-from tests.mocks.context_mock import ContextMock
 from tests.utils.http_client import HttpClient
 from tests.utils.utils import snake_to_camel
 

@@ -1,6 +1,6 @@
 from alembic import op
 
-from app.core.settings import get_settings
+from app.infra.settings import get_settings
 
 
 def grant():

@@ -3,10 +3,9 @@ from unittest.mock import AsyncMock, patch
 
 from faker import Faker
 
-from app.core.context import get_context_with_request
+from app.infra.context import get_context_with_request
 from app.resources.token_resource import Token
 from app.services.auth_service import credentials_error
-from tests.mocks.context_mock import ContextMock
 from tests.utils.http_client import HttpClient
 
 fake = Faker("pt_BR")

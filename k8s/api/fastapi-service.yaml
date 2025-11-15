@@ -10,5 +10,5 @@ spec:
   selector:
     app: fastapi-deploy
   ports:
-  - port: 4000
+  - port: 8000
     targetPort: 80

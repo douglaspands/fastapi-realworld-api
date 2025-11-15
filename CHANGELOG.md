@@ -8,6 +8,7 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 
 ### Adicionado
 
+- Context: Criação de interface
 - README: Inclusão da seção de qualidade de código;
 - README: Inclusão da seção de Kubernetes;
 - Teste Integrado: Dominio de User; [AGUARDANDO]
@@ -20,6 +21,8 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 
 ### Modificado
 
+- Utilização do poetry > 2.0 e as mudanças no `pyproject.toml`;
+- Modificado a versão para `0.4.0` do `pyproject.toml`;
 - Modificado a versão para `0.3.0` do `pyproject.toml`;
 - Modificado a versão para `0.3.0` do `core/settings.py`;
 - Migração: Quando for PostgreSQL, executar GRANT para usuario da API; [AGUARDANDO]

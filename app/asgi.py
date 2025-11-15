@@ -1,4 +1,4 @@
-from app.core import api
+from app.infra import api
 
 app = api.create_app()
 

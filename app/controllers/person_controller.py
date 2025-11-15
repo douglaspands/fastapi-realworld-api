@@ -2,11 +2,11 @@ from typing import Annotated, Sequence
 
 from fastapi import APIRouter, Depends, Response, status
 
-from app.core.context import Context
-from app.core.exceptions import NoContentError
-from app.core.openapi import response_generator
-from app.core.schema import ResponseOK
 from app.enums.openapi_enum import OpenApiTagEnum
+from app.infra.context import IContext
+from app.infra.exceptions import NoContentError
+from app.infra.openapi import response_generator
+from app.infra.schema import ResponseOK
 from app.resources.person_resource import (
     CreatePerson,
     Person,
@@ -33,7 +33,7 @@ router = APIRouter(
     ),
 )
 async def get_person(
-    ctx: Annotated[Context, Depends(check_access_token)], person_id: int
+    ctx: Annotated[IContext, Depends(check_access_token)], person_id: int
 ):
     data = await person_service.get_person(ctx, person_id=person_id)
     return ResponseOK(data=data)
@@ -49,7 +49,7 @@ async def get_person(
         status.HTTP_500_INTERNAL_SERVER_ERROR,
     ),
 )
-async def get_all_person(ctx: Annotated[Context, Depends(check_access_token)]):
+async def get_all_person(ctx: Annotated[IContext, Depends(check_access_token)]):
     data = await person_service.get_all_persons(ctx)
     if not len(data):
         raise NoContentError()
@@ -67,7 +67,7 @@ async def get_all_person(ctx: Annotated[Context, Depends(check_access_token)]):
     ),
 )
 async def create_person(
-    ctx: Annotated[Context, Depends(check_access_token)], create_person: CreatePerson
+    ctx: Annotated[IContext, Depends(check_access_token)], create_person: CreatePerson
 ):
     data = await person_service.create_person(ctx, create_person=create_person)
     return ResponseOK(data=data)
@@ -84,7 +84,7 @@ async def create_person(
     ),
 )
 async def update_person(
-    ctx: Annotated[Context, Depends(check_access_token)],
+    ctx: Annotated[IContext, Depends(check_access_token)],
     person_id: int,
     update_person: UpdatePerson,
 ):
@@ -105,7 +105,7 @@ async def update_person(
     ),
 )
 async def update_person_optional(
-    ctx: Annotated[Context, Depends(check_access_token)],
+    ctx: Annotated[IContext, Depends(check_access_token)],
     person_id: int,
     update_person: UpdatePersonOptional,
 ):
@@ -126,7 +126,7 @@ async def update_person_optional(
     ),
 )
 async def delete_person(
-    ctx: Annotated[Context, Depends(check_access_token)], person_id: int
+    ctx: Annotated[IContext, Depends(check_access_token)], person_id: int
 ):
     await person_service.delete_person(ctx, person_id=person_id)
     return

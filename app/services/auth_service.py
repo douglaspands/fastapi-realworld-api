@@ -5,10 +5,10 @@ from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 
-from app.core.context import Context
-from app.core.crypt import get_crypt
-from app.core.database import SessionIO, get_sessionio
-from app.core.settings import get_settings
+from app.infra.context import Context, IContext
+from app.infra.crypt import get_crypt
+from app.infra.database import SessionIO, get_sessionio
+from app.infra.settings import get_settings
 from app.models.user_model import User
 from app.repositories import user_repository
 from app.resources.token_resource import Token
@@ -35,7 +35,7 @@ async def get_active_user_by_username(session: SessionIO, username: str) -> User
     return users[0]
 
 
-async def authenticate_user(ctx: Context, username: str, password: str) -> Token:
+async def authenticate_user(ctx: IContext, username: str, password: str) -> Token:
     user = await get_active_user_by_username(session=ctx.session, username=username)
     if not user:
         raise credentials_error
@@ -55,7 +55,7 @@ async def authenticate_user(ctx: Context, username: str, password: str) -> Token
 async def check_access_token(
     request: Request,
     token: Annotated[str, Depends(oauth2_scheme)],
-) -> AsyncGenerator[Context, Any]:
+) -> AsyncGenerator[IContext, Any]:
     try:
         async for session in get_sessionio():
             payload = jwt.decode(

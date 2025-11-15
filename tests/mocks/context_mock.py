@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import Any, Self, Type, cast
 
-from app.core.context import Context
 from tests.mocks.async_session_mock import SessionIO, SessionIOMock
 
 

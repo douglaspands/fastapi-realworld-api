@@ -5,11 +5,9 @@ import pytest
 from faker import Faker
 from fastapi import HTTPException, Request
 
-from app.core.context import Context
 from app.models.user_model import User
 from app.resources.token_resource import Token
 from app.services.auth_service import authenticate_user, check_access_token, crypt
-from tests.mocks.context_mock import ContextMock
 
 fake = Faker("pt_BR")
 Faker.seed(0)

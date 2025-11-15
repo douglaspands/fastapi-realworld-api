@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 from pydash import unset
 
-from app.core.schema import ResponseBadRequest, ResponseErrors
+from app.infra.schema import ResponseBadRequest, ResponseErrors
 
 HTTP_422 = {
     "description": "Unprocessable Entity",

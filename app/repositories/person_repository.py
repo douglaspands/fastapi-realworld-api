@@ -2,8 +2,8 @@ from typing import Any, Sequence
 
 from sqlmodel import select
 
-from app.core import utils
-from app.core.database import SessionIO
+from app.infra import utils
+from app.infra.database import SessionIO
 from app.models.person_model import Person
 
 

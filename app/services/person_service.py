@@ -1,6 +1,6 @@
 from typing import Sequence
 
-from app.core.context import Context
+from app.infra.context import IContext
 from app.models.person_model import Person
 from app.repositories import person_repository
 from app.resources.person_resource import (
@@ -10,17 +10,17 @@ from app.resources.person_resource import (
 )
 
 
-async def get_all_persons(ctx: Context) -> Sequence[Person]:
+async def get_all_persons(ctx: IContext) -> Sequence[Person]:
     person = await person_repository.get_all(ctx.session)
     return person
 
 
-async def get_person(ctx: Context, person_id: int) -> Person:
+async def get_person(ctx: IContext, person_id: int) -> Person:
     person = await person_repository.get(ctx.session, pk=person_id)
     return person
 
 
-async def create_person(ctx: Context, create_person: CreatePerson) -> Person:
+async def create_person(ctx: IContext, create_person: CreatePerson) -> Person:
     async with ctx.session.begin():
         person = Person(
             first_name=create_person.first_name, last_name=create_person.last_name
@@ -30,7 +30,7 @@ async def create_person(ctx: Context, create_person: CreatePerson) -> Person:
 
 
 async def update_person(
-    ctx: Context, person_id: int, update_person: UpdatePerson
+    ctx: IContext, person_id: int, update_person: UpdatePerson
 ) -> Person:
     async with ctx.session.begin():
         values = update_person.model_dump()
@@ -39,7 +39,7 @@ async def update_person(
 
 
 async def update_person_optional(
-    ctx: Context, person_id: int, update_person: UpdatePersonOptional
+    ctx: IContext, person_id: int, update_person: UpdatePersonOptional
 ) -> Person:
     async with ctx.session.begin():
         values = update_person.model_dump(exclude_none=True)
@@ -47,7 +47,7 @@ async def update_person_optional(
     return person
 
 
-async def delete_person(ctx: Context, person_id: int):
+async def delete_person(ctx: IContext, person_id: int):
     async with ctx.session.begin():
         await person_repository.delete(ctx.session, pk=person_id)
 

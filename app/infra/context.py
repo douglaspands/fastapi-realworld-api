@@ -1,24 +1,27 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, AsyncGenerator, Self
+from contextlib import asynccontextmanager
+from typing import TYPE_CHECKING, Any, AsyncGenerator, Protocol, Self
 
 from fastapi import Request
-from pydantic import BaseModel, ConfigDict
 
-from app.core.database import SessionIO, get_sessionio
+from app.infra.database import SessionIO, get_sessionio
 
 if TYPE_CHECKING:
     from app.resources.user_resource import User
 
 
-class Context(BaseModel):
+class IContext(Protocol):
+    session: SessionIO
+    user: User
+    request: Request
+
+
+class Context(IContext):
     # private
     _session: SessionIO | None = None
     _user: User | None = None
     _request: Request | None = None
-
-    # config
-    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     def __init__(
         self: Self,
@@ -26,7 +29,6 @@ class Context(BaseModel):
         user: User | None = None,
         request: Request | None = None,
     ):
-        super().__init__()
         self._session = session
         self._user = user
         self._request = request
@@ -57,4 +59,10 @@ async def get_context_with_request(
         yield Context(session=session, request=request)
 
 
-__all__ = ("Context", "get_context_with_request")
+@asynccontextmanager
+async def get_context():
+    async for session in get_sessionio():
+        yield Context(session=session, request=None)
+
+
+__all__ = ("IContext", "Context", "get_context_with_request", "get_context")

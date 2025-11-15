@@ -1,8 +1,8 @@
 from typing import Sequence
 
-from app.core.context import Context
-from app.core.crypt import get_crypt
-from app.core.exceptions import BusinessError
+from app.infra.context import IContext
+from app.infra.crypt import get_crypt
+from app.infra.exceptions import BusinessError
 from app.models.person_model import Person
 from app.models.user_model import User
 from app.repositories import person_repository, user_repository
@@ -17,7 +17,7 @@ crypt = get_crypt()
 
 
 async def create_user_person(
-    ctx: Context, user_person_create: CreateUserPerson
+    ctx: IContext, user_person_create: CreateUserPerson
 ) -> User:
     async with ctx.session.begin():
         person = await person_repository.get_or_create(
@@ -41,7 +41,7 @@ async def create_user_person(
 
 
 async def change_password(
-    ctx: Context, user_id: int, update_password: UpdateUserPassword
+    ctx: IContext, user_id: int, update_password: UpdateUserPassword
 ) -> User:
     user = await user_repository.get(session=ctx.session, pk=user_id)
     if not crypt.check_password(update_password.current_password, user.password):
@@ -56,17 +56,17 @@ async def change_password(
     return res
 
 
-async def get_all_users(ctx: Context) -> Sequence[User]:
+async def get_all_users(ctx: IContext) -> Sequence[User]:
     user = await user_repository.get_all(ctx.session)
     return user
 
 
-async def get_user(ctx: Context, user_id: int) -> User:
+async def get_user(ctx: IContext, user_id: int) -> User:
     user = await user_repository.get(ctx.session, pk=user_id)
     return user
 
 
-async def update_user(ctx: Context, user_id: int, update_user: UpdateUser) -> User:
+async def update_user(ctx: IContext, user_id: int, update_user: UpdateUser) -> User:
     async with ctx.session.begin():
         values = update_user.model_dump()
         user = await user_repository.update(ctx.session, pk=user_id, **values)
@@ -74,7 +74,7 @@ async def update_user(ctx: Context, user_id: int, update_user: UpdateUser) -> Us
 
 
 async def update_user_optional(
-    ctx: Context, user_id: int, update_user: UpdateUserOptional
+    ctx: IContext, user_id: int, update_user: UpdateUserOptional
 ) -> User:
     async with ctx.session.begin():
         values = update_user.model_dump(exclude_none=True)
@@ -82,7 +82,7 @@ async def update_user_optional(
     return user
 
 
-async def delete_user(ctx: Context, user_id: int):
+async def delete_user(ctx: IContext, user_id: int):
     async with ctx.session.begin():
         await user_repository.delete(ctx.session, pk=user_id)
 

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from app.core import handler, middleware, openapi, router
-from app.core.settings import get_settings
+from app.infra import handler, middleware, openapi, routers
+from app.infra.settings import get_settings
 
 settings = get_settings()
 
@@ -15,7 +15,7 @@ def create_app() -> FastAPI:
     )
     middleware.init_app(app)
     handler.init_app(app)
-    router.init_app(app)
+    routers.init_app(app)
     openapi.init_app(app)
     return app
 
