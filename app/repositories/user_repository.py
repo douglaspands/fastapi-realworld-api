@@ -1,42 +1,40 @@
-from typing import Any, Sequence
+from typing import Any
 
 from sqlmodel import select
 
 from app.infra import utils
-from app.infra.database import SessionIO
+from app.infra.context import IContext
 from app.models.user_model import User
 
 
-async def create(session: SessionIO, user: User) -> User:
-    session.add(user)
+async def create(ctx: IContext, *, user: User) -> User:
+    ctx.session.add(user)
     return user
 
 
-async def get(session: SessionIO, pk: int) -> User:
+async def get(ctx: IContext, *, pk: int) -> User:
     statement = select(User).where(User.id == pk)
-    result = await session.exec(statement)
+    result = await ctx.session.exec(statement)
     return result.one()
 
 
-async def get_all(
-    session: SessionIO, limit: int = 250, **values: Any
-) -> Sequence[User]:
+async def get_all(ctx: IContext, *, limit: int = 250, **values: Any) -> list[User]:
     statement = select(User).filter_by(**values).limit(limit)
-    result = await session.exec(statement)
-    return result.all()
+    result = await ctx.session.exec(statement)
+    return list(result.all())
 
 
-async def update(session: SessionIO, pk: int, **values: Any) -> User:
+async def update(ctx: IContext, *, pk: int, **values: Any) -> User:
     utils.repository_columns_can_update(values)
-    user = await get(session=session, pk=pk)
+    user = await get(ctx, pk=pk)
     user.sqlmodel_update(values)
-    session.add(user)
+    ctx.session.add(user)
     return user
 
 
-async def delete(session: SessionIO, pk: int):
-    user = await get(session=session, pk=pk)
-    await session.delete(user)
+async def delete(ctx: IContext, *, pk: int):
+    user = await get(ctx, pk=pk)
+    await ctx.session.delete(user)
 
 
 __all__ = (

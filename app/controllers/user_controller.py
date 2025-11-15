@@ -37,9 +37,10 @@ async def create_user_and_person(
     ctx: Annotated[IContext, Depends(get_context_with_request)],
     user_person_create: CreateUserPerson,
 ):
-    data = await user_service.create_user_person(
-        ctx=ctx, user_person_create=user_person_create
-    )
+    async with ctx.session.begin():
+        data = await user_service.create_user_person(
+            ctx, user_person_create=user_person_create
+        )
     return ResponseOK(data=data)
 
 
@@ -59,9 +60,10 @@ async def update_user_password(
     user_id: int,
     update_password: UpdateUserPassword,
 ):
-    data = await user_service.change_password(
-        ctx=ctx, user_id=user_id, update_password=update_password
-    )
+    async with ctx.session.begin():
+        data = await user_service.change_password(
+            ctx, user_id=user_id, update_password=update_password
+        )
     return ResponseOK(data=data)
 
 
@@ -112,7 +114,10 @@ async def update_user(
     user_id: int,
     update_user: UpdateUser,
 ):
-    data = await user_service.update_user(ctx, user_id=user_id, update_user=update_user)
+    async with ctx.session.begin():
+        data = await user_service.update_user(
+            ctx, user_id=user_id, update_user=update_user
+        )
     return ResponseOK(data=data)
 
 
@@ -131,9 +136,10 @@ async def update_user_optional(
     user_id: int,
     update_user: UpdateUserOptional,
 ):
-    data = await user_service.update_user_optional(
-        ctx, user_id=user_id, update_user=update_user
-    )
+    async with ctx.session.begin():
+        data = await user_service.update_user_optional(
+            ctx, user_id=user_id, update_user=update_user
+        )
     return ResponseOK(data=data)
 
 
@@ -150,7 +156,8 @@ async def update_user_optional(
 async def delete_user(
     ctx: Annotated[IContext, Depends(check_access_token)], user_id: int
 ):
-    await user_service.delete_user(ctx, user_id=user_id)
+    async with ctx.session.begin():
+        await user_service.delete_user(ctx, user_id=user_id)
     return
 
 

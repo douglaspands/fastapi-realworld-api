@@ -69,7 +69,8 @@ async def get_all_person(ctx: Annotated[IContext, Depends(check_access_token)]):
 async def create_person(
     ctx: Annotated[IContext, Depends(check_access_token)], create_person: CreatePerson
 ):
-    data = await person_service.create_person(ctx, create_person=create_person)
+    async with ctx.session.begin():
+        data = await person_service.create_person(ctx, create_person=create_person)
     return ResponseOK(data=data)
 
 
@@ -88,9 +89,10 @@ async def update_person(
     person_id: int,
     update_person: UpdatePerson,
 ):
-    data = await person_service.update_person(
-        ctx, person_id=person_id, update_person=update_person
-    )
+    async with ctx.session.begin():
+        data = await person_service.update_person(
+            ctx, person_id=person_id, update_person=update_person
+        )
     return ResponseOK(data=data)
 
 
@@ -109,9 +111,10 @@ async def update_person_optional(
     person_id: int,
     update_person: UpdatePersonOptional,
 ):
-    data = await person_service.update_person_optional(
-        ctx, person_id=person_id, update_person=update_person
-    )
+    async with ctx.session.begin():
+        data = await person_service.update_person_optional(
+            ctx, person_id=person_id, update_person=update_person
+        )
     return ResponseOK(data=data)
 
 
@@ -128,7 +131,8 @@ async def update_person_optional(
 async def delete_person(
     ctx: Annotated[IContext, Depends(check_access_token)], person_id: int
 ):
-    await person_service.delete_person(ctx, person_id=person_id)
+    async with ctx.session.begin():
+        await person_service.delete_person(ctx, person_id=person_id)
     return
 
 

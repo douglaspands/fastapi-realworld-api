@@ -7,7 +7,7 @@ from jose import JWTError, jwt
 
 from app.infra.context import Context, IContext
 from app.infra.crypt import get_crypt
-from app.infra.database import SessionIO, get_sessionio
+from app.infra.database import get_sessionio
 from app.infra.settings import get_settings
 from app.models.user_model import User
 from app.repositories import user_repository
@@ -26,17 +26,15 @@ crypt = get_crypt()
 settings = get_settings()
 
 
-async def get_active_user_by_username(session: SessionIO, username: str) -> User | None:
-    users = await user_repository.get_all(
-        session=session, limit=1, username=username, active=True
-    )
+async def get_active_user_by_username(ctx: IContext, *, username: str) -> User | None:
+    users = await user_repository.get_all(ctx, limit=1, username=username, active=True)
     if not users:
         return None
     return users[0]
 
 
 async def authenticate_user(ctx: IContext, username: str, password: str) -> Token:
-    user = await get_active_user_by_username(session=ctx.session, username=username)
+    user = await get_active_user_by_username(ctx, username=username)
     if not user:
         raise credentials_error
     if not crypt.check_password(password=password, hashed_password=user.password):
@@ -64,7 +62,9 @@ async def check_access_token(
                 algorithms=[settings.token_algorithm],
             )
             username: str = payload.get("sub", "")
-            user = await get_active_user_by_username(session=session, username=username)
+            user = await get_active_user_by_username(
+                Context(session=session), username=username
+            )
             if not (username and user):
                 raise credentials_error
             user_resource = UserResource(**user.model_dump())
