@@ -1,3 +1,4 @@
+import secrets
 from functools import cache
 from typing import Annotated
 
@@ -20,7 +21,7 @@ DatabaseDsn = Annotated[
 class Settings(BaseSettings):
     # app
     app_name: str = "FastAPI RealWorld API"
-    app_version: str = "0.3.0"
+    app_version: str = "0.4.0"
 
     # openapi_doc
     openapi_description: str = (
@@ -30,10 +31,10 @@ class Settings(BaseSettings):
 
     # database
     db_debug: bool = False
-    db_url: DatabaseDsn = Field(default=None)
+    db_url: DatabaseDsn | None = None
 
     # token
-    token_secret_key: str = Field(default=None)
+    token_secret_key: str = Field(default_factory=lambda: secrets.token_hex(32))
     token_algorithm: str = "HS256"
     token_expire_minutes: int = 30
 
