@@ -4,7 +4,7 @@ import pytest
 from faker import Faker
 from fastapi import Request
 
-from app.infra.context import get_context_with_request
+from app.infra.context import Context, get_context_with_request
 from app.infra.settings import DatabaseDsn, Settings
 from app.resources.user_resource import User
 from tests.mocks.async_session_mock import SessionIO, SessionIOMock
