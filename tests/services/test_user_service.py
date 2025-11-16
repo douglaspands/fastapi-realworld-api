@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError, NoResultFound
 from app.infra.database import SessionIO
 from app.infra.exceptions import BusinessError
 from app.models.person_model import Person
-from app.models.user_model import User
+from app.models.user_model import User as UserModel
 from app.resources.user_resource import (
     CreateUserPerson,
     UpdateUser,
@@ -30,7 +30,7 @@ async def test_get_user_ok(user_repository_mock: AsyncMock):
     user_id = 1
 
     # MOCK
-    user_mock = User(
+    user_mock = UserModel(
         id=user_id,
         username=fake.user_name(),
         password=crypt.hash_password(fake.password(10)),
@@ -78,7 +78,7 @@ async def test_get_user_not_found(user_repository_mock: AsyncMock):
 async def test_all_users_ok(user_repository_mock: AsyncMock):
     # MOCK
     users_mock = [
-        User(
+        UserModel(
             id=idx + 1,
             username=fake.user_name(),
             password=crypt.hash_password(fake.password(10)),
@@ -110,7 +110,7 @@ async def test_all_users_ok(user_repository_mock: AsyncMock):
 @patch("app.services.user_service.user_repository", new_callable=AsyncMock)
 async def test_all_users_nocontent(user_repository_mock: AsyncMock):
     # MOCK
-    users_mock: list[User] = []
+    users_mock: list[UserModel] = []
     context_mock = ContextMock.context_session_mock()
     user_repository_mock.get_all.return_value = users_mock
 
@@ -134,7 +134,7 @@ async def test_update_user_ok(user_repository_mock: AsyncMock):
 
     # MOCK
     context_mock = ContextMock.context_session_mock()
-    user_mock = User(
+    user_mock = UserModel(
         id=user_id,
         username=fake.user_name(),
         password=crypt.hash_password(fake.password(10)),
@@ -205,7 +205,7 @@ async def test_update_user_optional_ok(user_repository_mock: AsyncMock):
 
     # MOCK
     context_mock = ContextMock.context_session_mock()
-    user_mock = User(
+    user_mock = UserModel(
         id=user_id,
         username=fake.user_name(),
         password=crypt.hash_password(fake.password(10)),
@@ -310,7 +310,7 @@ async def test_change_password_ok(user_repository_mock: AsyncMock):
 
     # MOCK
     context_mock = ContextMock.context_session_mock()
-    user_mock = User(
+    user_mock = UserModel(
         id=user_id,
         username=fake.user_name(),
         password=crypt.hash_password(update_password.current_password),
@@ -385,7 +385,7 @@ async def test_change_password_invalid(user_repository_mock: AsyncMock):
 
     # MOCK
     context_mock = ContextMock.context_session_mock()
-    user_mock = User(
+    user_mock = UserModel(
         id=user_id,
         username=fake.user_name(),
         password=crypt.hash_password(fake.password(10)),
@@ -428,7 +428,7 @@ async def test_create_user_person_ok(
         first_name=create_user.first_name,
         last_name=create_user.last_name,
     )
-    user_mock = User(
+    user_mock = UserModel(
         id=fake.pyint(1, 999),
         username=create_user.username,
         password=crypt.hash_password(create_user.password),

@@ -1,12 +1,12 @@
 from copy import copy
+from datetime import datetime
 from unittest.mock import AsyncMock, patch
 
 import pytest
 from faker import Faker
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
-from app.infra.database import SessionIO
-from app.models.person_model import Person
+from app.models.person_model import Person as PersonModel
 from app.resources.person_resource import (
     CreatePerson,
     UpdatePerson,
@@ -26,8 +26,13 @@ async def test_get_person_ok(person_repository_mock: AsyncMock):
     person_id = 1
 
     # MOCK
-    person_mock = Person(
-        id=person_id, first_name=fake.first_name(), last_name=fake.last_name()
+    now = datetime.now()
+    person_mock = PersonModel(
+        id=person_id,
+        first_name=fake.first_name(),
+        last_name=fake.last_name(),
+        created_at=now,
+        updated_at=now,
     )
     context_mock = ContextMock.context_session_mock()
     person_repository_mock.get.return_value = person_mock
@@ -64,8 +69,15 @@ async def test_get_person_not_found(person_repository_mock: AsyncMock):
 @patch("app.services.person_service.person_repository", new_callable=AsyncMock)
 async def test_get_all_persons_ok(person_repository_mock: AsyncMock):
     # MOCK
+    now = datetime.now()
     person_mock = [
-        Person(id=idx + 1, first_name=fake.first_name(), last_name=fake.last_name())
+        PersonModel(
+            id=idx + 1,
+            first_name=fake.first_name(),
+            last_name=fake.last_name(),
+            created_at=now,
+            updated_at=now,
+        )
         for idx in range(10)
     ]
     context_mock = ContextMock.context_session_mock()
@@ -92,9 +104,13 @@ async def test_create_person_ok(person_repository_mock: AsyncMock):
 
     # MOCK
     context_mock = ContextMock.context_session_mock()
+    now = datetime.now()
 
-    async def create_mock(session: SessionIO, person: Person):
+    async def create_mock(ctx, *, person: PersonModel):
         person.id = 1
+        person.created_at = now
+        person.updated_at = now
+        return person
 
     person_repository_mock.create = create_mock
 
@@ -143,9 +159,12 @@ async def test_update_person_ok(person_repository_mock: AsyncMock):
 
     # MOCK
     context_mock = ContextMock.context_session_mock()
+    now = datetime.now()
 
-    async def update_mock(session: SessionIO, pk: int, **values):
-        return Person(id=pk, **values)
+    async def update_mock(ctx, *, pk: int, **values):
+        values["created_at"] = now
+        values["updated_at"] = now
+        return PersonModel(id=pk, **values)
 
     person_repository_mock.update = update_mock
 
@@ -195,13 +214,16 @@ async def test_update_person_optional_ok(person_repository_mock: AsyncMock):
 
     # MOCK
     context_mock = ContextMock.context_session_mock()
-    person_mock = Person(
+    now = datetime.now()
+    person_mock = PersonModel(
         id=person_id,
         first_name=fake.first_name(),
         last_name=fake.last_name(),
+        created_at=now,
+        updated_at=now,
     )
 
-    async def update_mock(session: SessionIO, pk: int, **values):
+    async def update_mock(ctx, *, pk: int, **values):
         person = copy(person_mock)
         for k, v in values.items():
             setattr(person, k, v)

@@ -26,3 +26,7 @@ class ContextMock:
                 )
             ),
         )
+
+    @classmethod
+    def cast(cls: Type[ContextMock], session: SessionIO) -> IContext:
+        return cast(IContext, cls(session))
