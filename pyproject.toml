@@ -15,9 +15,9 @@ dependencies = [
     "pydash (>=8.0.5,<9.0.0)",
     "python-jose[cryptography] (>=3.5.0,<4.0.0)",
     "python-multipart (>=0.0.20,<0.0.21)",
-    "passlib[bcrypt] (>=1.7.4,<2.0.0)",
     "alembic (>=1.17.2,<2.0.0)",
-    "psycopg[binary,pool] (>=3.2.12,<4.0.0)"
+    "psycopg[binary,pool] (>=3.2.12,<4.0.0)",
+    "pwdlib[argon2] (>=0.3.0,<0.4.0)"
 ]
 
 [build-system]

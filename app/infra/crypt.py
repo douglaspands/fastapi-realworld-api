@@ -1,7 +1,7 @@
 from functools import cache
 from typing import Protocol, Self
 
-from passlib.context import CryptContext
+from pwdlib import PasswordHash
 
 
 class CryptInterface(Protocol):
@@ -11,7 +11,7 @@ class CryptInterface(Protocol):
 
 class PasslibCore(CryptInterface):
     def __init__(self: Self):
-        self._pw_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+        self._pw_context = PasswordHash.recommended()
 
     def check_password(self: Self, password: str, hashed_password: str) -> bool:
         return self._pw_context.verify(password, hashed_password)
