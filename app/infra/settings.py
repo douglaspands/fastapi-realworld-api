@@ -31,7 +31,7 @@ class Settings(BaseSettings):
 
     # database
     db_debug: bool = False
-    db_url: DatabaseDsn | None = None
+    db_url: DatabaseDsn | str = "<DB_URL_NOT_FOUND>"
 
     # token
     token_secret_key: str = Field(default_factory=lambda: secrets.token_hex(32))

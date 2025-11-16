@@ -8,12 +8,12 @@ from tests.unit.utils.http_client import HttpClient
 
 
 @pytest.fixture
-def httpclient() -> HttpClient:
-    return HttpClient(app)
-
-
-@pytest.fixture
 def settings() -> Generator[Settings, Any, Any]:
     settings = get_settings()
     yield settings
     get_settings.cache_clear()
+
+
+@pytest.fixture
+def httpclient(settings) -> HttpClient:
+    return HttpClient(app)

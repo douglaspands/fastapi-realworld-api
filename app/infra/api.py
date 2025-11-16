@@ -3,10 +3,9 @@ from fastapi import FastAPI
 from app.infra import handler, middleware, openapi, router
 from app.infra.settings import get_settings
 
-settings = get_settings()
-
 
 def create_app() -> FastAPI:
+    settings = get_settings()
     app = FastAPI(
         title=settings.app_name,
         version=settings.app_version,

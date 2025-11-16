@@ -23,7 +23,6 @@ credentials_error = HTTPException(
 )
 
 crypt = get_crypt()
-settings = get_settings()
 
 
 async def get_active_user_by_username(ctx: IContext, *, username: str) -> User | None:
@@ -39,6 +38,7 @@ async def authenticate_user(ctx: IContext, *, username: str, password: str) -> T
         raise credentials_error
     if not crypt.check_password(password=password, hashed_password=user.password):
         raise credentials_error
+    settings = get_settings()
     expire = datetime.now(timezone.utc) + timedelta(
         minutes=settings.token_expire_minutes
     )
@@ -54,6 +54,7 @@ async def check_access_token(
     request: Request,
     token: Annotated[str, Depends(oauth2_scheme)],
 ) -> AsyncGenerator[IContext, Any]:
+    settings = get_settings()
     try:
         async with get_sessionio() as session:
             payload = jwt.decode(
