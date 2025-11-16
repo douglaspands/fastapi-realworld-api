@@ -14,9 +14,9 @@ from app.resources.person_resource import (
     UpdatePersonOptional,
 )
 from app.services.auth_service import check_access_token
-from tests.mocks.context_mock import ContextMock
-from tests.utils.http_client import HttpClient
-from tests.utils.utils import snake_to_camel
+from tests.unit.mocks.context_mock import ContextMock
+from tests.unit.utils.http_client import HttpClient
+from tests.unit.utils.utils import snake_to_camel
 
 fake = Faker("pt_BR")
 Faker.seed(0)

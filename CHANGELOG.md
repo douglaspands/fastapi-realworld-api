@@ -11,13 +11,13 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 - Context: Criação de interface
 - README: Inclusão da seção de qualidade de código;
 - README: Inclusão da seção de Kubernetes;
-- Teste Integrado: Dominio de User; [AGUARDANDO]
-- Teste Integrado: Dominio de Person; [AGUARDANDO]
-- Teste Integrado: Dominio de Auth; [AGUARDANDO]
+- Teste Integrado: Dominio de User;
+- Teste Integrado: Dominio de Person;
+- Teste Integrado: Dominio de Auth;
 - K8S: Inclusão do manifesto de deployment;
 - K8S: Inclusão do manifesto de service;
 - K8S: Inclusão do manifesto de hpa;
-- DB: Inclusão do client de PostgreSQL; [AGUARDANDO]
+- DB: Inclusão do client de PostgreSQL;
 
 ### Modificado
 

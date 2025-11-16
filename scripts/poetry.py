@@ -32,8 +32,13 @@ def _print(msg: str, is_error: bool = False):
         console.print(f"\n[green]{msg}[/green]\n")
 
 
-def test():
-    cmd = "pytest -vv tests"
+def unit_test():
+    cmd = "pytest -vv -ra -q --cov=app --cov-report html --cov-fail-under=85 tests/unit"
+    _shell(cmd)
+
+
+def integration_test():
+    cmd = "pytest -vv -ra -q tests/integration"
     _shell(cmd)
 
 

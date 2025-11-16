@@ -52,17 +52,15 @@ class Context(IContext):
         return self._request
 
 
-async def get_context_with_request(
-    request: Request,
-) -> AsyncGenerator[Context, Any]:
+@asynccontextmanager
+async def get_context(request: Request | None = None) -> AsyncGenerator[Context, Any]:
     async with get_sessionio() as session:
         yield Context(session=session, request=request)
 
 
-@asynccontextmanager
-async def get_context() -> AsyncGenerator[Context, Any]:
-    async with get_sessionio() as session:
-        yield Context(session=session, request=None)
+async def get_context_with_request(request: Request) -> AsyncGenerator[Context, Any]:
+    async with get_context(request=request) as ctx:
+        yield ctx
 
 
 __all__ = ("IContext", "Context", "get_context_with_request", "get_context")

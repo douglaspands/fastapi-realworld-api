@@ -13,7 +13,7 @@ from app.resources.person_resource import (
     UpdatePersonOptional,
 )
 from app.services import person_service
-from tests.mocks.context_mock import ContextMock
+from tests.unit.mocks.context_mock import ContextMock
 
 fake = Faker("pt_BR")
 Faker.seed(0)

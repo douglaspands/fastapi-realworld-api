@@ -17,7 +17,7 @@ from app.resources.user_resource import (
 )
 from app.services import user_service
 from app.services.auth_service import crypt
-from tests.mocks.context_mock import ContextMock
+from tests.unit.mocks.context_mock import ContextMock
 
 fake = Faker("pt_BR")
 Faker.seed(0)

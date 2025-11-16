@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError, NoResultFound
 from app.models.user_model import User
 from app.repositories import user_repository
 from app.services.auth_service import crypt
-from tests.mocks.context_mock import ContextMock
+from tests.unit.mocks.context_mock import ContextMock
 
 fake = Faker("pt_BR")
 Faker.seed(0)

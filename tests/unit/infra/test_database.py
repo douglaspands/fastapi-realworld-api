@@ -4,7 +4,7 @@ from sqlalchemy.exc import OperationalError
 from app.infra.database import get_sessionio
 from app.infra.settings import DatabaseDsn, Settings
 from app.repositories import person_repository
-from tests.mocks.context_mock import ContextMock
+from tests.unit.mocks.context_mock import ContextMock
 
 
 @pytest.mark.asyncio

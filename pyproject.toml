@@ -3,7 +3,7 @@ name = "fastapi-realworld-api"
 version = "0.4.0"
 description = ""
 authors = [
-    {name = "Douglas Panhota",email = "douglaspands@gmail.com"}
+    {name = "Douglas Panhota", email = "douglaspands@gmail.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.13,<3.15"
@@ -43,7 +43,7 @@ packages = [{include = "app"}]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-ra -q --cov=app --cov-report html --cov-fail-under=85"
+addopts = "-ra -q"
 python_files = "test_*.py"
 # testpaths = "tests"
 norecursedirs = ["__pycache__"]
@@ -67,7 +67,8 @@ exclude_also = [
 server = 'scripts.poetry:server'
 lint = 'scripts.poetry:lint'
 format = 'scripts.poetry:format'
-test = 'scripts.poetry:test'
+unit_test = 'scripts.poetry:unit_test'
+integration_test = 'scripts.poetry:integration_test'
 build = 'scripts.poetry:build'
 # migrations
 migrate = 'scripts.poetry:migrate'

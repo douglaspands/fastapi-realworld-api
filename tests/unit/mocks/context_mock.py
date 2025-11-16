@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any, Self, Type, cast
 
 from app.infra.context import IContext
-from tests.mocks.async_session_mock import SessionIO, SessionIOMock
+from tests.unit.mocks.async_session_mock import SessionIO, SessionIOMock
 
 
 class ContextMock:
