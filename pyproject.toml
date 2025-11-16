@@ -43,7 +43,7 @@ packages = [{include = "app"}]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-ra -q --cov=server --cov-report html --cov-fail-under=85"
+addopts = "-ra -q --cov=app --cov-report html --cov-fail-under=85"
 python_files = "test_*.py"
 # testpaths = "tests"
 norecursedirs = ["__pycache__"]

@@ -51,7 +51,7 @@ async def create_user_and_person(
     responses=response_generator(
         status.HTTP_400_BAD_REQUEST,
         status.HTTP_401_UNAUTHORIZED,
-        status.HTTP_422_UNPROCESSABLE_ENTITY,
+        status.HTTP_422_UNPROCESSABLE_CONTENT,
         status.HTTP_500_INTERNAL_SERVER_ERROR,
     ),
 )

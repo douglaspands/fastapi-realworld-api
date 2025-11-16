@@ -5,9 +5,14 @@ from unittest.mock import AsyncMock, patch
 
 from faker import Faker
 
-from app.controllers.user_controller import UpdateUser, UpdateUserOptional
+from app.controllers.user_controller import (
+    UpdateUser,
+    UpdateUserOptional,
+    get_context_with_request,
+)
 from app.models.user_model import User as UserModel
 from app.services.auth_service import check_access_token, crypt
+from tests.mocks.context_mock import ContextMock
 from tests.utils.http_client import HttpClient
 from tests.utils.utils import snake_to_camel
 
@@ -43,6 +48,7 @@ def test_get_user_ok(
     response = httpclient.get(url)
 
     # THEN
+    print(f"{response.text=}")
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {
         "data": snake_to_camel(user_mock.model_dump(mode="json"))
@@ -230,7 +236,7 @@ def test_user_person_create_ok(
         updated_at=datetime_now,
         created_at=datetime_now,
     )
-    httpclient.current_app.dependency_overrides[check_access_token] = (
+    httpclient.current_app.dependency_overrides[get_context_with_request] = (
         lambda: ContextMock.context_session_mock()
     )
     user_service_mock.create_user_person.return_value = user_mock
@@ -240,6 +246,7 @@ def test_user_person_create_ok(
     response = httpclient.post(url, json=create_user_person)
 
     # THEN
+    print(f"{response.text=}")
     assert response.status_code == HTTPStatus.CREATED
     data: dict[str, Any] = response.json()["data"]
     assert not data.get("password")
@@ -263,7 +270,7 @@ def test_user_person_create_pw_no_match(
     }
 
     # MOCK
-    httpclient.current_app.dependency_overrides[check_access_token] = (
+    httpclient.current_app.dependency_overrides[get_context_with_request] = (
         lambda: ContextMock.context_session_mock()
     )
 
@@ -272,6 +279,7 @@ def test_user_person_create_pw_no_match(
     response = httpclient.post(url, json=create_user_person)
 
     # THEN
+    print(f"{response.text=}")
     assert response.status_code == HTTPStatus.BAD_REQUEST
     assert "passwords do not match" in response.text
 

@@ -15,7 +15,7 @@ SERVER_FOLDER = ROOT_FOLDER / "app"
 MIGRATION_FOLDER = ROOT_FOLDER / "migrations"
 TEST_FOLDER = ROOT_FOLDER / "tests"
 
-API_APP = f"{SERVER_FOLDER.name}.api:app"
+API_APP = f"{SERVER_FOLDER.name}.asgi:app"
 API_PORT = 5000
 API_WORKERS = 3
 
@@ -90,11 +90,7 @@ def make_migrations():
 
 def server():
     cmd = (
-        "uvicorn "
-        "--reload "
-        f"--reload-dir {SERVER_FOLDER!s} "
-        f"--port {API_PORT!s} "
-        f"{API_APP}"
+        f"uvicorn --reload --reload-dir {SERVER_FOLDER!s} --port {API_PORT!s} {API_APP}"
     )
     _shell(cmd)
 

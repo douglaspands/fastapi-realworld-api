@@ -6,6 +6,7 @@ from faker import Faker
 from app.infra.context import get_context_with_request
 from app.resources.token_resource import Token
 from app.services.auth_service import credentials_error
+from tests.mocks.context_mock import ContextMock
 from tests.utils.http_client import HttpClient
 
 fake = Faker("pt_BR")
@@ -33,6 +34,7 @@ def test_get_token_ok(
     response = httpclient.post(url, data={"username": username, "password": password})
 
     # THEN
+    print(f"{response.text=}")
     assert response.status_code == HTTPStatus.OK
     assert response.json() == token_mock.model_dump(mode="json")
 
@@ -57,4 +59,5 @@ def test_get_token_error(
     response = httpclient.post(url, data={"username": username, "password": password})
 
     # THEN
+    print(f"{response.text=}")
     assert response.status_code == HTTPStatus.UNAUTHORIZED

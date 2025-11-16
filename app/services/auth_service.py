@@ -33,7 +33,7 @@ async def get_active_user_by_username(ctx: IContext, *, username: str) -> User |
     return users[0]
 
 
-async def authenticate_user(ctx: IContext, username: str, password: str) -> Token:
+async def authenticate_user(ctx: IContext, *, username: str, password: str) -> Token:
     user = await get_active_user_by_username(ctx, username=username)
     if not user:
         raise credentials_error

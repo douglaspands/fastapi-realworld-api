@@ -60,7 +60,7 @@ async def get_context_with_request(
 
 
 @asynccontextmanager
-async def get_context():
+async def get_context() -> AsyncGenerator[Context, Any]:
     async with get_sessionio() as session:
         yield Context(session=session, request=None)
 

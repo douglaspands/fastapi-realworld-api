@@ -130,7 +130,7 @@ def test_get_person_internal_app_error(
     response = httpclient.get(url)
 
     # THEN
-    assert response.status_code == HTTPStatus.INTERNAL_app_ERROR
+    assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
     assert message_error in get(response.json(), "errors[0].message")
 
 

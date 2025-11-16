@@ -22,5 +22,5 @@ class NotFoundError(BaseError):
 class BusinessError(BaseError):
     def __init__(self: Self, message: str):
         super().__init__(
-            http_status=status.HTTP_422_UNPROCESSABLE_ENTITY, message=message
+            http_status=status.HTTP_422_UNPROCESSABLE_CONTENT, message=message
         )
