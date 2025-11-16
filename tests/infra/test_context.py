@@ -1,10 +1,11 @@
 from typing import cast
+from unittest.mock import patch
 
 import pytest
 from faker import Faker
 from fastapi import Request
 
-from app.infra.context import Context, get_context_with_request
+from app.infra.context import Context, get_context, get_context_with_request
 from app.infra.settings import DatabaseDsn, Settings
 from app.resources.user_resource import User
 from tests.mocks.async_session_mock import SessionIO, SessionIOMock
@@ -87,3 +88,11 @@ def test_context_not_request():
         ctx.request
     # THEN
     assert "request not found" in str(exc_info.value)
+
+
+async def test_get_context():
+    with patch("app.infra.context.get_sessionio", new=lambda: SessionIOMock()) as _:
+        async with get_context() as context:
+            # Assert
+            assert isinstance(context, Context)
+            assert isinstance(context.session, SessionIOMock)
