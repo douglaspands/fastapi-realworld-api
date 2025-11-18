@@ -2,11 +2,11 @@ from typing import Annotated, Sequence
 
 from fastapi import APIRouter, Depends, Response, status
 
-from app.core.context import Context, get_context_with_request
-from app.core.exceptions import NoContentError
-from app.core.openapi import response_generator
-from app.core.schema import ResponseOK
 from app.enums.openapi_enum import OpenApiTagEnum
+from app.infra.context import IContext, get_context_with_request
+from app.infra.exceptions import NoContentError
+from app.infra.openapi import response_generator
+from app.infra.schema import ResponseOK
 from app.resources.user_resource import (
     CreateUserPerson,
     UpdateUser,
@@ -34,12 +34,13 @@ router = APIRouter(
     ),
 )
 async def create_user_and_person(
-    ctx: Annotated[Context, Depends(get_context_with_request)],
+    ctx: Annotated[IContext, Depends(get_context_with_request)],
     user_person_create: CreateUserPerson,
 ):
-    data = await user_service.create_user_person(
-        ctx=ctx, user_person_create=user_person_create
-    )
+    async with ctx.session.begin():
+        data = await user_service.create_user_person(
+            ctx, user_person_create=user_person_create
+        )
     return ResponseOK(data=data)
 
 
@@ -50,18 +51,19 @@ async def create_user_and_person(
     responses=response_generator(
         status.HTTP_400_BAD_REQUEST,
         status.HTTP_401_UNAUTHORIZED,
-        status.HTTP_422_UNPROCESSABLE_ENTITY,
+        status.HTTP_422_UNPROCESSABLE_CONTENT,
         status.HTTP_500_INTERNAL_SERVER_ERROR,
     ),
 )
 async def update_user_password(
-    ctx: Annotated[Context, Depends(check_access_token)],
+    ctx: Annotated[IContext, Depends(check_access_token)],
     user_id: int,
     update_password: UpdateUserPassword,
 ):
-    data = await user_service.change_password(
-        ctx=ctx, user_id=user_id, update_password=update_password
-    )
+    async with ctx.session.begin():
+        data = await user_service.change_password(
+            ctx, user_id=user_id, update_password=update_password
+        )
     return ResponseOK(data=data)
 
 
@@ -75,7 +77,7 @@ async def update_user_password(
         status.HTTP_500_INTERNAL_SERVER_ERROR,
     ),
 )
-async def get_user(ctx: Annotated[Context, Depends(check_access_token)], user_id: int):
+async def get_user(ctx: Annotated[IContext, Depends(check_access_token)], user_id: int):
     data = await user_service.get_user(ctx, user_id=user_id)
     return ResponseOK(data=data)
 
@@ -90,7 +92,7 @@ async def get_user(ctx: Annotated[Context, Depends(check_access_token)], user_id
         status.HTTP_500_INTERNAL_SERVER_ERROR,
     ),
 )
-async def get_all_users(ctx: Annotated[Context, Depends(check_access_token)]):
+async def get_all_users(ctx: Annotated[IContext, Depends(check_access_token)]):
     data = await user_service.get_all_users(ctx)
     if not data:
         raise NoContentError()
@@ -108,11 +110,14 @@ async def get_all_users(ctx: Annotated[Context, Depends(check_access_token)]):
     ),
 )
 async def update_user(
-    ctx: Annotated[Context, Depends(check_access_token)],
+    ctx: Annotated[IContext, Depends(check_access_token)],
     user_id: int,
     update_user: UpdateUser,
 ):
-    data = await user_service.update_user(ctx, user_id=user_id, update_user=update_user)
+    async with ctx.session.begin():
+        data = await user_service.update_user(
+            ctx, user_id=user_id, update_user=update_user
+        )
     return ResponseOK(data=data)
 
 
@@ -127,13 +132,14 @@ async def update_user(
     ),
 )
 async def update_user_optional(
-    ctx: Annotated[Context, Depends(check_access_token)],
+    ctx: Annotated[IContext, Depends(check_access_token)],
     user_id: int,
     update_user: UpdateUserOptional,
 ):
-    data = await user_service.update_user_optional(
-        ctx, user_id=user_id, update_user=update_user
-    )
+    async with ctx.session.begin():
+        data = await user_service.update_user_optional(
+            ctx, user_id=user_id, update_user=update_user
+        )
     return ResponseOK(data=data)
 
 
@@ -148,9 +154,10 @@ async def update_user_optional(
     ),
 )
 async def delete_user(
-    ctx: Annotated[Context, Depends(check_access_token)], user_id: int
+    ctx: Annotated[IContext, Depends(check_access_token)], user_id: int
 ):
-    await user_service.delete_user(ctx, user_id=user_id)
+    async with ctx.session.begin():
+        await user_service.delete_user(ctx, user_id=user_id)
     return
 
 

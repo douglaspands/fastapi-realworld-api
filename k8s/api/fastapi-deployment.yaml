@@ -33,17 +33,15 @@ spec:
             cpu: "500m"
         command: 
         - "uvicorn"
-        - "app.api:app"        
-        - "--workers"
-        - "3"
+        - "app.asgi:app"        
         - "--host"
         - "0.0.0.0"
         - "--port"
-        - "80"
+        - "8000"
         - "--root-path" 
         - "/realworld/api"
         ports:
-        - containerPort: 80
+        - containerPort: 8000
         env:
         - name: db_url
           valueFrom:

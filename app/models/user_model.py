@@ -21,19 +21,21 @@ class User(SQLModel, table=True):
     person: Person = Relationship()
     # timestamp
     created_at: datetime | None = Field(
+        default=None,
         sa_column=Column(
             DateTime,
             default=lambda: datetime.now(timezone.utc),
             nullable=False,
-        )
+        ),
     )
     updated_at: datetime | None = Field(
+        default=None,
         sa_column=Column(
             DateTime,
             default=lambda: datetime.now(timezone.utc),
             onupdate=lambda: datetime.now(timezone.utc),
             nullable=False,
-        )
+        ),
     )
 
 

@@ -5,9 +5,9 @@ services:
     build: 
       dockerfile: Dockerfile
       context: .
-    command: uvicorn app.api:app --workers 3 --host 0.0.0.0 --port 80
+    command: uvicorn app.asgi:app --workers 3 --host 0.0.0.0 --port 8000
     ports:
-    - "5000:80"
+    - "8000:8000"
     environment:
     # - db_url=sqlite+aiosqlite:///database.db
     - db_url=postgresql+psycopg://fastapi_user:123456@fastapi-realword-db:5432/fastapi
