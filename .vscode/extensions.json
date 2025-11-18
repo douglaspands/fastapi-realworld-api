@@ -6,6 +6,7 @@
         "njpwerner.autodocstring",
         "diogonolasco.pyinit",
         "kevinrose.vsc-python-indent",
-        "mgesbert.python-path"
+        "mgesbert.python-path",
+        "ms-kubernetes-tools.vscode-kubernetes-tools"
     ]
 }

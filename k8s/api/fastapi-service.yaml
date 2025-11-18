@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fastapi-service
+  namespace: realworld
+  labels:
+    app: fastapi-service
+spec:
+  type: ClusterIP
+  selector:
+    app: fastapi-deploy
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000

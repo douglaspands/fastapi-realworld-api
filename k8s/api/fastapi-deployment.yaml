@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-deploy
+  namespace: realworld
+  labels:
+    app: fastapi-deploy  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastapi-deploy
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: fastapi-deploy
+    spec:
+      containers:
+      - name: fastapi-pod
+        image: localhost:32000/fastapi-realword-api:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        command: 
+        - "uvicorn"
+        - "app.asgi:app"        
+        - "--host"
+        - "0.0.0.0"
+        - "--port"
+        - "8000"
+        - "--root-path" 
+        - "/realworld/api"
+        ports:
+        - containerPort: 8000
+        env:
+        - name: db_url
+          valueFrom:
+            secretKeyRef:
+              name: fastapi-secret
+              key: db_url
+        - name: token_secret_key
+          valueFrom:
+            configMapKeyRef:
+              name: fastapi-config
+              key: token_secret_key

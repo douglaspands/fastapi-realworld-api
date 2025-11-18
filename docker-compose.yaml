@@ -1,0 +1,43 @@
+services:
+  fastapi-realword-api:
+    image: localhost:32000/fastapi-realword-api:latest
+    container_name: fastapi-realword-api
+    build: 
+      dockerfile: Dockerfile
+      context: .
+    command: uvicorn app.asgi:app --workers 3 --host 0.0.0.0 --port 8000
+    ports:
+    - "8000:8000"
+    environment:
+    # - db_url=sqlite+aiosqlite:///database.db
+    - db_url=postgresql+psycopg://fastapi_user:123456@fastapi-realword-db:5432/fastapi
+    - db_debug=1
+    - token_secret_key=09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7
+    networks:
+    - fastapi-realword-network
+
+  fastapi-realword-db:
+    image: postgres:16.4-bookworm
+    container_name: fastapi-realword-db
+    command: ["postgres", "-c", "log_statement=all", "-c", "log_destination=stderr", "-c", "log_duration=on"]
+    shm_size: 128mb
+    ports:
+    - "5432:5432"
+    volumes:
+    - fastapi-realword-pgdata:/var/lib/postgresql/data
+    - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: fastapi
+    networks:
+    - fastapi-realword-network
+
+volumes:
+  fastapi-realword-pgdata:
+    name: fastapi-realword-pgdata
+  
+networks:
+  fastapi-realword-network:
+    name: fastapi-realword-network

@@ -1,0 +1,59 @@
+from typing import Any
+
+from sqlmodel import select
+
+from app.infra import utils
+from app.infra.context import IContext
+from app.models.person_model import Person
+
+
+async def create(ctx: IContext, *, person: Person) -> Person:
+    ctx.session.add(person)
+    return person
+
+
+async def get(ctx: IContext, *, pk: int) -> Person:
+    statement = select(Person).where(Person.id == pk)
+    result = await ctx.session.exec(statement)
+    return result.one()
+
+
+async def get_all(ctx: IContext, *, limit: int = 250, **values: Any) -> list[Person]:
+    statement = select(Person).filter_by(**values).limit(limit)
+    result = await ctx.session.exec(statement)
+    return list(result.all())
+
+
+async def update(ctx: IContext, *, pk: int, **values: Any) -> Person:
+    utils.repository_columns_can_update(values)
+    person = await get(ctx, pk=pk)
+    person.sqlmodel_update(values)
+    ctx.session.add(person)
+    return person
+
+
+async def delete(ctx: IContext, *, pk: int):
+    person = await get(ctx, pk=pk)
+    await ctx.session.delete(person)
+
+
+async def get_or_create(ctx: IContext, *, person: Person) -> Person:
+    person_ = await get_all(
+        ctx,
+        limit=1,
+        first_name=person.first_name,
+        last_name=person.last_name,
+    )
+    if person_:
+        return person_[0]
+    return await create(ctx, person=person)
+
+
+__all__ = (
+    "get",
+    "get_all",
+    "create",
+    "update",
+    "delete",
+    "get_or_create",
+)

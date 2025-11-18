@@ -1,4 +1,4 @@
-# fastapi-realworld-api
+# fastapi-realworld-api [EM DESENVOLVIMENTO]
 Exemplo de projeto com `FastAPI` e `SQLModel` usando `async/await` utilizado no mundo real.   
 Meu desejo é apresentar um motor de API REST utilizando o que considero que tem de melhor no universo Python. `[MINHA OPINIÃO]`
 
@@ -39,6 +39,107 @@ Após iniciado, o `OpenAPI Specification` da aplicação estará disponivel em 2
 - [http://localhost:5000/docs](http://localhost:5000/docs)
 - [http://localhost:5000/redoc](http://localhost:5000/redoc)
 
-## Changelog
+## Qualidade
+Para executar os comandos a seguir, é necessario ter as [dependencias instaladas](#1-instalar-dependencias).
 
+### Validação de código (Linter)
+```sh
+poetry run lint
+```
+
+### Testes unitarios
+```sh
+poetry run test
+``` 
+
+### Build
+```sh
+poetry run build
+```
+> São executados: [validação de codigo](#validação-de-código-linter) e [testes unitarios](#testes-unitarios).
+
+## Docker-Compose
+Iniciar a aplicação com o comando:
+```sh
+docker compose up
+```
+| Será feito o build caso seja a primeira vez.
+
+Executar os scripts de `migração` com o seguinte comando:
+```sh
+docker exec -it fastapi-realword-api bash -c 'DB_ROOT_URL="postgresql+psycopg://postgres:docker@fastapi-realword-db:5432/fastapi" alembic upgrade head'
+```
+
+## Kubernetes
+Os manifestos deste projeto foram desenvolvidos e testados utilizando [microK8s](https://microk8s.io/).
+
+### Namespaces
+```sh
+kubectl create namespace realworld
+```
+
+### Iniciar
+1. Criar namespace:
+```
+kubectl apply -f k8s/common
+```
+2. Criar e configurar o banco de dados:
+```
+kubectl apply -f k8s/db
+```
+Assim que o banco estiver ativo, criar um `port-forward` para acessar o banco de dados:
+```sh
+kubectl -n realworld port-forward pod/postgres-deploy 5432:5432
+```
+| `pod/postgres-deploy` é um exemplo de nome para o pod.
+
+Com sua IDE favorita do Postgres, execute os seguintes comandos:
+```sql
+CREATE DATABASE fastapi;
+CREATE USER fastapi_user WITH PASSWORD '123456';
+GRANT CONNECT ON DATABASE fastapi TO fastapi_user;
+GRANT USAGE ON SCHEMA public TO fastapi_user;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO fastapi_user;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO fastapi_user;
+GRANT ALL ON ALL FUNCTIONS IN SCHEMA public TO fastapi_user;
+```
+
+3. Iniciar API:
+```
+kubectl apply -f k8s/api
+```
+
+4. Executar as migrações:
+```sh
+kubectl -n realworld exec pod/fastapi-deploy -- bash -c 'DB_ROOT_URL="postgresql+psycopg://postgres:docker@postgres-service.realworld.svc.cluster.local:5432/fastapi" alembic upgrade head'
+```
+| `pod/fastapi-deploy` é um exemplo de nome para o pod.
+
+### DNS
+```yaml
+api: fastapi-service.realworld.svc.cluster.local:3000
+db: postgres-service.realworld.svc.cluster.local:5432
+```
+
+## Dicas
+### MicroK8s? Serviços que precisam ser iniciados
+```sh
+microk8s enable dashboard
+microk8s enable dns
+microk8s enable registry
+microk8s enable ingress
+```
+
+### Verificar DNS da API
+```sh
+kubectl -n realworld run mycurlpod --image=curlimages/curl -i --tty -- sh
+```
+execute o comando:
+```sh
+curl -i http://fastapi-service.realworld.svc.cluster.local:4000/docs
+
+```
+
+
+## Changelog
 Todas as notas de alteração deste projeto serão documentados no [CHANGELOG.md](./CHANGELOG.md).

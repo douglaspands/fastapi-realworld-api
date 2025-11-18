@@ -10,9 +10,12 @@ from . import message
 
 console = Console()
 
-SERVER_FOLDER = Path.cwd() / "server"
-TEST_FOLDER = Path.cwd() / "tests"
-API_APP = "server.api:app"
+ROOT_FOLDER = Path(__file__).parent.parent
+SERVER_FOLDER = ROOT_FOLDER / "app"
+MIGRATION_FOLDER = ROOT_FOLDER / "migrations"
+TEST_FOLDER = ROOT_FOLDER / "tests"
+
+API_APP = f"{SERVER_FOLDER.name}.asgi:app"
 API_PORT = 5000
 API_WORKERS = 3
 
@@ -29,8 +32,13 @@ def _print(msg: str, is_error: bool = False):
         console.print(f"\n[green]{msg}[/green]\n")
 
 
-def test():
-    cmd = "pytest -vv tests"
+def unit_test():
+    cmd = "pytest -vv -ra -q --cov=app --cov-report html --cov-fail-under=85 tests/unit"
+    _shell(cmd)
+
+
+def integration_test():
+    cmd = "pytest -vv -ra -q tests/integration"
     _shell(cmd)
 
 
@@ -48,7 +56,7 @@ def lint():
 
 def format():
     cmd = "ruff format {folder}"
-    folders = " ".join((str(SERVER_FOLDER), str(TEST_FOLDER)))
+    folders = " ".join((str(SERVER_FOLDER), str(TEST_FOLDER), str(MIGRATION_FOLDER)))
     _shell(cmd.format(folder=folders))
 
 
@@ -87,11 +95,7 @@ def make_migrations():
 
 def server():
     cmd = (
-        "uvicorn "
-        "--reload "
-        f"--reload-dir {quote(str(SERVER_FOLDER))} "
-        f"--port {API_PORT} "
-        f"{API_APP}"
+        f"uvicorn --reload --reload-dir {SERVER_FOLDER!s} --port {API_PORT!s} {API_APP}"
     )
     _shell(cmd)
 
@@ -101,7 +105,27 @@ def prodution_server():
         "gunicorn "
         f"--workers {API_WORKERS} "
         "--worker-class uvicorn.workers.UvicornWorker "
-        f"--bind 0.0.0.0:{API_PORT} "
+        f"--bind 0.0.0.0:{API_PORT!s} "
         f"{API_APP}"
     )
+    _shell(cmd)
+
+
+def make_requirements():
+    cmd = "poetry export -f requirements.txt --without-hashes --output requirements.txt"
+    _shell(cmd)
+
+
+def docker_build():
+    cmd = "docker compose -f scripts/docker-compose.yaml build"
+    _shell(cmd)
+
+
+def compose_up():
+    cmd = "docker compose -f scripts/docker-compose.yaml up"
+    _shell(cmd)
+
+
+def deployment_apply():
+    cmd = "kubectl deployment apply scripts/deployment.yaml"
     _shell(cmd)

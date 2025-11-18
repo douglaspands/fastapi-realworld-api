@@ -1,7 +1,6 @@
 # Changelog
 
-Todas as notas de alteração deste projeto serão documentados neste arquivo.
-
+Todas as notas de alteração deste projeto serão documentados neste arquivo.   
 O formato é baseado no [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/spec/v2.0.0.html).
 
@@ -9,9 +8,29 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 
 ### Adicionado
 
-- Teste Integrador: Dominio de User; [AGUARDANDO]
-- Teste Integrador: Dominio de Person; [AGUARDANDO]
-- Teste Integrador: Dominio de Auth; [AGUARDANDO]
+- Context: Criação de interface
+- README: Inclusão da seção de qualidade de código;
+- README: Inclusão da seção de Kubernetes;
+- Teste Integrado: Dominio de User;
+- Teste Integrado: Dominio de Person;
+- Teste Integrado: Dominio de Auth;
+- K8S: Inclusão do manifesto de deployment;
+- K8S: Inclusão do manifesto de service;
+- K8S: Inclusão do manifesto de hpa;
+- DB: Inclusão do client de PostgreSQL;
+
+### Modificado
+
+- O Contexto passa por todas as funções.
+- Utilização do poetry > 2.0 e as mudanças no `pyproject.toml`;
+- Modificado a versão para `0.4.0` do `pyproject.toml`;
+- Modificado a versão para `0.4.0` do `core/settings.py`;
+- Migração: Quando for PostgreSQL, executar GRANT para usuario da API; [AGUARDANDO]
+
+## [0.3.0] - 2024-11-15
+- Modificado a versão para `0.3.0` do `pyproject.toml`;
+- Modificado a versão para `0.3.0` do `core/settings.py`;
+- Pasta raiz da aplicação mudou de `server` para `app`;
 
 ## [0.2.0] - 2024-05-23
 

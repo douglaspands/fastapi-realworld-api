@@ -12,6 +12,8 @@ import sqlalchemy as sa
 import sqlmodel
 from alembic import op
 
+from migrations import db
+
 revision: str = "9ac51557c8fd"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
@@ -30,6 +32,7 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
     )
     # ### end Alembic commands ###
+    db.grant()
 
 
 def downgrade() -> None:
