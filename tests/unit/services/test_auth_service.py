@@ -21,7 +21,9 @@ class RequestMock:
 
 @pytest.fixture
 @patch("app.services.auth_service.user_repository", new_callable=AsyncMock)
-async def token_mock(user_repository_mock: AsyncMock) -> Token:
+async def token_mock(
+    user_repository_mock: AsyncMock,
+) -> Token:
     username = "abc.xyz"
     password = "asdfgh123456"
     users_mock = [
@@ -44,7 +46,9 @@ async def token_mock(user_repository_mock: AsyncMock) -> Token:
 
 @pytest.mark.asyncio
 @patch("app.services.auth_service.user_repository", new_callable=AsyncMock)
-async def test_authenticate_user_ok(user_repository_mock: AsyncMock):
+async def test_authenticate_user_ok(
+    user_repository_mock: AsyncMock,
+):
     # GIVEN
     username = fake.user_name()
     password = fake.password(8)
@@ -75,7 +79,9 @@ async def test_authenticate_user_ok(user_repository_mock: AsyncMock):
 
 @pytest.mark.asyncio
 @patch("app.services.auth_service.user_repository", new_callable=AsyncMock)
-async def test_authenticate_user_not_found(user_repository_mock: AsyncMock):
+async def test_authenticate_user_not_found(
+    user_repository_mock: AsyncMock,
+):
     # GIVEN
     username = fake.user_name()
     password = fake.password(8)
@@ -126,7 +132,8 @@ async def test_authenticate_user_error_password_invalid(
 @pytest.mark.asyncio
 @patch("app.services.auth_service.user_repository", new_callable=AsyncMock)
 async def test_check_access_token_ok(
-    user_repository_mock: AsyncMock, token_mock: Token
+    user_repository_mock: AsyncMock,
+    token_mock: Token,
 ):
     # GIVEN
     username = "abc.xyz"
@@ -157,7 +164,8 @@ async def test_check_access_token_ok(
 @pytest.mark.asyncio
 @patch("app.services.auth_service.user_repository", new_callable=AsyncMock)
 async def test_check_access_token_not_found(
-    user_repository_mock: AsyncMock, token_mock: Token
+    user_repository_mock: AsyncMock,
+    token_mock: Token,
 ):
     # MOCK
     request_mock = cast(Request, RequestMock())
@@ -177,7 +185,9 @@ async def test_check_access_token_not_found(
 
 @pytest.mark.asyncio
 @patch("app.services.auth_service.user_repository", new_callable=AsyncMock)
-async def test_check_access_token_invalid(user_repository_mock: AsyncMock):
+async def test_check_access_token_invalid(
+    user_repository_mock: AsyncMock,
+):
     # MOCK
     request_mock = cast(Request, RequestMock())
     user_repository_mock.get_all.return_value = []

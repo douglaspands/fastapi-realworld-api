@@ -12,9 +12,14 @@ if TYPE_CHECKING:
 
 
 class IContext(Protocol):
-    session: SessionIO
-    user: User
-    request: Request
+    @property
+    def session(self: Self) -> SessionIO: ...
+
+    @property
+    def user(self: Self) -> User: ...
+
+    @property
+    def request(self: Self) -> Request: ...
 
 
 class Context(IContext):
