@@ -6,7 +6,6 @@ from faker import Faker
 from fastapi import Request
 
 from app.infra.context import Context, get_context, get_context_with_request
-from app.infra.settings import DatabaseDsn, Settings
 from app.resources.user_resource import User
 from tests.unit.mocks.async_session_mock import SessionIO, SessionIOMock
 
@@ -19,9 +18,8 @@ class RequestMock:
 
 
 @pytest.mark.asyncio
-async def test_get_context_with_request_ok(settings: Settings):
+async def test_get_context_with_request_ok():
     # GIVEN
-    settings.db_url = DatabaseDsn(r"sqlite+aiosqlite://")
     request_mock = cast(Request, RequestMock())
     # WHEN
     async for context in get_context_with_request(request=request_mock):

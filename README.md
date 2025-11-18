@@ -49,7 +49,7 @@ poetry run lint
 
 ### Testes unitarios
 ```sh
-poetry run test
+poetry run unit_test
 ``` 
 
 ### Build

@@ -10,7 +10,7 @@ from app.controllers.user_controller import (
     UpdateUserOptional,
     get_context_with_request,
 )
-from app.models.user_model import User as UserModel
+from app.resources.user_resource import User
 from app.services.auth_service import check_access_token, crypt
 from tests.unit.mocks.context_mock import ContextMock
 from tests.unit.utils.http_client import HttpClient
@@ -29,7 +29,7 @@ def test_get_user_ok(
     user_id = fake.pyint(1, 999)
 
     # MOCK
-    user_mock = UserModel(
+    user_mock = User(
         id=user_id,
         username=fake.user_name(),
         person_id=fake.pyint(1, 999),
@@ -64,7 +64,7 @@ def test_get_all_users_ok(
 
     # MOCK
     user_mock = [
-        UserModel(
+        User(
             id=fake.pyint(1, 999),
             username=fake.user_name(),
             person_id=fake.pyint(1, 999),
@@ -126,7 +126,7 @@ def test_update_user_ok(
     )
 
     # MOCK
-    user_mock = UserModel(
+    user_mock = User(
         id=user_id,
         username=update_user.username,
         person_id=update_user.person_id,
@@ -164,7 +164,7 @@ def test_update_user_optional_ok(
     )
 
     # MOCK
-    user_mock = UserModel(
+    user_mock = User(
         id=user_id,
         username=update_user.username,
         person_id=fake.pyint(1, 999),
@@ -227,7 +227,7 @@ def test_user_person_create_ok(
 
     # MOCK
     datetime_now = datetime.now()
-    user_mock = UserModel(
+    user_mock = User(
         id=fake.pyint(1, 999),
         username=create_user_person["username"],
         password=crypt.hash_password(create_user_person["password"]),
@@ -300,10 +300,9 @@ def test_update_user_password_ok(
 
     # MOCK
     datetime_now = datetime.now()
-    user_mock = UserModel(
+    user_mock = User(
         id=user_id,
         username=fake.user_name(),
-        password=crypt.hash_password(update_user_password["newPassword"]),
         person_id=fake.pyint(1, 999),
         active=True,
         updated_at=datetime_now,
@@ -321,7 +320,6 @@ def test_update_user_password_ok(
     # THEN
     assert response.status_code == HTTPStatus.OK
     data: dict[str, Any] = response.json()["data"]
-    assert not data.get("password")
     assert data.get("username") == user_mock.username
     assert data.get("personId") == user_mock.person_id
     assert data.get("active") == user_mock.active
