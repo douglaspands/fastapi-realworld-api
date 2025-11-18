@@ -17,7 +17,7 @@ def sessionio_maker() -> async_sessionmaker[SessionIO]:
     config = get_settings()
     session_local = async_sessionmaker(
         bind=create_async_engine(
-            url=str(config.db_url),
+            url=config.db_url,
             echo=config.db_debug,
         ),
         class_=SessionIO,

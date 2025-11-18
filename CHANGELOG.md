@@ -6,6 +6,14 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 
 ## [Não Lançado]
 
+## [0.5.0] - 2024-11-15
+
+### Adicionado
+
+- Foi criado o tipo de variavel `DatabaseDsn` para validar DSN de banco de dados.
+
+## [0.4.0] - 2024-11-17
+
 ### Adicionado
 
 - Context: Criação de interface
