@@ -12,7 +12,7 @@ from app.infra.types import DatabaseDsn
 class Settings(BaseSettings):
     # app
     app_name: str = "FastAPI RealWorld API"
-    app_version: str = "0.5.0"
+    app_version: str = "0.5.1"
 
     # openapi_doc
     openapi_description: str = (

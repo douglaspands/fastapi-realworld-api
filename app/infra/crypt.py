@@ -9,7 +9,7 @@ class CryptInterface(Protocol):
     def hash_password(self: Self, password: str) -> str: ...
 
 
-class PasslibCore(CryptInterface):
+class CryptCore(CryptInterface):
     def __init__(self: Self):
         self._pw_context = PasswordHash.recommended()
 
@@ -22,7 +22,7 @@ class PasslibCore(CryptInterface):
 
 @cache
 def get_crypt() -> CryptInterface:
-    return PasslibCore()
+    return CryptCore()
 
 
 __all__ = (
