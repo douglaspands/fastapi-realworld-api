@@ -6,6 +6,8 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 
 ## [Não Lançado]
 
+## [0.5.2] - 2024-11-30
+
 ### Modificado
 
 - Modificado a porta do service de `8000` para `8080`;
@@ -16,7 +18,6 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 - Incluido arquivo `main.py`;
 - Dockerfile: Configuração de build para produção com usuario non-root;
 - K8s: Inclusão do manifesto de `kustomization.yaml` para sequenciar a execução do inicialização da aplicação;
-
 
 ## [0.5.1] - 2024-11-17
 
