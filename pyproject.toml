@@ -1,10 +1,8 @@
 [project]
 name = "fastapi-realworld-api"
-version = "0.5.1"
-description = ""
-authors = [
-    {name = "Douglas Panhota", email = "douglaspands@gmail.com"}
-]
+version = "0.5.2"
+description = "Exemplo de projeto com FastAPI e SQLModel usando async/await"
+authors = [{ name = "Douglas Panhota", email = "douglaspands@gmail.com" }]
 readme = "README.md"
 requires-python = ">=3.13,<3.15"
 dependencies = [
@@ -17,7 +15,7 @@ dependencies = [
     "python-multipart (>=0.0.20,<0.0.21)",
     "alembic (>=1.17.2,<2.0.0)",
     "psycopg[binary,pool] (>=3.2.12,<4.0.0)",
-    "pwdlib[argon2] (>=0.3.0,<0.4.0)"
+    "pwdlib[argon2] (>=0.3.0,<0.4.0)",
 ]
 
 [build-system]
@@ -36,11 +34,11 @@ dev = [
     "faker (>=38.0.0,<39.0.0)",
     "httpx (>=0.28.1,<0.29.0)",
     "types-passlib (>=1.7.7.20250602,<2.0.0.0)",
-    "types-python-jose (>=3.5.0.20250531,<4.0.0.0)"
+    "types-python-jose (>=3.5.0.20250531,<4.0.0.0)",
 ]
 
 [tool.poetry]
-packages = [{include = "app"}]
+packages = [{ include = "app" }]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
@@ -62,7 +60,7 @@ exclude_also = [
     "if TYPE_CHECKING:",
     "class .*\\bProtocol\\):",
     "@(abc\\.)?abstractmethod",
-    ]
+]
 
 [tool.mypy]
 plugins = ["pydantic.mypy"]

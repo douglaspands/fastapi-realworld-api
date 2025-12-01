@@ -14,8 +14,8 @@
                 "--reload-dir",
                 "app",
                 "--port",
-                "5000",
-                "app.api:app",
+                "8000",
+                "main:app",
             ],
             "jinja": true
         },

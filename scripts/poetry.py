@@ -15,8 +15,8 @@ SERVER_FOLDER = ROOT_FOLDER / "app"
 MIGRATION_FOLDER = ROOT_FOLDER / "migrations"
 TEST_FOLDER = ROOT_FOLDER / "tests"
 
-API_APP = f"{SERVER_FOLDER.name}.asgi:app"
-API_PORT = 5000
+API_APP = "main:app"
+API_PORT = 8000
 API_WORKERS = 3
 
 
