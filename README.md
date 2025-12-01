@@ -1,10 +1,10 @@
-# fastapi-realworld-api [EM DESENVOLVIMENTO]
+# fastapi-realworld-api
 Exemplo de projeto com `FastAPI` e `SQLModel` usando `async/await` utilizado no mundo real.   
 Meu desejo é apresentar um motor de API REST utilizando o que considero que tem de melhor no universo Python. `[MINHA OPINIÃO]`
 
 ## Requerimentos
-- Python ~3.12
-- Poetry ~1.8.0
+- Python >=3.12
+- Poetry >=2.0
 
 ## Como usar
 Segue abaixo os passos para iniciar a aplicação.
@@ -139,7 +139,6 @@ execute o comando:
 curl -i http://fastapi-service.realworld.svc.cluster.local:4000/docs
 
 ```
-
 
 ## Changelog
 Todas as notas de alteração deste projeto serão documentados no [CHANGELOG.md](./CHANGELOG.md).
