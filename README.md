@@ -1,4 +1,4 @@
-# fastapi-realworld-api
+# FastAPI Real World API
 Exemplo de projeto com `FastAPI` e `SQLModel` usando `async/await` utilizado no mundo real.   
 Meu desejo é apresentar um motor de API REST utilizando o que considero que tem de melhor no universo Python. `[MINHA OPINIÃO]`
 
@@ -36,8 +36,8 @@ Iniciar a aplicação (modo `watch`):
 poetry run server
 ```
 Após iniciado, o `OpenAPI Specification` da aplicação estará disponivel em 2 endpoints:
-- [http://localhost:5000/docs](http://localhost:5000/docs)
-- [http://localhost:5000/redoc](http://localhost:5000/redoc)
+- [http://localhost:8000/docs](http://localhost:8000/docs)
+- [http://localhost:8000/redoc](http://localhost:8000/redoc)
 
 ## Qualidade
 Para executar os comandos a seguir, é necessario ter as [dependencias instaladas](#1-instalar-dependencias).
@@ -117,7 +117,7 @@ kubectl -n realworld exec pod/fastapi-deploy -- bash -c 'DB_ROOT_URL="postgresql
 
 ### DNS
 ```yaml
-api: fastapi-service.realworld.svc.cluster.local:3000
+api: fastapi-service.realworld.svc.cluster.local:8080
 db: postgres-service.realworld.svc.cluster.local:5432
 ```
 
@@ -136,7 +136,7 @@ kubectl -n realworld run mycurlpod --image=curlimages/curl -i --tty -- sh
 ```
 execute o comando:
 ```sh
-curl -i http://fastapi-service.realworld.svc.cluster.local:4000/docs
+curl -i http://fastapi-service.realworld.svc.cluster.local:8080/docs
 
 ```
 

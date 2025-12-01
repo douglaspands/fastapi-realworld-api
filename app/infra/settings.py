@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import secrets
+import tomllib
 from functools import cache
+from pathlib import Path
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -11,14 +13,9 @@ from app.infra.types import DatabaseDsn
 
 class Settings(BaseSettings):
     # app
-    app_name: str = "FastAPI RealWorld API"
-    app_version: str = "0.5.1"
-
-    # openapi_doc
-    openapi_description: str = (
-        "Exemplo de projeto com <b>FastAPI</b> e <b>SQLModel</b> usando <b>async/await</b> utilizado no mundo real.<br>"
-        "Meu desejo é apresentar um motor de API REST utilizando o que considero que tem de melhor no universo Python. <b>[MINHA OPINIÃO]</b>"
-    )
+    app_name: str = ""
+    app_version: str = ""
+    app_description: str = ""
 
     # database
     db_debug: bool = False
@@ -35,7 +32,16 @@ class Settings(BaseSettings):
 
 @cache
 def get_settings() -> Settings:
-    return Settings()
+    root_path = Path(__file__).parent.parent.parent
+    pyproject_path = root_path / "pyproject.toml"
+    with pyproject_path.open("rb") as f:
+        pyproject = tomllib.load(f)
+    settings = Settings(
+        app_name=pyproject["project"]["name"],
+        app_version=pyproject["project"]["version"],
+        app_description=pyproject["project"]["description"],
+    )
+    return settings
 
 
 __all__ = ("Settings", "get_settings")

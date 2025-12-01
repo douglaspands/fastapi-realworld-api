@@ -10,6 +10,7 @@ os.environ["db_url"] = "sqlite+aiosqlite:///:memory:"
 
 @pytest.fixture
 def httpclient() -> Generator[HttpClient, None, None]:
-    from app.asgi import app
+    from app.infra.api import create_app
 
+    app = create_app()
     yield HttpClient(app)
