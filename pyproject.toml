@@ -1,6 +1,6 @@
 [project]
 name = "fastapi-realworld-api"
-version = "0.5.2"
+version = "0.6.0"
 description = "Exemplo de projeto com FastAPI e SQLModel usando async/await"
 authors = [{ name = "Douglas Panhota", email = "douglaspands@gmail.com" }]
 readme = "README.md"

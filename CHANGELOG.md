@@ -6,6 +6,18 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 
 ## [Não Lançado]
 
+### Modificado
+
+- pyproject: atualizado para versão `0.6.0`;
+- k8s: foram renomeados todos os manifestos iniciados com `fastapi-` para `api-`.;
+- k8s: foram renomeados os names e labels iniciados com `fastapi-` para `api-`.;
+- k8s: foram renomeados todos os manifestos iniciados com `postgres-` para `db-`.;
+- k8s: foram renomeados os names e labels iniciados com `postgres-` para `db-`.;
+- docker-compose: foram renomeados os names e labels iniciados com `fastapi-` para `api-`.;
+- docker-compose: foram renomeados os names e labels iniciados com `postgres-` para `db-`.;
+- README: melhorado o topico informando como subir o projeto no kubernetes;
+- pyproject: dependencias atualizadas;
+
 ## [0.5.2] - 2024-11-30
 
 ### Modificado

@@ -1,7 +1,7 @@
 services:
-  fastapi-realword-api:
+  api-service:
     image: localhost:32000/fastapi-realword-api:latest
-    container_name: fastapi-realword-api
+    container_name: api-container
     build:
       dockerfile: Dockerfile
       context: .
@@ -15,11 +15,11 @@ services:
       - token_secret_key=09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7
       - TZ=America/Sao_Paulo
     networks:
-      - fastapi-realword-network
+      - realworld-network
 
-  fastapi-realword-db:
+  db-service:
     image: postgres:16.4-bookworm
-    container_name: fastapi-realword-db
+    container_name: db-container
     command:
       [
         "postgres",
@@ -34,7 +34,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - fastapi-realword-pgdata:/var/lib/postgresql/data
+      - db-pgdata:/var/lib/postgresql/data
       - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
@@ -43,12 +43,12 @@ services:
       POSTGRES_DB: fastapi
       TZ: America/Sao_Paulo
     networks:
-      - fastapi-realword-network
+      - realworld-network
 
 volumes:
-  fastapi-realword-pgdata:
-    name: fastapi-realword-pgdata
+  db-pgdata:
+    name: db-pgdata
 
 networks:
-  fastapi-realword-network:
-    name: fastapi-realword-network
+  realworld-network:
+    name: realworld-network

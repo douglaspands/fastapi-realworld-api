@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres-deployment
+  name: db-deploy
   namespace: realworld
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgres
+      app: db
   template:
     metadata:
       labels:
-        app: postgres
+        app: db
     spec:
       containers:
-      - name: postgres-pod
+      - name: db-pod
         image: postgres:16.3-bookworm
         resources:
           requests:
@@ -27,19 +27,19 @@ spec:
         - name: POSTGRES_USER
           valueFrom:
             secretKeyRef:
-              name: postgres-secret
-              key: postgres-user
+              name: db-secret
+              key: db-user
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: postgres-secret
-              key: postgres-password
+              name: db-secret
+              key: db-password
         ports:
         - containerPort: 5432
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
-          name: postgres-storage
+          name: db-storage
       volumes:
-      - name: postgres-storage
+      - name: db-storage
         persistentVolumeClaim:
-          claimName: postgres-pvc
+          claimName: db-pvc

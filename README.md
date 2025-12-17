@@ -1,6 +1,7 @@
 # FastAPI Real World API
 Exemplo de projeto com `FastAPI` e `SQLModel` usando `async/await` utilizado no mundo real.   
-Meu desejo é apresentar um motor de API REST utilizando o que considero que tem de melhor no universo Python. `[MINHA OPINIÃO]`
+Meu desejo é apresentar um motor de API REST utilizando o que considero que tem de melhor no universo Python. `[MINHA OPINIÃO]`   
+Conforme vou adquirindo mais conhecimento, vou ajustando o projeto para ficar mais claro. 
 
 ## Requerimentos
 - Python >=3.12
@@ -67,31 +68,23 @@ docker compose up
 
 Executar os scripts de `migração` com o seguinte comando:
 ```sh
-docker exec -it fastapi-realword-api bash -c 'DB_ROOT_URL="postgresql+psycopg://postgres:docker@fastapi-realword-db:5432/fastapi" alembic upgrade head'
+docker exec -it api-container bash -c 'DB_ROOT_URL="postgresql+psycopg://postgres:docker@db-service:5432/fastapi" alembic upgrade head'
 ```
 
 ## Kubernetes
+
 Os manifestos deste projeto foram desenvolvidos e testados utilizando [microK8s](https://microk8s.io/).
 
-### Namespaces
+### Iniciando todas as instancias
 ```sh
-kubectl create namespace realworld
+kubectl apply -k k8s
 ```
 
-### Iniciar
-1. Criar namespace:
-```
-kubectl apply -f k8s/common
-```
-2. Criar e configurar o banco de dados:
-```
-kubectl apply -f k8s/db
-```
-Assim que o banco estiver ativo, criar um `port-forward` para acessar o banco de dados:
+### Preparando o banco de dados
+Criar um `port-forward` para acessar o banco de dados:
 ```sh
-kubectl -n realworld port-forward pod/postgres-deploy 5432:5432
+kubectl -n realworld port-forward pod/db-deploy 5432:5432
 ```
-| `pod/postgres-deploy` é um exemplo de nome para o pod.
 
 Com sua IDE favorita do Postgres, execute os seguintes comandos:
 ```sql
@@ -104,24 +97,20 @@ GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO fastapi_user;
 GRANT ALL ON ALL FUNCTIONS IN SCHEMA public TO fastapi_user;
 ```
 
-3. Iniciar API:
-```
-kubectl apply -f k8s/api
+Executar os scripts de migração do banco de dados:
+```sh
+kubectl -n realworld exec pod/api-deploy -- bash -c 'DB_ROOT_URL="postgresql+psycopg://postgres:docker@db-service.realworld.svc.cluster.local:5432/fastapi" alembic upgrade head'
 ```
 
-4. Executar as migrações:
-```sh
-kubectl -n realworld exec pod/fastapi-deploy -- bash -c 'DB_ROOT_URL="postgresql+psycopg://postgres:docker@postgres-service.realworld.svc.cluster.local:5432/fastapi" alembic upgrade head'
-```
-| `pod/fastapi-deploy` é um exemplo de nome para o pod.
+
+## Dicas
 
 ### DNS
 ```yaml
-api: fastapi-service.realworld.svc.cluster.local:8080
-db: postgres-service.realworld.svc.cluster.local:5432
+api: api-service.realworld.svc.cluster.local:8080
+db: db-service.realworld.svc.cluster.local:5432
 ```
 
-## Dicas
 ### MicroK8s? Serviços que precisam ser iniciados
 ```sh
 microk8s enable dashboard
@@ -136,8 +125,7 @@ kubectl -n realworld run mycurlpod --image=curlimages/curl -i --tty -- sh
 ```
 execute o comando:
 ```sh
-curl -i http://fastapi-service.realworld.svc.cluster.local:8080/docs
-
+curl -i http://api-service.realworld.svc.cluster.local:8080/docs
 ```
 
 ## Changelog

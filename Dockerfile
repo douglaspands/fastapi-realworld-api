@@ -19,7 +19,7 @@ ENV LC_ALL=pt_BR.UTF-8 \
 FROM python_base AS python_deps 
 USER app 
 WORKDIR /home/app 
-RUN pip install --user -U pip poetry && \ 
+RUN pip install --user --upgrade pip poetry && \ 
     poetry config virtualenvs.create false 
 COPY pyproject.toml . 
 COPY poetry.lock . 
