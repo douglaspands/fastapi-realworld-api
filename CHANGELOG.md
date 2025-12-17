@@ -6,6 +6,10 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 
 ## [Não Lançado]
 
+### Adicionado
+
+- Foi adicionado rota de healthcheck;
+
 ### Modificado
 
 - pyproject: atualizado para versão `0.6.0`;
