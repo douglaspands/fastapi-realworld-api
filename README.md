@@ -102,20 +102,12 @@ Executar os scripts de migração do banco de dados:
 kubectl -n realworld exec deployments/api-deploy -- bash -c 'DB_ROOT_URL="postgresql+psycopg://postgres:docker@db-service.realworld.svc.cluster.local:5432/fastapi" alembic upgrade head'
 ```
 
-## Dicas
+## Dicas e orientações
 
 ### DNS
 ```yaml
 api: api-service.realworld.svc.cluster.local:8080
 db: db-service.realworld.svc.cluster.local:5432
-```
-
-### MicroK8s? Serviços que precisam ser iniciados
-```sh
-microk8s enable dashboard
-microk8s enable dns
-microk8s enable registry
-microk8s enable ingress
 ```
 
 ### Verificar DNS da API
@@ -126,6 +118,30 @@ execute o comando:
 ```sh
 curl -i http://api-service.realworld.svc.cluster.local:8080/docs
 ```
+
+### MicroK8s
+
+#### Serviços que precisam ser iniciados
+```sh
+microk8s enable dashboard
+microk8s enable dns
+microk8s enable registry
+microk8s enable ingress
+```
+
+### Kind
+
+#### Iniciando e encerrando cluster
+Iniciando o cluster:
+```sh
+kind create cluster --name cluster-local-1
+```
+> `cluster-local-1` é o nome que escolhi, caso não preencha, o nome padrão é `kind-kind`.
+
+Encerrando o cluster:
+```sh
+kind delete cluster --name cluster-local-1
+``` 
 
 ## Changelog
 Todas as notas de alteração deste projeto serão documentados no [CHANGELOG.md](./CHANGELOG.md).
