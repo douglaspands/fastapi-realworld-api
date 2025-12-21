@@ -99,9 +99,8 @@ GRANT ALL ON ALL FUNCTIONS IN SCHEMA public TO fastapi_user;
 
 Executar os scripts de migração do banco de dados:
 ```sh
-kubectl -n realworld exec pod/api-deploy -- bash -c 'DB_ROOT_URL="postgresql+psycopg://postgres:docker@db-service.realworld.svc.cluster.local:5432/fastapi" alembic upgrade head'
+kubectl -n realworld exec deployments/api-deploy -- bash -c 'DB_ROOT_URL="postgresql+psycopg://postgres:docker@db-service.realworld.svc.cluster.local:5432/fastapi" alembic upgrade head'
 ```
-
 
 ## Dicas
 
