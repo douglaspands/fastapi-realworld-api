@@ -3,15 +3,16 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.infra import handler, middleware, openapi, router
-from app.infra.database import ping_database
+
+# from app.infra.database import ping_database
 from app.infra.settings import get_settings
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    db_ready = await ping_database()
-    if not db_ready:
-        raise Exception("Database is not available")
+    # db_ready = await ping_database()
+    # if not db_ready:
+    #     raise Exception("Database is not available")
     yield
 
 

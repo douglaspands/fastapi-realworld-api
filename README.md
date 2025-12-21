@@ -75,6 +75,17 @@ docker exec -it api-container bash -c 'DB_ROOT_URL="postgresql+psycopg://postgre
 
 Os manifestos deste projeto foram desenvolvidos e testados utilizando [microK8s](https://microk8s.io/) e [kind](https://kind.sigs.k8s.io).
 
+### Publicando a imagem da aplicação no registry local
+Para o manifesto do Kubernetes conseguir iniciar a aplicação, a imagem docker precisa estar no registry local.
+Para isso minha recomendação é criar a imagem com o `docker-compose`:
+```sh
+docker compose build
+```
+Publicar a imagem no registry local:
+```sh
+docker compose push
+```
+
 ### Iniciando todas as instancias
 ```sh
 kubectl apply -k k8s
@@ -131,16 +142,21 @@ microk8s enable ingress
 
 ### Kind
 
-#### Iniciando e encerrando cluster
+#### Criando cluster
 Iniciando o cluster:
 ```sh
-kind create cluster --name cluster-local-1
+kind create cluster
 ```
-> `cluster-local-1` é o nome que escolhi, caso não preencha, o nome padrão é `kind-kind`.
+> o nome padrão do cluster é `kind-kind`.
 
-Encerrando o cluster:
+
+#### Criando cluster com local registry
+Executar o script: `./scripts/kind-with-registry.sh`.   
+> Ele foi [copiado](https://kind.sigs.k8s.io/docs/user/local-registry/) e ajustado.
+
+#### Encerrando cluster
 ```sh
-kind delete cluster --name cluster-local-1
+kind delete cluster
 ``` 
 
 ## Changelog

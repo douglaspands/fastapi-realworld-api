@@ -32,7 +32,10 @@ USER ${USERNAME}
 WORKDIR /home/${USERNAME} 
 EXPOSE 8000 
 ENV LOG_LEVEL=INFO
+COPY --chown=${USERNAME}:${USERNAME} pyproject.toml . 
+COPY --chown=${USERNAME}:${USERNAME} alembic.ini .
+COPY --chown=${USERNAME}:${USERNAME} migrations migrations
 COPY --from=requirements_gen --chown=${USERNAME}:${USERNAME} /app/requirements.txt . 
 RUN pip install --user --upgrade --no-cache-dir --requirement requirements.txt
-COPY main.py .
-COPY app app 
+COPY --chown=${USERNAME}:${USERNAME} main.py .
+COPY --chown=${USERNAME}:${USERNAME} app app 
