@@ -73,7 +73,7 @@ docker exec -it api-container bash -c 'DB_ROOT_URL="postgresql+psycopg://postgre
 
 ## Kubernetes
 
-Os manifestos deste projeto foram desenvolvidos e testados utilizando [microK8s](https://microk8s.io/).
+Os manifestos deste projeto foram desenvolvidos e testados utilizando [microK8s](https://microk8s.io/) e [kind](https://kind.sigs.k8s.io).
 
 ### Iniciando todas as instancias
 ```sh
@@ -83,7 +83,7 @@ kubectl apply -k k8s
 ### Preparando o banco de dados
 Criar um `port-forward` para acessar o banco de dados:
 ```sh
-kubectl -n realworld port-forward pod/db-deploy 5432:5432
+kubectl -n realworld port-forward deployments/db-deploy 5432:5432
 ```
 
 Com sua IDE favorita do Postgres, execute os seguintes comandos:
