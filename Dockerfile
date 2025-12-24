@@ -20,11 +20,10 @@ ENV LC_ALL=pt_BR.UTF-8 \
 
 FROM python:${PYTHON_VERSION} AS requirements_gen
 WORKDIR /app 
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 COPY pyproject.toml . 
-COPY poetry.lock . 
-RUN pip install poetry && \
-    poetry self add poetry-plugin-export && \
-    poetry export -f requirements.txt --without-hashes --output requirements.txt
+COPY uv.lock . 
+RUN uv pip compile pyproject.toml --output-file requirements.txt
 
 FROM python_base AS python_app
 ARG USERNAME
@@ -32,8 +31,8 @@ USER ${USERNAME}
 WORKDIR /home/${USERNAME} 
 EXPOSE 8000 
 ENV LOG_LEVEL=INFO
-COPY --chown=${USERNAME}:${USERNAME} pyproject.toml . 
 COPY --chown=${USERNAME}:${USERNAME} alembic.ini .
+COPY --chown=${USERNAME}:${USERNAME} pyproject.toml . 
 COPY --chown=${USERNAME}:${USERNAME} migrations migrations
 COPY --from=requirements_gen --chown=${USERNAME}:${USERNAME} /app/requirements.txt . 
 RUN pip install --user --upgrade --no-cache-dir --requirement requirements.txt

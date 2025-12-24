@@ -5,7 +5,7 @@ Conforme vou adquirindo mais conhecimento, vou ajustando o projeto para ficar ma
 
 ## Requerimentos
 - Python >=3.12
-- Poetry >=2.0
+- uv >=0.9
 
 ## Como usar
 Segue abaixo os passos para iniciar a aplicação.
@@ -14,7 +14,7 @@ Segue abaixo os passos para iniciar a aplicação.
 ### 1. Instalar dependencias
 Na primeira vez é necessario instalar todas as dependencias executando o seguinte comando:
 ```sh
-poetry install
+uv sync
 ```
 
 ### 2. Criar arquivo .env
@@ -28,13 +28,13 @@ token_secret_key=09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e
 ### 3. Executar migrações
 Preparar o banco de dados para o uso:
 ```sh
-poetry run migrate
+uv run migrate
 ``` 
 
 ### 4. Iniciar aplicação
 Iniciar a aplicação (modo `watch`):
 ```sh
-poetry run server
+uv run server
 ```
 Após iniciado, o `OpenAPI Specification` da aplicação estará disponivel em 2 endpoints:
 - [http://localhost:8000/docs](http://localhost:8000/docs)
@@ -45,17 +45,17 @@ Para executar os comandos a seguir, é necessario ter as [dependencias instalada
 
 ### Validação de código (Linter)
 ```sh
-poetry run lint
+uv run lint
 ```
 
 ### Testes unitarios
 ```sh
-poetry run unit_test
+uv run unit_test
 ``` 
 
 ### Build
 ```sh
-poetry run build
+uv run build
 ```
 > São executados: [validação de codigo](#validação-de-código-linter) e [testes unitarios](#testes-unitarios).
 

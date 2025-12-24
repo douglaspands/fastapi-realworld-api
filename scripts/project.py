@@ -3,10 +3,9 @@ import sys
 from pathlib import Path
 from shlex import quote
 
+from art import text2art
 from rich.console import Console
 from rich.prompt import Prompt
-
-from . import message
 
 console = Console()
 
@@ -44,14 +43,14 @@ def integration_test():
 
 def lint():
     results = []
-    cmd_tools = ("mypy {folder}", "ruff check {folder}")
+    cmd_tools = ("ty check {folder}", "ruff check {folder}")
     folders = " ".join((str(SERVER_FOLDER), str(TEST_FOLDER)))
     for cmd in cmd_tools:
         results.append(_shell(cmd.format(folder=folders)))
     if not all(sc == 0 for sc in results):
-        _print(message.LINT_ERROR, is_error=True)
+        _print(text2art("LINT ERROR"), is_error=True)
         sys.exit(1)
-    _print(message.LINT_SUCCESSFUL)
+    _print(text2art("LINT SUCCESSFUL"))
 
 
 def format():
@@ -62,15 +61,15 @@ def format():
 
 def build():
     results = []
-    cmd_tools = ("mypy {folder}", "ruff check {folder}")
+    cmd_tools = ("ty check {folder}", "ruff check {folder}")
     folders = " ".join((str(SERVER_FOLDER), str(TEST_FOLDER)))
     for cmd in cmd_tools:
         results.append(_shell(cmd.format(folder=folders)))
     results.append(_shell("pytest -v tests"))
     if not all(sc == 0 for sc in results):
-        _print(message.BUILD_ERROR, is_error=True)
+        _print(text2art("BUILD ERROR"), is_error=True)
         sys.exit(1)
-    _print(message.BUILD_SUCCESSFUL)
+    _print(text2art("BUILD SUCCESSFUL"))
 
 
 def migrate():
