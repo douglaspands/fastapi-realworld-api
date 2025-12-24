@@ -9,6 +9,7 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 ### Adicionado
 
 - Foi adicionado rota de healthcheck;
+- Foi adicionado a lib `json-logging` para formatação de log;
 - Ferramenta: foi adicionado o utilitario `ty` para o lint;
 
 ### Modificado

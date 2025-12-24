@@ -24,13 +24,6 @@ spec:
         - name: api-pod
           image: localhost:32000/fastapi-realword-api:latest
           imagePullPolicy: Always
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "100m"
-            limits:
-              memory: "512Mi"
-              cpu: "500m"
           command:
             - "uvicorn"
             - "main:app"
@@ -53,3 +46,22 @@ spec:
                 configMapKeyRef:
                   name: api-config
                   key: token_secret_key
+          livenessProbe:
+            httpGet:
+              path: /health/v1/liveness
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /health/v1/readiness
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"

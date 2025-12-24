@@ -2,21 +2,20 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from app.infra import handler, middleware, openapi, router
-
-# from app.infra.database import ping_database
+from app.infra import handler, logging, middleware, openapi, router
+from app.infra.logging import set_logging_webapp
 from app.infra.settings import get_settings
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # db_ready = await ping_database()
-    # if not db_ready:
-    #     raise Exception("Database is not available")
+    logger = logging.get_logger(__name__)
+    logger.info("Starting up...")
     yield
+    logger.info("Shutting down...")
 
 
-def create_app() -> FastAPI:
+def create_app(is_test: bool = False) -> FastAPI:
     settings = get_settings()
     app = FastAPI(
         title=settings.app_name,
@@ -29,6 +28,8 @@ def create_app() -> FastAPI:
     handler.init_app(app)
     router.init_app(app)
     openapi.init_app(app)
+    if not is_test:
+        set_logging_webapp(app)
     return app
 
 

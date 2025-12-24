@@ -16,6 +16,7 @@ dependencies = [
     "alembic (>=1.17.2,<2.0.0)",
     "psycopg[binary,pool] (>=3.2.12,<4.0.0)",
     "pwdlib[argon2] (>=0.3.0,<0.4.0)",
+    "json-logging>=1.5.1",
 ]
 
 [dependency-groups]
@@ -47,7 +48,7 @@ module-root = ""
 minversion = "6.0"
 addopts = "-ra -q"
 python_files = "test_*.py"
-testpaths = "tests"
+# testpaths = "tests"
 norecursedirs = ["__pycache__"]
 asyncio_mode = "auto"
 

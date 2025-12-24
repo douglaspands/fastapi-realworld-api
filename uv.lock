@@ -433,6 +433,7 @@ dependencies = [
     { name = "aiosqlite" },
     { name = "alembic" },
     { name = "fastapi", extra = ["standard"] },
+    { name = "json-logging" },
     { name = "psycopg", extra = ["binary", "pool"] },
     { name = "pwdlib", extra = ["argon2"] },
     { name = "pydantic-settings" },
@@ -464,6 +465,7 @@ requires-dist = [
     { name = "aiosqlite", specifier = ">=0.21.0,<0.22.0" },
     { name = "alembic", specifier = ">=1.17.2,<2.0.0" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.121.2,<0.122.0" },
+    { name = "json-logging", specifier = ">=1.5.1" },
     { name = "psycopg", extras = ["binary", "pool"], specifier = ">=3.2.12,<4.0.0" },
     { name = "pwdlib", extras = ["argon2"], specifier = ">=0.3.0,<0.4.0" },
     { name = "pydantic-settings", specifier = ">=2.12.0,<3.0.0" },
@@ -661,6 +663,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/df/bf/f7da0350254c0ed7c72f3e33cef02e048281fec7ecec5f032d4aac52226b/jinja2-3.1.6.tar.gz", hash = "sha256:0137fb05990d35f1275a587e9aee6d56da821fc83491a0fb838183be43f66d6d", size = 245115, upload-time = "2025-03-05T20:05:02.478Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/62/a1/3d680cbfd5f4b8f15abc1d571870c5fc3e594bb582bc3b64ea099db13e56/jinja2-3.1.6-py3-none-any.whl", hash = "sha256:85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67", size = 134899, upload-time = "2025-03-05T20:05:00.369Z" },
+]
+
+[[package]]
+name = "json-logging"
+version = "1.5.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/74/cc/6bef021352f8a4d4e1b0ab4216f65ed313f66b0adaf279e8ff08ea03ad68/json-logging-1.5.1.tar.gz", hash = "sha256:7c938750996a1cc66042b516caf75214513bcc25a105012865496864f5f3983b", size = 26072, upload-time = "2025-07-07T07:09:45.397Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/76/6c/4a74f61a66b1360425339f5fd57178c47f44e8a38a214ae3d4104f9fc19e/json_logging-1.5.1-py2.py3-none-any.whl", hash = "sha256:df39ee1e6709c46830654e96a769894832061207c653c851baeacf655bff596d", size = 23689, upload-time = "2025-07-07T07:09:44.505Z" },
 ]
 
 [[package]]
