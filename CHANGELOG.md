@@ -9,10 +9,11 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 ### Adicionado
 
 - Foi adicionado rota de healthcheck;
-- Ferramenta: foi adicionado os utilitarios `uv` e `ty`;
+- Ferramenta: foi adicionado o utilitario `ty` para o lint;
 
 ### Modificado
 
+- Ferramenta: foi substituido o `poetry` pelo `uv` e suas menções;
 - pyproject: atualizado para versão `0.6.0`;
 - k8s: foram renomeados todos os manifestos iniciados com `fastapi-` para `api-`.;
 - k8s: foram renomeados os names e labels iniciados com `fastapi-` para `api-`.;
@@ -25,6 +26,7 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 
 ### Removido
 - Ferramenta: foi removido o utilitario `mypy`;
+- Ferramenta: foi removido o utilitario `poetry`;
 
 ## [0.5.2] - 2024-11-30
 

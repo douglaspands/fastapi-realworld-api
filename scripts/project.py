@@ -111,7 +111,7 @@ def prodution_server():
 
 
 def make_requirements():
-    cmd = "poetry export -f requirements.txt --without-hashes --output requirements.txt"
+    cmd = "uv pip compile pyproject.toml --output-file requirements.txt"
     _shell(cmd)
 
 
