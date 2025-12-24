@@ -32,12 +32,12 @@ def _print(msg: str, is_error: bool = False):
 
 
 def unit_test():
-    cmd = "pytest -vv -ra -q --cov=app --cov-report html --cov-fail-under=85 tests/unit"
+    cmd = "pytest -vv -ra -q -n auto --cov=app --cov-report html --cov-fail-under=85 tests/unit"
     _shell(cmd)
 
 
 def integration_test():
-    cmd = "pytest -vv -ra -q tests/integration"
+    cmd = "pytest -vv -ra -q -n auto tests/integration"
     _shell(cmd)
 
 
