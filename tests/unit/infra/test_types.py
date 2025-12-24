@@ -20,7 +20,7 @@ def test_validate_specific_dsn_scheme_invalid():
     uri = "https://test.db"
     # WHEN
     with pytest.raises(ValueError) as exc_info:
-        result = validate_specific_dsn(uri)
+        validate_specific_dsn(uri)
 
     # THEN
     assert "Unsupported database scheme" in str(exc_info.value)
@@ -31,7 +31,7 @@ def test_validate_specific_dsn_path_invalid():
     uri = "sqlite+aiosqlite:"
     # WHEN
     with pytest.raises(ValueError) as exc_info:
-        result = validate_specific_dsn(uri)
+        validate_specific_dsn(uri)
 
     # THEN
     assert "Unsupported database host" in str(exc_info.value)

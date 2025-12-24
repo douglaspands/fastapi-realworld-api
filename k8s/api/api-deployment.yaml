@@ -31,8 +31,8 @@ spec:
             - "0.0.0.0"
             - "--port"
             - "8000"
-            - "--root-path"
-            - "/realworld/api"
+            # - "--root-path"
+            # - "/realworld/api"
           ports:
             - containerPort: 8000
           env:
