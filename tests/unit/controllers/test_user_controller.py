@@ -11,7 +11,7 @@ from app.controllers.user_controller import (
     get_context_with_request,
 )
 from app.resources.user_resource import User
-from app.services.auth_service import check_access_token, crypt
+from app.services.auth_service import check_access_token
 from tests.unit.mocks.context_mock import ContextMock
 from tests.unit.utils.http_client import HttpClient
 from tests.unit.utils.utils import snake_to_camel
@@ -230,7 +230,7 @@ def test_user_person_create_ok(
     user_mock = User(
         id=fake.pyint(1, 999),
         username=create_user_person["username"],
-        password=crypt.hash_password(create_user_person["password"]),
+        # password=crypt.hash_password(create_user_person["password"]),
         person_id=fake.pyint(1, 999),
         active=True,
         updated_at=datetime_now,

@@ -4,7 +4,7 @@ Meu desejo é apresentar um motor de API REST utilizando o que considero que tem
 Conforme vou adquirindo mais conhecimento, vou ajustando o projeto para ficar mais claro. 
 
 ## Requerimentos
-- Python >=3.12
+- Python >=3.13
 - uv >=0.9
 
 ## Como usar
