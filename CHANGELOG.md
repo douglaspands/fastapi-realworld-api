@@ -6,6 +6,8 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 
 ## [Não Lançado]
 
+## [0.6.0] - 2025-12-27
+
 ### Adicionado
 
 - Foi adicionado rota de healthcheck;
@@ -30,7 +32,7 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 - Ferramenta: foi removido o utilitario `mypy`;
 - Ferramenta: foi removido o utilitario `poetry`;
 
-## [0.5.2] - 2024-11-30
+## [0.5.2] - 2025-11-30
 
 ### Modificado
 
@@ -43,19 +45,19 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 - Dockerfile: Configuração de build para produção com usuario non-root;
 - K8s: Inclusão do manifesto de `kustomization.yaml` para sequenciar a execução do inicialização da aplicação;
 
-## [0.5.1] - 2024-11-17
+## [0.5.1] - 2025-11-17
 
 ### Modificado
 
 - Componente de criptografia mudou o nome de `PasslibCore` para `CryptCore`.
 
-## [0.5.0] - 2024-11-17
+## [0.5.0] - 2025-11-17
 
 ### Adicionado
 
 - Foi criado o tipo de variavel `DatabaseDsn` para validar DSN de banco de dados.
 
-## [0.4.0] - 2024-11-17
+## [0.4.0] - 2025-11-17
 
 ### Adicionado
 
