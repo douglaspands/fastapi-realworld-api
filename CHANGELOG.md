@@ -26,6 +26,7 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 - pyproject: dependencias atualizadas;
 
 ### Removido
+
 - Ferramenta: foi removido o utilitario `mypy`;
 - Ferramenta: foi removido o utilitario `poetry`;
 

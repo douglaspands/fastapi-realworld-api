@@ -25,9 +25,7 @@ async def health_readness():
     status_code=status.HTTP_200_OK,
 )
 async def health_liveness():
-    db_ready = await ping_database()
-    if not db_ready:
-        raise Exception("Database is not available")
+    await ping_database()
     return "OK"
 
 

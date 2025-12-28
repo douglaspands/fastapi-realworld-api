@@ -34,12 +34,10 @@ async def get_sessionio() -> AsyncGenerator[SessionIO, Any]:
 
 
 async def ping_database() -> bool:
-    try:
-        async with get_sessionio() as session:
-            result = await session.scalars(text("SELECT 1"))
-            return result.first() == 1
-    except Exception:
-        return False
+    async with get_sessionio() as session:
+        cursor = await session.exec(text("SELECT 1"))
+        result = cursor.fetchone()
+        return result[0] == 1
 
 
 __all__ = ("sessionio_maker", "get_sessionio", "SessionIO", "ping_database")
