@@ -142,14 +142,6 @@ microk8s enable ingress
 
 ### Kind
 
-#### Criando cluster
-Iniciando o cluster:
-```sh
-kind create cluster
-```
-> o nome padrão do cluster é `kind-kind`.
-
-
 #### Criando cluster com local registry
 Executar o script: `./scripts/kind-with-registry.sh`.   
 > Ele foi [copiado](https://kind.sigs.k8s.io/docs/user/local-registry/) e ajustado.

@@ -6,6 +6,19 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/sp
 
 ## [Não Lançado]
 
+## [0.6.1] - 2025-12-27
+
+### Modificado
+
+- pyproject: atualizado para versão `0.6.1`;
+- lib: `httpx` agora é uma lib principal;
+- lib: `ipython` agora é uma lib principal;
+- README: ajuste na criação do cluster k8s usando o kind;
+
+### Removido
+
+- lib: `types-passlib` foi removido por falta de uso;
+
 ## [0.6.0] - 2025-12-27
 
 ### Adicionado
