@@ -1,4 +1,5 @@
 from copy import copy
+from typing import cast
 
 import pytest
 from faker import Faker
@@ -7,7 +8,7 @@ from sqlalchemy.exc import IntegrityError, NoResultFound
 from app.models.user_model import User
 from app.repositories import user_repository
 from app.services.auth_service import crypt
-from tests.unit.mocks.context_mock import ContextMock
+from tests.unit.mocks.context_mock import ContextMock, SessionIOMock
 
 fake = Faker("pt_BR")
 Faker.seed(0)
@@ -22,7 +23,7 @@ async def test_user_get_by_pk_ok():
     user_mock = User(
         id=user_id,
         username=fake.user_name(),
-        password=crypt.hash_password(fake.password(digits=8)),
+        password=crypt.hash_password(fake.password(length=8)),
         person_id=fake.random_int(min=1, max=999),
     )
     context_mock = ContextMock.context_session_mock(return_value=user_mock)
@@ -62,7 +63,7 @@ async def test_user_get_all_ok():
         User(
             id=idx + 1,
             username=fake.user_name(),
-            password=crypt.hash_password(fake.password(digits=8)),
+            password=crypt.hash_password(fake.password(length=8)),
             person_id=fake.random_int(min=1, max=999),
         )
         for idx in range(10)
@@ -85,7 +86,7 @@ async def test_user_save_ok():
     # GIVEN
     create_user = User(
         username=fake.user_name(),
-        password=crypt.hash_password(fake.password(digits=8)),
+        password=crypt.hash_password(fake.password(length=8)),
         person_id=fake.random_int(min=1, max=999),
     )
 
@@ -105,7 +106,7 @@ async def test_user_save_error():
     # GIVEN
     create_user = User(
         username=fake.user_name(),
-        password=crypt.hash_password(fake.password(digits=8)),
+        password=crypt.hash_password(fake.password(length=8)),
         person_id=fake.random_int(min=1, max=999),
     )
 
@@ -127,18 +128,18 @@ async def test_user_save_error():
 
 @pytest.mark.asyncio
 async def test_user_update_ok():
+    # GIVEN
+    user_id = fake.random_int(min=1, max=10)
+    username = fake.user_name()
+
     # MOCK
     mock_user = User(
-        id=fake.random_int(min=1, max=10),
+        id=user_id,
         username=fake.user_name(),
-        password=crypt.hash_password(fake.password(digits=8)),
+        password=crypt.hash_password(fake.password(length=8)),
         person_id=fake.random_int(min=1, max=999),
     )
     context_mock = ContextMock.context_session_mock(return_value=copy(mock_user))
-
-    # GIVEN
-    user_id = mock_user.id
-    username = fake.user_name()
 
     # WHEN
     user_updated = await user_repository.update(
@@ -174,23 +175,24 @@ async def test_user_update_error():
 
 @pytest.mark.asyncio
 async def test_user_delete_ok():
+    # GIVEN
+    user_id = fake.random_int(min=1, max=10)
+
     # MOCK
     mock_user = User(
-        id=fake.random_int(min=1, max=10),
+        id=user_id,
         username=fake.user_name(),
-        password=crypt.hash_password(fake.password(digits=8)),
+        password=crypt.hash_password(fake.password(length=8)),
         person_id=fake.random_int(min=1, max=999),
     )
     context_mock = ContextMock.context_session_mock(return_value=mock_user)
-
-    # GIVEN
-    user_id = mock_user.id
 
     # WHEN
     await user_repository.delete(context_mock, pk=user_id)
 
     # THEN
-    assert context_mock.session._delete_count == 1
+    session: SessionIOMock = cast(SessionIOMock, context_mock.session)
+    assert session._delete_count == 1
 
 
 @pytest.mark.asyncio

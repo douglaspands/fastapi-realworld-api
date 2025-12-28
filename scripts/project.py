@@ -3,10 +3,9 @@ import sys
 from pathlib import Path
 from shlex import quote
 
+from art import text2art
 from rich.console import Console
 from rich.prompt import Prompt
-
-from . import message
 
 console = Console()
 
@@ -33,25 +32,25 @@ def _print(msg: str, is_error: bool = False):
 
 
 def unit_test():
-    cmd = "pytest -vv -ra -q --cov=app --cov-report html --cov-fail-under=85 tests/unit"
+    cmd = "pytest -vv -ra -q -n auto --cov=app --cov-report html --cov-fail-under=85 tests/unit"
     _shell(cmd)
 
 
 def integration_test():
-    cmd = "pytest -vv -ra -q tests/integration"
+    cmd = "pytest -vv -ra -q -n auto tests/integration"
     _shell(cmd)
 
 
 def lint():
     results = []
-    cmd_tools = ("mypy {folder}", "ruff check {folder}")
+    cmd_tools = ("ty check {folder}", "ruff check {folder}")
     folders = " ".join((str(SERVER_FOLDER), str(TEST_FOLDER)))
     for cmd in cmd_tools:
         results.append(_shell(cmd.format(folder=folders)))
     if not all(sc == 0 for sc in results):
-        _print(message.LINT_ERROR, is_error=True)
+        _print(text2art("LINT ERROR"), is_error=True)
         sys.exit(1)
-    _print(message.LINT_SUCCESSFUL)
+    _print(text2art("LINT SUCCESSFUL"))
 
 
 def format():
@@ -62,15 +61,15 @@ def format():
 
 def build():
     results = []
-    cmd_tools = ("mypy {folder}", "ruff check {folder}")
+    cmd_tools = ("ty check {folder}", "ruff check {folder}")
     folders = " ".join((str(SERVER_FOLDER), str(TEST_FOLDER)))
     for cmd in cmd_tools:
         results.append(_shell(cmd.format(folder=folders)))
     results.append(_shell("pytest -v tests"))
     if not all(sc == 0 for sc in results):
-        _print(message.BUILD_ERROR, is_error=True)
+        _print(text2art("BUILD ERROR"), is_error=True)
         sys.exit(1)
-    _print(message.BUILD_SUCCESSFUL)
+    _print(text2art("BUILD SUCCESSFUL"))
 
 
 def migrate():
@@ -112,7 +111,7 @@ def prodution_server():
 
 
 def make_requirements():
-    cmd = "poetry export -f requirements.txt --without-hashes --output requirements.txt"
+    cmd = "uv pip compile pyproject.toml --output-file requirements.txt"
     _shell(cmd)
 
 

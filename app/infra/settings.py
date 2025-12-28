@@ -19,7 +19,7 @@ class Settings(BaseSettings):
 
     # database
     db_debug: bool = False
-    db_url: DatabaseDsn
+    db_url: DatabaseDsn = ""
 
     # token
     token_secret_key: str = Field(default_factory=lambda: secrets.token_hex(32))

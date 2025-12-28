@@ -1,11 +1,14 @@
-# Image Base With OS Dependencies 
-FROM python:3.13-slim-bookworm AS python_base 
+ARG USERNAME=nonroot
+ARG PYTHON_VERSION=3.14.2-slim-trixie
+
+FROM python:${PYTHON_VERSION} AS python_base
+ARG USERNAME
 RUN apt update -qq && \ 
     apt install --no-install-recommends -y locales git curl && \ 
     apt autoclean && rm -rf /var/lib/apt/lists/* && \ 
     sed -i -e 's/# pt_BR.UTF-8 UTF-8/pt_BR.UTF-8 UTF-8/' /etc/locale.gen && \ 
     dpkg-reconfigure --frontend=noninteractive locales && \ 
-    useradd -m app 
+    useradd -m ${USERNAME}
 ENV LC_ALL=pt_BR.UTF-8 \ 
     LANG=pt_BR.UTF-8 \ 
     LANGUAGE=pt_BR.UTF-8 \ 
@@ -13,22 +16,25 @@ ENV LC_ALL=pt_BR.UTF-8 \
     PYTHONDONTWRITEBYTECODE=1 \ 
     PIP_NO_CACHE_DIR=1 \ 
     PIP_DISABLE_PIP_VERSION_CHECK=1 \ 
-    PATH=/home/app/.local/bin:$PATH 
+    PATH=/home/${USERNAME}/.local/bin:$PATH 
 
-# Python Base Image With Dependencies 
-FROM python_base AS python_deps 
-USER app 
-WORKDIR /home/app 
-RUN pip install --user -U pip poetry && \ 
-    poetry config virtualenvs.create false 
+FROM python:${PYTHON_VERSION} AS requirements_gen
+WORKDIR /app 
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 COPY pyproject.toml . 
-COPY poetry.lock . 
-RUN poetry install --only main 
+COPY uv.lock . 
+RUN uv pip compile pyproject.toml --output-file requirements.txt
 
-# Image Python Production 
-FROM python_deps AS python_production 
-USER app 
-WORKDIR /home/app 
+FROM python_base AS python_app
+ARG USERNAME
+USER ${USERNAME} 
+WORKDIR /home/${USERNAME} 
 EXPOSE 8000 
-COPY app app 
-COPY main.py .
+ENV LOG_LEVEL=INFO
+COPY --chown=${USERNAME}:${USERNAME} alembic.ini .
+COPY --chown=${USERNAME}:${USERNAME} pyproject.toml . 
+COPY --chown=${USERNAME}:${USERNAME} migrations migrations
+COPY --from=requirements_gen --chown=${USERNAME}:${USERNAME} /app/requirements.txt . 
+RUN pip install --user --upgrade --no-cache-dir --requirement requirements.txt
+COPY --chown=${USERNAME}:${USERNAME} main.py .
+COPY --chown=${USERNAME}:${USERNAME} app app 

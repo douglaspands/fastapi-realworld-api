@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fastapi-deploy
+  name: api-deploy
   namespace: realworld
   labels:
-    app: fastapi-deploy
+    app: api-deploy
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: fastapi-deploy
+      app: api-deploy
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -18,19 +18,12 @@ spec:
   template:
     metadata:
       labels:
-        app: fastapi-deploy
+        app: api-deploy
     spec:
       containers:
-        - name: fastapi-pod
+        - name: api-pod
           image: localhost:32000/fastapi-realword-api:latest
           imagePullPolicy: Always
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "100m"
-            limits:
-              memory: "512Mi"
-              cpu: "500m"
           command:
             - "uvicorn"
             - "main:app"
@@ -38,18 +31,37 @@ spec:
             - "0.0.0.0"
             - "--port"
             - "8000"
-            - "--root-path"
-            - "/realworld/api"
+            # - "--root-path"
+            # - "/realworld/api"
           ports:
             - containerPort: 8000
           env:
             - name: db_url
               valueFrom:
                 secretKeyRef:
-                  name: fastapi-secret
+                  name: api-secret
                   key: db_url
             - name: token_secret_key
               valueFrom:
                 configMapKeyRef:
-                  name: fastapi-config
+                  name: api-config
                   key: token_secret_key
+          livenessProbe:
+            httpGet:
+              path: /health/v1/liveness
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /health/v1/readiness
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"

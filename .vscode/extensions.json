@@ -2,11 +2,10 @@
     "recommendations": [
         "tamasfe.even-better-toml",
         "charliermarsh.ruff",
-        "ms-python.mypy-type-checker",
         "njpwerner.autodocstring",
         "diogonolasco.pyinit",
         "kevinrose.vsc-python-indent",
         "mgesbert.python-path",
-        "ms-kubernetes-tools.vscode-kubernetes-tools"
+        "astral-sh.ty"
     ]
 }

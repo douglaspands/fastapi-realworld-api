@@ -12,5 +12,5 @@ os.environ["db_url"] = "sqlite+aiosqlite:///:memory:"
 def httpclient() -> Generator[HttpClient, None, None]:
     from app.infra.api import create_app
 
-    app = create_app()
+    app = create_app(is_test=True)
     yield HttpClient(app)

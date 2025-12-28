@@ -14,6 +14,11 @@ class SessionIOMock:
     ):
         self._return_value = return_value
         self._side_effect = side_effect
+        self._delete_count = 0
+        self._refresh_count = 0
+        self._begin_count = 0
+        self._commit_count = 0
+        self._rollback_count = 0
 
     @classmethod
     def cast(
