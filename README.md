@@ -73,7 +73,33 @@ docker exec -it api-container bash -c 'DB_ROOT_URL="postgresql+psycopg://postgre
 
 ## Kubernetes
 
-Os manifestos deste projeto foram desenvolvidos e testados utilizando [microK8s](https://microk8s.io/) e [kind](https://kind.sigs.k8s.io).
+Os manifestos deste projeto foram desenvolvidos e testados utilizando o **KinD**.
+
+### KinD
+
+Para rodar o K8s localmente, é necessario a instalação:
+1. Instalar o [KinD](https://kind.sigs.k8s.io/docs/user/quick-start/);
+2. Instalar o [kubectl](https://kubernetes.io/pt-br/docs/tasks/tools/)
+3. Instalar o [LoadBalancer](https://github.com/kubernetes-sigs/cloud-provider-kind);
+
+Eu instalei tudo usando o gerenciador de pacotes [brew](https://brew.sh):
+```sh
+brew install kind cloud-provider-kind kubectl
+``` 
+Agora execute os seguintes procedimentos:
+1. Inicie o LoadBalancer:
+
+```sh
+cloud-provider-kind --gateway-channel standard
+```
+> Iniciar em um terminal isolado.
+
+2. Criar o [cluster com docker registry](https://kind.sigs.k8s.io/docs/user/local-registry/):
+```sh
+./scripts/kind-with-registry.sh
+```
+> Caso queria encerrar o cluster: `kind delete cluster`.
+
 
 ### Publicando a imagem da aplicação no registry local
 Para o manifesto do Kubernetes conseguir iniciar a aplicação, a imagem docker precisa estar no registry local.
@@ -97,7 +123,7 @@ Criar um `port-forward` para acessar o banco de dados:
 kubectl -n realworld port-forward deployments/db-deploy 5432:5432
 ```
 
-Com sua IDE favorita do Postgres, execute os seguintes comandos:
+Com sua IDE favorita do `PostgreSQL`, execute os seguintes comandos:
 ```sql
 CREATE DATABASE fastapi;
 CREATE USER fastapi_user WITH PASSWORD '123456';
@@ -113,7 +139,7 @@ Executar os scripts de migração do banco de dados:
 kubectl -n realworld exec deployments/api-deploy -- bash -c 'DB_ROOT_URL="postgresql+psycopg://postgres:docker@db-service.realworld.svc.cluster.local:5432/fastapi" alembic upgrade head'
 ```
 
-## Dicas e orientações
+## Dicas e Orientações
 
 ### DNS
 ```yaml
@@ -130,26 +156,6 @@ execute o comando:
 curl -i http://api-service.realworld.svc.cluster.local:8080/docs
 ```
 
-### MicroK8s
-
-#### Serviços que precisam ser iniciados
-```sh
-microk8s enable dashboard
-microk8s enable dns
-microk8s enable registry
-microk8s enable ingress
-```
-
-### Kind
-
-#### Criando cluster com local registry
-Executar o script: `./scripts/kind-with-registry.sh`.   
-> Ele foi [copiado](https://kind.sigs.k8s.io/docs/user/local-registry/) e ajustado.
-
-#### Encerrando cluster
-```sh
-kind delete cluster
-``` 
 
 ## Changelog
 Todas as notas de alteração deste projeto serão documentados no [CHANGELOG.md](./CHANGELOG.md).

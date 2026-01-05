@@ -13,8 +13,9 @@ spec:
   rules:
   - http:
       paths:
-      - path: /realworld/api(/|$)(.*)
-        pathType: Prefix
+      - pathType: Prefix
+        # path: /realworld/api(/|$)(.*)
+        path: /api
         backend:
           service:
             name: api-service

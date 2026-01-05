@@ -11,7 +11,7 @@ router = APIRouter(
 
 
 @router.get(
-    "/v1/readness",
+    "/v1/readiness",
     response_class=PlainTextResponse,
     status_code=status.HTTP_200_OK,
 )

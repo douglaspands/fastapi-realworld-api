@@ -6,7 +6,8 @@ metadata:
   labels:
     app: api-service
 spec:
-  type: ClusterIP
+  type: LoadBalancer
+  # externalTrafficPolicy: Local
   selector:
     app: api-deploy
   ports:
