@@ -1,5 +1,8 @@
 if __name__ == "__main__":
-    pass
+    from app.infra.cli import create_app
+
+    app = create_app()
+    app()
 
 else:
     from app.infra.api import create_app

@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: api-pod
-          image: localhost:32000/fastapi-realword-api:latest
+          image: localhost:5001/fastapi-realword-api:latest
           imagePullPolicy: Always
           command:
             - "uvicorn"
@@ -31,8 +31,6 @@ spec:
             - "0.0.0.0"
             - "--port"
             - "8000"
-            # - "--root-path"
-            # - "/realworld/api"
           ports:
             - containerPort: 8000
           env:

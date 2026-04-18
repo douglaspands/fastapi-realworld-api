@@ -74,6 +74,7 @@ docker exec -it api-container bash -c 'DB_ROOT_URL="postgresql+psycopg://postgre
 ## Kubernetes
 
 Os manifestos deste projeto foram desenvolvidos e testados utilizando [microK8s](https://microk8s.io/) e [kind](https://kind.sigs.k8s.io).
+> Não deixe de ler o topico [Kubernetes Local](#kubernetes-local)
 
 ### Publicando a imagem da aplicação no registry local
 Para o manifesto do Kubernetes conseguir iniciar a aplicação, a imagem docker precisa estar no registry local.
@@ -115,6 +116,14 @@ kubectl -n realworld exec deployments/api-deploy -- bash -c 'DB_ROOT_URL="postgr
 
 ## Dicas e orientações
 
+### Kubernetes Local
+#### Kind
+Minha recomendação é usar o [KinD](https://kind.sigs.k8s.io/) e para facilitar a instalação eu recomendo usar as orientações do repositorio: [douglaspands/easy-k8s-local](https://github.com/douglaspands/easy-k8s-local).   
+Nele é explicado como o **Kubernetes** funciona e onde entra a ferramenta **KinD** para facilitar o uso pelo desenvolvedor.
+
+#### MicroK8s
+O [MicroK8s](https://canonical.com/microk8s) é uma solução da **Canonical** para o Kuberntes, onde ela tenta facilitar o uso no computador do desenvolvedor.
+
 ### DNS
 ```yaml
 api: api-service.realworld.svc.cluster.local:8080
@@ -130,8 +139,6 @@ execute o comando:
 curl -i http://api-service.realworld.svc.cluster.local:8080/docs
 ```
 
-### MicroK8s
-
 #### Serviços que precisam ser iniciados
 ```sh
 microk8s enable dashboard
@@ -139,8 +146,6 @@ microk8s enable dns
 microk8s enable registry
 microk8s enable ingress
 ```
-
-### Kind
 
 #### Criando cluster com local registry
 Executar o script: `./scripts/kind-with-registry.sh`.   

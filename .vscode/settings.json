@@ -12,5 +12,5 @@
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
-    "python.languageServer": "None"    
+    "python.languageServer": "Default"    
 }

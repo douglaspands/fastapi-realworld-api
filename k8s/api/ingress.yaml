@@ -3,17 +3,11 @@ kind: Ingress
 metadata:
   name: api-ingress
   namespace: realworld
-  # labels:
-  #   app: api-ingress
-  # annotations:
-  #   nginx.ingress.kubernetes.io/use-regex: "true"
-  #   nginx.ingress.kubernetes.io/rewrite-target: /$2    
 spec:
-  # ingressClassName: nginx
   rules:
   - http:
       paths:
-      - path: /realworld/api(/|$)(.*)
+      - path: /realworld/api
         pathType: Prefix
         backend:
           service:

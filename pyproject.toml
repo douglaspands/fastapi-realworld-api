@@ -1,6 +1,6 @@
 [project]
 name = "fastapi-realworld-api"
-version = "0.6.1"
+version = "0.7.0"
 description = "Exemplo de projeto com FastAPI e SQLModel usando async/await"
 authors = [{ name = "Douglas Panhota", email = "douglaspands@gmail.com" }]
 readme = "README.md"
@@ -19,6 +19,7 @@ dependencies = [
     "json-logging>=1.5.1",
     "httpx>=0.28.1",
     "ipython>=9.8.0",
+    "typer>=0.24.1",
 ]
 
 [dependency-groups]

@@ -27,6 +27,8 @@ class Settings(BaseSettings):
     token_expire_minutes: int = 30
 
     # config
+    root_path: str = ""
+
     model_config = SettingsConfigDict(env_file=".env")
 
 

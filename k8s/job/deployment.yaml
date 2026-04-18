@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: job-deploy
+  namespace: realworld
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: api-pod
+              image: localhost:5001/fastapi-realword-api:latest
+              imagePullPolicy: Always
+              command:
+                - "python"
+                - "main.py"
+                - "user"
+                - "check_old_password"
+              env:
+                - name: db_url
+                  valueFrom:
+                    secretKeyRef:
+                      name: job-secret
+                      key: db_url
+                - name: token_secret_key
+                  valueFrom:
+                    configMapKeyRef:
+                      name: job-config
+                      key: token_secret_key
+              resources:
+                requests:
+                  memory: "128Mi"
+                  cpu: "100m"
+                limits:
+                  memory: "512Mi"
+                  cpu: "500m"

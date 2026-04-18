@@ -3,10 +3,7 @@ kind: Service
 metadata:
   name: api-service
   namespace: realworld
-  labels:
-    app: api-service
 spec:
-  type: ClusterIP
   selector:
     app: api-deploy
   ports:

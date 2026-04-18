@@ -1,11 +1,11 @@
 services:
   api-service:
-    image: localhost:32000/fastapi-realword-api:latest
+    image: localhost:5001/fastapi-realword-api:latest
     container_name: api-container
     build:
       dockerfile: Dockerfile
       context: .
-    command: uvicorn main:app --workers 3 --host 0.0.0.0 --port 8000
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
     ports:
       - "8000:8000"
     environment:

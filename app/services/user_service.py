@@ -1,5 +1,7 @@
+import asyncio
 from typing import cast
 
+from app.infra import logging
 from app.infra.context import IContext
 from app.infra.crypt import get_crypt
 from app.infra.exceptions import BusinessError
@@ -82,6 +84,12 @@ async def delete_user(ctx: IContext, *, user_id: int):
     await user_repository.delete(ctx, pk=user_id)
 
 
+async def check_old_password(ctx: IContext):
+    logger = logging.get_logger(f"{__name__}.check_old_password")
+    logger.info("check old password processing...")
+    await asyncio.sleep(10)
+
+
 __all__ = (
     "create_user_person",
     "change_password",
@@ -90,4 +98,5 @@ __all__ = (
     "update_user",
     "update_user_optional",
     "delete_user",
+    "check_old_password",
 )

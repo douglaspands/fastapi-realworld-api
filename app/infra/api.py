@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 
 from app.infra import handler, logging, middleware, openapi, router
 from app.infra.logging import set_logging_webapp
@@ -23,10 +24,14 @@ def create_app(is_test: bool = False) -> FastAPI:
         description=settings.app_description,
         with_google_fonts=True,
         lifespan=lifespan,
+        root_path=settings.root_path,
     )
     middleware.init_app(app)
     handler.init_app(app)
     router.init_app(app)
+    app.get("/", include_in_schema=False)(
+        lambda: RedirectResponse(url=f"{settings.root_path}/docs")
+    )
     openapi.init_app(app)
     if not is_test:
         set_logging_webapp(app)
